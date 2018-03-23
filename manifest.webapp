@@ -1,0 +1,20 @@
+{
+  "launch_path": "index.html",
+  "default_locale": "en",
+  "activities": {
+    "dhis": {
+      "href": "*"
+    }
+  },
+  "appType": "APP",
+  "name": "#React Skeleton",
+  "version": "1.0.0",
+  "description": "haha",
+  "developer": {
+    "name": "harsh",
+    "email": "harsh.atal@gmail.com"
+  },
+  "icons": {
+    "48": "icon.png"
+  }
+}
