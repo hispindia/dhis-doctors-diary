@@ -1,7 +1,11 @@
-import React, {Component} from 'react';
+import React,{propTypes} from 'react';
 
-export default class App extends Component {
-    render () {
-        return <p>This is my new react app</p>
-    }
+export function UploadFile(props){
+        return (
+                <div>
+                    <label>Upload .xlsx/csv file</label>
+                    <input type="file" id="fileInput"/>
+                    <button onClick={props.onClick}>Import</button>
+                </div>
+            )
 }
