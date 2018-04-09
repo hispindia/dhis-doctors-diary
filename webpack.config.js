@@ -4,7 +4,12 @@ var path = require('path');
 var parentDir = path.join(__dirname, './');
 
 module.exports = {
-
+    node: {
+        console: false,
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    },
     entry: [
         path.join(parentDir, 'index.js')
     ],

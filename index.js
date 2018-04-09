@@ -4,10 +4,15 @@ import ReactDOM from 'react-dom';
 // main app
 //import App from './components/app';
 import {UploadFile} from './components/app';
+import {ReportContainer} from './components/app';
 
-//ReactDOM.render(<App />, document.getElementById('app'))
-ReactDOM.render(<UploadFile onClick={uploadFileHandler}/>, document.getElementById('app'));
 
+window.onload = function(){
+
+    ReactDOM.render(<ReportContainer />, document.getElementById('reportContainer'));
+
+
+}
 
 function uploadFileHandler(){
 

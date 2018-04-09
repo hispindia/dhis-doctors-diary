@@ -19,6 +19,7 @@
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "request": "^2.85.0",
     "webpack": "^4.2.0"
   },
   "devDependencies": {
