@@ -92,6 +92,12 @@ function  dhis2API(){
             })
         }
 
+        this.getValue = function(key,_callback){
+            get("dataStore/"+dataStoreName+"/"+key,function(error,response,body){
+                _callback(error,response,body);
+            })
+
+        }
         
         this.saveOrUpdate = function(jsonObj,callback){
 
