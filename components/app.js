@@ -29,47 +29,9 @@ function NewReportForm(props){
 
     function handleSubmit(event){
         event.preventDefault();
-/*
-        var XLSX = require('xlsx-populate');
-        
-        var fileService = require('../utility-fileOps');
-        var test = event.target.elements.excelFile.files[0]
-
-        var excelP = fileService.loadExcelFile(test);
-        excelP.then(function(wb){
-            
-         //   XLSX.writeFile(wb.wb,'out.xls')
-            
-        })
-        var ds = new dhis2API.dataStoreService("XLReports");
-        ds.getValue(12784,function(error,response,body){
-            
-            var data = JSON.parse(body);
-           
-            XLSX.fromDataAsync(data.excelTemplate,{base64:true}).then(function(wb){
-                debugger
-                wb.outputAsync().then(function(blob){
-                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                        window.navigator.msSaveOrOpenBlob(blob, "out.xlsx");
-                    } else {
-                        var url = window.URL.createObjectURL(blob);
-                        var a = document.createElement("a");
-                        document.body.appendChild(a);
-                        a.href = url;
-                        a.download = "out.xlsx";
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                }
-                    debugger
-                });
-            });
-                     
-        })
-  */      
-       
         var data = {
             name : event.target.elements.name.value,
+            key : event.target.elements.key.value,
             description : event.target.elements.description.value,
             periodType : event.target.elements.periodType.selectedOptions[0].value,
             orgUnitLevel : event.target.elements.orgUnitLevel.value,
@@ -105,6 +67,8 @@ function NewReportForm(props){
                 <form onSubmit={handleSubmit}>
                 <table>
                 <tbody>
+                <tr>
+                <td> Key: <input id="key" type="text"></input></td></tr>
                 <tr>
                 <td>Name : </td><td><input id="name" type="text"></input></td>
                 </tr>

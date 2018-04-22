@@ -101,8 +101,9 @@ function  dhis2API(){
         
         this.saveOrUpdate = function(jsonObj,callback){
 
-            //TODO
-            jsonObj.key = Math.floor(Math.random(0)*100000);
+            if (!jsonObj.key){
+                jsonObj.key = Math.floor(Math.random(0)*100000);
+            }
 debugger
             update("dataStore/"+dataStoreName+"/"+jsonObj.key,jsonObj,function(error,response,body){
                 if (error || body.status == "ERROR"){

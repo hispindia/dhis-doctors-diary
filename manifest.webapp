@@ -7,9 +7,9 @@
     }
   },
   "appType": "APP",
-  "name": "#React Skeleton",
+  "name": "datastore",
   "version": "1.0.0",
-  "description": "haha",
+  "description": "data store",
   "developer": {
     "name": "harsh",
     "email": "harsh.atal@gmail.com"
