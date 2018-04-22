@@ -20,6 +20,7 @@
     "jszip": "^3.1.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
     "request": "^2.85.0",
     "webpack": "^4.2.0",
     "xlsx-populate": "^1.14.0"

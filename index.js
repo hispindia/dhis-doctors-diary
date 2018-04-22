@@ -1,15 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 
 // main app
 //import App from './components/app';
 import {UploadFile} from './components/app';
-import {ReportContainer} from './components/app';
+import {App} from './components/app';
 
 
 window.onload = function(){
 
-    ReactDOM.render(<ReportContainer />, document.getElementById('reportContainer'));
+ //   ReactDOM.render(<ReportContainer />, document.getElementById('reportContainer'));
+    ReactDOM.render(<BrowserRouter>
+                    <App />
+                    </BrowserRouter>,
+                    document.getElementById('reportContainer'));
 
 
 }
