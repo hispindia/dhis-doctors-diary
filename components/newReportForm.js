@@ -14,28 +14,7 @@ export function UploadFile(props){
 export function NewReportForm(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;   
-
     var state = {
-        report : null
-    }
-
-    function init(){
-        var key = "";
-        
-        var dsServiceMeta = new dhis2API.dataStoreService('XLReports_Metdata');
-        var dsServiceData = new dhis2API.dataStoreService('XLReports_Data');
-
-        var Preports = dsService.getAllKeyValues();
-        Promise.all([Preports]).then(function(values){
-            var reports = values[0];        
-            state.reports = reports;
-            instance.setState(Object.assign({},state));
-        })
-    }
-
-    // init();
-
-    state = {
         metadata : {
             name : "",
             key : "XLReport_"+Math.random(1),
@@ -58,12 +37,46 @@ export function NewReportForm(props){
                 pivotEndRow : "",
                 periodCell  : "",
                 facilityCell:"",
-                decoc : [],
+                decoc : [
+                    {
+                        de : "",
+                        coc :"",
+                        row: "",
+                        ougroup : "nogroup"
+                    }
+                ],
                 calc : []
             }
+        },
+        init : {
+            des : [],
+            ougs : []
         }
     }
 
+    function init(){
+        var key = "";
+        
+        var dsServiceMeta = new dhis2API.dataStoreService('XLReports_Metdata');
+        var dsServiceData = new dhis2API.dataStoreService('XLReports_Data');
+
+      //  var Preports = dsService.getAllKeyValues();
+        
+        var mdService = new dhis2API.metadataService();
+        var deP = mdService.getObj("dataElements?paging=false&fields=id,name,categoryCombo[id,name,categoryOptionCombos[id,name]]");
+        var ougP = mdService.getObj("organisationUnitGroups?paging=false&fields=id,name")
+        Promise.all([deP,ougP]).then(function(values){
+            var des = values[0].dataElements;
+            var ougs = values[1].organisationUnitGroups;        
+            state.init.des = des;
+            state.init.ougs = ougs;
+            instance.setState(Object.assign({},state));
+        })
+    }
+
+     init();
+
+  
     
     function handleSubmit(event){
         event.preventDefault();debugger
@@ -119,17 +132,51 @@ export function NewReportForm(props){
     
      function getDecocRows(){
 
-        if (state.data.mapping.decoc.length == 0){
-            return (<tr><td>
-                    <select key="initialDe" ></select></td></tr>
-                   )
-        }
-         
-        var decoc = state.decoc.reduce((list,obj) => {
-            
+
+         function getCOCOptions(de){
+             var options = []
+
+             return<option></option>
+         }
+
+         function getOUGOptions(){
+
+             var options = [];
+
+             options.push()
+             
+             options =  state.init.ougs.reduce((list,obj)=>{
+                 
+                 list.push(<option key={obj.id}>{obj.name}</option>)
+                 return list;
+             },[<option value="nogroup">nogroup</option>])
+             return options;
+         }
+
+         function getDeOptions(){
+             var options = [];
+
+             options = state.init.des.reduce((list,obj)=>{
+                 
+                 list.push(<option key={obj.id}>{obj.name}</option>)
+                 return list;
+             },[])
+             return options;
+         }
+
+      
+        var decoc = state.data.mapping.decoc.reduce((list,obj,index) => {
+            list.push(<tr><td>
+                      <select key={index+"de"} defaultValue={obj.de} > {getDeOptions()}</select> </td>
+                      <td><select key={index+"coc"} value={obj.coc} > {getCOCOptions(obj.de)}</select></td>
+                      <td><select key={index+"oug"} value={obj.ougroup} > {getOUGOptions()}</select></td>
+                      <td><input type="text" value = {obj.row}></input></td>
+                      
+                      </tr>)
+            return list;
         },[])
 
-        
+        return decoc;
     }
     
     instance.render = function(){
