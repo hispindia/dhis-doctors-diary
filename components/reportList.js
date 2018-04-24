@@ -22,18 +22,13 @@ export function ReportList(){
     init();
 
     function edit(reportKey){
-
+        window.location.href = window.location.href+"/"+reportKey;        
    
     }
 
     function remove(reportKey){
 
-        //new dhis2API.dataStoreService("XLReports_Metadata").remove(reportKey);
-        
-        delete props.state.reports[reportKey];
-        instance.setState(props.state)
-debugger
-
+    
     }
 
     

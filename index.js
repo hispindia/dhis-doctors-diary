@@ -11,9 +11,9 @@ import {App} from './components/app';
 window.onload = function(){
 
  //   ReactDOM.render(<ReportContainer />, document.getElementById('reportContainer'));
-    ReactDOM.render(<BrowserRouter>
+    ReactDOM.render(
                     <App />
-                    </BrowserRouter>,
+            ,
                     document.getElementById('reportContainer'));
 
 

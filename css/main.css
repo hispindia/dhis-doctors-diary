@@ -1,0 +1,25 @@
+.decocTable td{
+
+    padding : 10px;
+    border-top: 1px solid black;
+    border-bottom; 1px solid black;
+
+}
+
+.ougroupSelect{
+
+    height:300px;
+    width:200px;
+    scroll:auto;
+   
+}
+
+.decocDE{
+    width:400px;
+}
+
+.decocJSON{
+    width : 300px;
+    height: 300px;
+    overflow:auto;
+}

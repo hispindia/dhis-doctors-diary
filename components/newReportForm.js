@@ -13,7 +13,21 @@ export function UploadFile(props){
 
 export function NewReportForm(props){
     var instance = Object.create(React.Component.prototype)
-    instance.props = props;   
+    instance.props = props;
+    var decocRow = {
+        de : "-1",
+        coc :"",
+        row: "",
+        ougroup : "nogroup",
+        ougroupList : ["nogroup"],
+        selOUGroup :["nogroup"]
+        
+    }
+
+    var calcRow = {
+        expression : ""
+    }
+    
     var state = {
         metadata : {
             name : "",
@@ -21,12 +35,7 @@ export function NewReportForm(props){
             description : "",
             periodType : "",
             reportType : "",
-            orgUnitLevel : "",
-            excelTemplate : {
-                name : "",
-                size : ""                   
-            },
-            lastUpdatedBy : ""
+            orgUnitLevel : "",         
         },
         data : {
             excelTemplate : null,
@@ -38,14 +47,11 @@ export function NewReportForm(props){
                 periodCell  : "",
                 facilityCell:"",
                 decoc : [
-                    {
-                        de : "",
-                        coc :"",
-                        row: "",
-                        ougroup : "nogroup"
-                    }
+                    Object.assign({},decocRow)
                 ],
-                calc : []
+                calc : [
+                    Object.assign({},calcRow)
+                ]
             }
         },
         init : {
@@ -55,6 +61,9 @@ export function NewReportForm(props){
     }
 
     function init(){
+
+        debugger
+        window.location
         var key = "";
         
         var dsServiceMeta = new dhis2API.dataStoreService('XLReports_Metdata');
@@ -70,6 +79,13 @@ export function NewReportForm(props){
             var ougs = values[1].organisationUnitGroups;        
             state.init.des = des;
             state.init.ougs = ougs;
+
+            state.init.deMap = des.reduce((map,obj)=>{
+                map[obj.id] = obj;
+                return map;
+            },[])
+
+            
             instance.setState(Object.assign({},state));
         })
     }
@@ -77,11 +93,49 @@ export function NewReportForm(props){
      init();
 
   
+    function validate(){debugger
+        
+        if (!state.metadata.name){
+            alert("name missing")
+            return false;
+        }
+
+        if (!state.data.excelTemplate){
+            alert("Please upload excel template")
+            return false;
+        }
+
+        if (!state.data.mapping.sheetName){
+            alert("SheetName missing")
+            return false;
+        }
+
+        
+        if (!state.data.mapping.pivotStartColumn){
+            alert("Decoc Mapping : StartColumn missing")
+            return false;
+        }
+        if (!state.data.mapping.pivotStartRow){
+            alert("Decoc Mapping : StartRow missing")
+            return false;
+        }
+        if (!state.data.mapping.pivotEndRow){
+            alert("Decoc mapping : endRow missing")
+            return false;
+        }
+
+        
+        return true;
+    }
     
     function handleSubmit(event){
-        event.preventDefault();debugger
+        event.preventDefault();
       
 
+        if (!validate()){
+            return
+        }
+        
         var fileService = require('../utility-fileOps');
         var userService = new dhis2API.userService();
     
@@ -133,10 +187,19 @@ export function NewReportForm(props){
      function getDecocRows(){
 
 
-         function getCOCOptions(de){
-             var options = []
+         function getCOCOptions(obj){
+             if (obj.de == "-1"){return}
+             
+             var coc = state.init.deMap[obj.de].categoryCombo.categoryOptionCombos;
 
-             return<option></option>
+             var options = coc.reduce((list,obj) =>{
+
+                 list.push(<option value={obj.id}>{obj.name}</option>)
+                 return list;
+             },[])
+
+             
+             return options;
          }
 
          function getOUGOptions(){
@@ -147,48 +210,166 @@ export function NewReportForm(props){
              
              options =  state.init.ougs.reduce((list,obj)=>{
                  
-                 list.push(<option key={obj.id}>{obj.name}</option>)
+                 list.push(<option key={obj.id} value={obj.id}>{obj.name}</option>)
                  return list;
              },[<option value="nogroup">nogroup</option>])
              return options;
          }
 
          function getDeOptions(){
-             var options = [];
 
-             options = state.init.des.reduce((list,obj)=>{
+             var options = state.init.des.reduce((list,obj)=>{
                  
-                 list.push(<option key={obj.id}>{obj.name}</option>)
+                 list.push(<option key={obj.id} value={obj.id}>{obj.name}</option>)
                  return list;
-             },[])
+             },[<option disabled value = "-1">--please select a de--</option>])
              return options;
          }
 
-      
-        var decoc = state.data.mapping.decoc.reduce((list,obj,index) => {
-            list.push(<tr><td>
-                      <select key={index+"de"} defaultValue={obj.de} > {getDeOptions()}</select> </td>
-                      <td><select key={index+"coc"} value={obj.coc} > {getCOCOptions(obj.de)}</select></td>
-                      <td><select key={index+"oug"} value={obj.ougroup} > {getOUGOptions()}</select></td>
-                      <td><input type="text" value = {obj.row}></input></td>
-                      
+         function onDeChange(obj,e){
+             obj.de = e.target.selectedOptions[0].value;
+             var coc = state.init.deMap[obj.de].categoryCombo.categoryOptionCombos;
+             obj.coc = coc[0].id
+             instance.setState(state);
+         }
+
+         function onCOCChange(obj,e){
+             obj.coc = e.target.selectedOptions[0].value;
+             instance.setState(state);
+         }
+
+         function onOUGroupChange(obj,e){
+             var selGroups = e.target.selectedOptions;
+
+             var str = ""
+             for (var key=0; key<selGroups.length;key++){
+                 var group = selGroups[key];
+                 if (str == ""){
+                     str=group.value;
+                 }else{
+                     str = str+"-"+group.value
+                 }
+             }
+          
+             var list = []
+             var selOUGroup = []
+             for (var key=0; key<selGroups.length;key++){
+                 list.push(selGroups[key].value);
+                 selOUGroup.push(selGroups[key].text)
+             }
+             
+             obj.ougroupList = list;
+             obj.ougroup = str;
+             obj.selOUGroup = selOUGroup;
+             instance.setState(state);
+             
+         }
+
+         function onRowChange(obj,e){
+             obj.row = e.target.value;
+             instance.setState(state);
+         }
+         
+         function addRow(index){
+             var row = Object.assign({},decocRow);
+             state.data.mapping.decoc.splice(index+1,0,row);
+             instance.setState(state);
+             
+         }
+
+         function deleteRow(index){
+             state.data.mapping.decoc.splice(index,1);
+             instance.setState(state);
+         }
+
+         function getSelectedOUGroups(groups){
+
+             var groups = groups.reduce((list,obj)=>{
+                 list.push(<li>{obj}</li>)
+                 return list;
+             },[])
+             return  ( <ul>
+                       {groups}
+                       </ul>
+             )
+         }
+         
+         var decoc = state.data.mapping.decoc.reduce((list,obj,index) => {
+             list.push(<tr>
+                       <td>({index+1})</td>
+                       <td><input type="button" value="+" onClick={addRow.bind(null,index)}></input></td>
+                       <td><input type="button" value="-" onClick={deleteRow.bind(null,index)}></input></td>
+                       <td><select className="decocDE" key={index+"de"} value={obj.de} onChange={onDeChange.bind(null,obj)} > {getDeOptions()}</select> </td>
+                       <td><select key={index+"coc"} value={obj.coc} onChange={onCOCChange.bind(null,obj)} > {getCOCOptions(obj)}</select></td>
+                       <td><select multiple className="ougroupSelect" key={index+"oug"} value={obj.ougroupList} onChange={onOUGroupChange.bind(null,obj)}> {getOUGOptions()}</select></td>
+                       <td>{getSelectedOUGroups(obj.selOUGroup)}</td>
+                       <td><input type="text" value = {obj.row} onChange = {onRowChange.bind(null,obj)}></input></td>
+                       <td><div className="decocJSON"><pre>{JSON.stringify(obj, null, 2) }</pre></div></td>
+                       
                       </tr>)
             return list;
         },[])
 
         return decoc;
     }
+
+
+    function getCalculatedFields(){
+
+        function onExpressionChange(obj,e){
+            obj.expression = e.target.value;
+            instance.setState(state);
+        }
+
+        function onRowChange(obj,e){
+            obj.row = e.target.value;
+            instance.setState(state);
+        }
+        
+        function addRow(index){
+            var row = Object.assign({},calcRow);
+            state.data.mapping.calc.splice(index+1,0,row);
+            instance.setState(state);
+            
+        }
+        
+        function deleteRow(index){
+            state.data.mapping.calc.splice(index,1);
+            instance.setState(state);
+        }
+        
+        var calc = state.data.mapping.calc.reduce((list,obj,index) => {
+            list.push(<tr>
+                      <td>({index+1})</td>
+                      <td><input type="button" value="+" onClick={addRow.bind(null,index)}></input></td>
+                      <td><input type="button" value="-" onClick={deleteRow.bind(null,index)}></input></td>
+                      <td><textarea rows="5" cols="30" value = {obj.expression} onChange = {onExpressionChange.bind(null,obj)}></textarea></td>
+                      <td><div className="decocJSON"><pre>{JSON.stringify(obj, null, 2) }</pre></div></td>
+                      
+                      </tr>)
+            return list;
+        },[])
+        
+        return calc;
+    }
+
+    function textInputChanged(name,e) {
+        state.metadata[name] = e.target.value
+        instance.setState(state)
+    }
     
     instance.render = function(){
     
         return (            
                 <form onSubmit={handleSubmit} >
-                <table>
+                <input type="submit"  value="Save"></input>
+
+                <table >
                 <tbody>
                 <tr>
-                <td> Key: <input disabled id="key" value={state.metadata.key} type="text"></input></td></tr>
+                <td> Key: <input disabled id="key" value={state.metadata.key}  type="text"></input></td></tr>
                 <tr>
-                <td>Name : </td><td><input id="name" value={state.metadata.name} type="text"></input></td>
+                <td>Name : </td><td><input id="name" value={state.metadata.name} onChange={textInputChanged.bind(null,'name')} type="text"></input></td>
                 </tr>
                 <tr>
                 <td>Description : </td><td><input id="description" type="text" value={state.metadata.description} ></input></td>
@@ -218,7 +399,7 @@ export function NewReportForm(props){
           <div>
 
             <h3> Mapping </h3>
-            <table key="conf">
+            <table key="conf" >
                 <tbody>
                 <tr><td>Sheet Name: <input type="text" value={state.data.mapping.sheetName}></input></td></tr>
                 <tr><td>Start Column: <input type="text" value={state.data.sheetName}></input></td></tr>
@@ -229,18 +410,28 @@ export function NewReportForm(props){
             </tbody>
             </table>
                 <h3> Decoc </h3>
-                <table key="decoc">
+                <table key="decoc" className="decocTable">
                 <thead>
-                <tr><th>Data Element </th><th>CategoryOptionCombo</th><th>Org Unit Groups</th><th>Row</th><th>Column</th></tr>
+                <tr><th>#</th><th>$</th><th>$</th><th>Data Element </th><th>CategoryOptionCombo</th><th>Org Unit Groups</th><th>Selected OUGroups</th><th>Row</th><th><i>Mapping</i></th></tr>
                 </thead>
                 <tbody>
                 {getDecocRows()}
             </tbody>
-            </table>
-            
-            
-            </div>
-                <input type="submit"  value="Save"></input>
+                </table>
+                </div>
+                
+              <div>
+                <h3> Decoc </h3>
+                <table key="calcFields" className="decocTable">
+                <thead>
+                <tr><th>#</th><th>$</th><th>$</th><th>Expression</th><th><i>Mapping</i></th></tr>
+                </thead>
+                <tbody>
+                {getCalculatedFields()}
+            </tbody>
+            </table>            
+                </div>
+                
                 </form>
         )
     }

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/harsh-a1/react-skeleton#readme",
   "dependencies": {
+    "history": "^4.7.2",
     "jszip": "^3.1.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
