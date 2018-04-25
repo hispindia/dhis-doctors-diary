@@ -23,3 +23,12 @@
     height: 300px;
     overflow:auto;
 }
+
+a:hover, a:focus {
+    text-decoration:underline;
+         }
+
+a { 
+    color:blue;
+    text-decoration:none;
+}

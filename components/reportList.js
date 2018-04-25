@@ -10,9 +10,9 @@ export function ReportList(){
     };
     
     function init(){
-        var dsService = new dhis2API.dataStoreService('XLReports');
+        var dsServiceMetadata = new dhis2API.dataStoreService('XLReport_Metadata');
 
-        var Preports = dsService.getAllKeyValues();
+        var Preports = dsServiceMetadata.getAllKeyValues();
         Promise.all([Preports]).then(function(values){
             var reports = values[0];        
             state.reports = reports;
@@ -22,15 +22,32 @@ export function ReportList(){
     init();
 
     function edit(reportKey){
-        window.location.href = window.location.href+"/"+reportKey;        
-   
+        window.location.href = window.location.href+"/edit/"+reportKey;        
     }
-
+    
+    function add(){
+        window.location.href = window.location.href+"/add";        
+    }
+    
     function remove(reportKey){
 
     
     }
 
+    function downloadExcel(obj,index,e){
+
+        if (obj.excelTemplate){
+
+        }else{
+            var dsServiceData = new dhis2API.dataStoreService('XLReport_Data');
+            
+        }
+        debugger
+    }
+
+    function downloadMapping(obj,index,e){
+        debugger
+    }
     
     function getRows(){
         var rows = state.reports.reduce((list,obj,index)=>{
@@ -42,8 +59,8 @@ export function ReportList(){
                       <td>{obj.description}</td>
                       <td>{obj.periodType}</td>
                       <td>{obj.orgUnitLevel}</td>
-                      <td>Excel</td>
-                      <td>mapping</td>
+                      <td><a href="javascript:void(0);" onClick={downloadExcel.bind(null,obj,index)} >Download Template </a></td>
+                      <td><a href="javascript:void(0);" onClick={downloadMapping.bind(null,obj,index)} >Download Mapping </a></td>
                       <td><input type="button" value="Remove" onClick={remove.bind(null,obj.key)}></input></td>
                       </tr>);
             return list;
@@ -66,9 +83,9 @@ export function ReportList(){
             <tbody>
                 {getRows()}
             </tbody>
-        
+                
         </table>
-        
+                <input type="button" value="Add" onClick={add}></input>
             </div>
         )
     }
