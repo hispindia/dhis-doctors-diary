@@ -1,55 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import dhis2API from './lib/dhis2API'
 
-// main app
-//import App from './components/app';
-import {UploadFile} from './components/app';
 import {App} from './components/app';
 
 
 window.onload = function(){
 
- //   ReactDOM.render(<ReportContainer />, document.getElementById('reportContainer'));
-    ReactDOM.render(
-                    <App />
+   
+    dhis2API.getManifest().then(function(data){
+        ReactDOM.render(
+                <App baseURL={data.activities.dhis.href}/>
             ,
-                    document.getElementById('reportContainer'));
-
-
-}
-
-function uploadFileHandler(){
-
-    var file = document.getElementById('fileInput').files[0];
-
-    if (!file) {
-        alert("Error Cannot find the file!");
-        return;
-    }
-
-    
-    switch(file.type){
-    case "text/csv" :  parseCSV(file);
-        break
-    case "image/jpeg" :
-    case "image/png" :    renderImage(file);
-
+            document.getElementById('reportContainer'));
         
-        break;
-    default : alert("Unsupported Format");
-        break
-    }
+        
+    })
     
-} 
-
-function renderImage(file){
-
-    var reader = new FileReader();
-
-    reader.onload = function(e) {
-        document.getElementById('form').src=e.target.result;
-    }
-    
-    reader.readAsDataURL(file);       
+  
 }

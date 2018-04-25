@@ -28,9 +28,35 @@ export function ReportList(){
     function add(){
         window.location.href = window.location.href+"/add";        
     }
+
+    function refresh(){
+        window.location.href = window.location.href;            
+    }
     
     function remove(reportKey){
+        
+        if (!confirm("Are you sure?")){
+            return;
+        }
+        
+        var dsServiceMetadata = new dhis2API.dataStoreService('XLReport_Metadata');
+        var dsServiceData = new dhis2API.dataStoreService('XLReport_Data');
 
+        dsServiceMetadata.remove(reportKey,function(error,response,body){
+            if (error){
+                console.log("Not able to delete"+error)
+                return
+            }
+            
+            dsServiceData.remove(reportKey,function(error,response,body){
+                if (error){
+                    console.log("Not able to delete"+error)
+                    return
+                }
+
+                refresh();
+            })
+        })
     
     }
 
