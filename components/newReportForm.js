@@ -21,7 +21,7 @@ export function NewReportForm(props){
             key : "XLReport_"+Math.floor(Math.random(1)*100000),
             description : "",
             periodType : "monthly",
-            reportType : "FacilityANDPeriodWiseProgressive",
+            reportType : "OUWiseProgressive",
             orgUnitLevel : "-1",         
         },
         data : {
@@ -188,8 +188,8 @@ export function NewReportForm(props){
                 <option value="yearly">Yearly</option></select></td>
                 </tr>
                 <tr><td>Report Type: <select id="reportType" value={state.metadata.reportType} onChange={onReportTypeChange}>
-                <option value="FacilityANDPeriodWiseProgressive">OUWiseProgressive</option>
-                <option value="temp">PeriodWiseProgressive</option></select></td></tr>
+                <option value="OUWiseProgressive">OUWiseProgressive</option>
+                <option value="PeriodWiseProgressive">PeriodWiseProgressive</option></select></td></tr>
 
                 <tr>
                 <td>Org Unit Level : </td><td><input type="number" id="orgUnitLevel" value={state.metadata.orgUnitLevel} onChange={textInputChangedMetadata.bind(null,'orgUnitLevel')} ></input></td>

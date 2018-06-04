@@ -2,7 +2,7 @@ import React,{propTypes} from 'react';
 import { BrowserRouter as Router , Route, Link,Switch  } from 'react-router-dom'
 
 import {ReportList} from './reportList'
-import {EditReportForm} from './editReportForm'
+import {EditReportForm} from './editReportFormX'
 import {NewReportForm} from './newReportForm'
 
 export function App(props){
@@ -14,7 +14,7 @@ export function App(props){
         var baseName = props.baseURL.split("/")
         baseName = baseName[baseName.length-1];
         
-        return (  <Router basename={baseName+"/api/apps/datastore/index.html#"} >                 
+        return (  <Router basename={baseName+"/api/apps/react-skeleton/index.html#"} >                 
                   <Switch>
                   <Route exact path="/reports"  component={ReportList}  />
                   <Route exact path="/reports/add"  component={NewReportForm}  />
