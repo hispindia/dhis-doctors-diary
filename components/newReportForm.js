@@ -6,8 +6,8 @@ export function NewReportForm(props){
     instance.props = props;
     var decocRow = {
         de : "-1",
-        coc :"",
-        row: "",
+        coc :"-1",
+        row: "-1",
         ougroup : "nogroup"
       }
 
@@ -111,7 +111,7 @@ export function NewReportForm(props){
     
         if (state.data.mapping instanceof File){
             fileService.loadJsonFile(state.data.mapping).then((json)=>{
-                state.data.mapping=json;
+                state.data.mapping=JSON.parse(json);
                 saveReport();
             })
         }else{

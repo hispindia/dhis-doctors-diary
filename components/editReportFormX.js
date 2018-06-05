@@ -52,17 +52,18 @@ export function EditReportForm(props){
                     map[obj.id] = obj;
                     return map;
                 },[])
-
+                state.init.deMap["-1"] = {name : "-1"}
+                
                 state.init.cocMap = cocs.reduce((map,obj)=>{
                     map[obj.id] = obj;
                     return map;
                 },[])
-
+                state.init.cocMap["-1"] = {name : "-1"}
+                
                 
                 state.metadata = values[2];
                 state.data = values[3];
-                state.data.mapping = JSON.parse(state.data.mapping)
-
+                
                 var ouGroupMap = state.init.ougs.reduce((map,obj)=>{
                     map[obj.id] = obj;
                     return map;
@@ -72,7 +73,7 @@ export function EditReportForm(props){
 
                 state.init.ouGroupMap = ouGroupMap;
                 
-                state.data.mapping.decoc = state.data.mapping.decoc;
+                //  state.data.mapping = JSON.parse(state.data.mapping);
                 
                 instance.setState(Object.assign({},state));
             })
@@ -90,37 +91,112 @@ export function EditReportForm(props){
     }
 
 
-    function saveForm(){
-        debugger
-    }
     
     function goToReportList(){
         window.location.href = "./index.html#/reports";        
     }
- 
+    
     instance.render = function(){
         if (!state.init.deMap){ return <div></div>  }
         return (
-                <div>
-                <input type="submit"  value="Save" onClick={saveForm} ></input>
-                <input type="button" value="Cancel" onClick={goToReportList}></input>
+            <div>
+              <input type="submit"  value="Save" onClick={saveForm.bind(null,state)} ></input>
+              <input type="button" value="Cancel" onClick={goToReportList}></input>
               
-                <h3>Metadata</h3>
-            { <MetadataFormComponent metadata={state.metadata}/>}
-                <h3>Decoc </h3>
+              <h3>Metadata</h3>
+              { <MetadataFormComponent metadata={state.metadata}/>}
+              <div className="DecocContainer">
+                <h3>Conf </h3>
                 {<RowSelectionComponent init={ state.init}
-                 registerHandler = {registerHandler} />}
-            {<DecocFormComponent
-             decoc={state.data.mapping.decoc}
-             init={ state.init}
-             takeMyStuff = {decocStuff}
-             />}
-                <h3> Calculated Fields </h3>
-                {<CalculatedFieldsComponent calc={state.data.mapping.calc} />}
+                                        registerHandler = {registerHandler} />}
+                {<DecocFormComponent
+                        mapping={state.data.mapping}
+                        init={ state.init}
+                        takeMyStuff = {decocStuff}
+                    />}
+              </div>
+              <br/>
+              <h3> Calculated Fields </h3>
+              
+              {<CalculatedFieldsComponent calc={state.data.mapping.calc} />}
             </div>
         )
     }
     
-    return instance
-    
+    return instance;  
 }
+
+function saveForm(state,e){
+
+    if (!validate(state)){
+        return
+    }
+    
+    var metadata = state.metadata;    
+    var data = state.data;
+    
+    var excelP = null;
+    if (state.metadata.excel && state.metadata.excel.file){
+        var fileService = require('../utility-fileOps');
+        
+        excelP = fileService.loadExcelFile(state.metadata.excel.file);
+        
+        delete state.metadata.excel.file;
+        excelP.then(function(value){
+            data.excelTemplate =  value;
+            
+            var dsServiceMetadata = new dhis2API.dataStoreService("XLReport_Metadata");
+            var dsServiceData = new dhis2API.dataStoreService("XLReport_Data");
+            
+            dsServiceMetadata.saveOrUpdate(metadata,function(error,response,body){
+                if (error){
+                    console.log("Error saving metadata");            
+                    return;
+                }
+                
+                dsServiceData.saveOrUpdate(data,function(error,response,body){
+                    if (error){
+                        console.log("Error saving data");            
+                    }
+                });
+            });
+        });
+        
+    }    
+}
+
+function validate(state){
+    
+    if (!state.metadata.name){
+        alert("name missing")
+        return false;
+    }
+
+    if (!state.data.excelTemplate){
+        alert("Please upload excel template")
+        return false;
+    }
+
+    if (!state.data.mapping.sheetName){
+        alert("SheetName missing")
+        return false;
+    }
+
+    
+    if (!state.data.mapping.pivotStartColumn){
+        alert("Decoc Mapping : StartColumn missing")
+        return false;
+    }
+    if (!state.data.mapping.pivotStartRow){
+        alert("Decoc Mapping : StartRow missing")
+        return false;
+    }
+    if (!state.data.mapping.pivotEndRow){
+        alert("Decoc mapping : endRow missing")
+        return false;
+    }
+
+    
+    return true;
+}
+

@@ -100,7 +100,7 @@ export function ReportList(){
     instance.render = function(){
         return (
                 <div >
-            <table>
+                <table className="listTable">
             <thead>
             <tr>
             <th>#</th><th></th><th>Name</th><th>Description</th><th>Period Type</th><th>Org Unit Level</th><th>Excel Template</th><th>Mapping File</th><th></th>

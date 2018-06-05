@@ -1,3 +1,9 @@
+#main{
+
+    margin: 75px 10px 10px 320px;
+}
+
+
 .decocTable td{
 
     border-top: 1px solid black;
@@ -27,7 +33,7 @@ background: #cccccc;
 
 .ougroupSelect{
 
-    height:600px;
+    height:500px;
     width:400px;
     scroll:auto;
    
@@ -58,6 +64,8 @@ a {
     float:right;
     margin-right:10%;
     height: 700px;
+    margin-top:11%;
+
 
 }
 
@@ -66,5 +74,54 @@ a {
     height: 700px;
     overflow:auto;
     margin-left:3%;
-    
+    border:1px dashed grey;
+
+}
+
+
+.calcDiv{
+    width : 85%;
+    height: 900px;
+    overflow:auto;
+    margin-left:3%;
+    margin-bottom:5%;
+    border:1px dashed grey;
+
+}
+
+pre {
+    width :400px;
+    height:200px;
+        white-space: pre-wrap;
+
+        overflow: auto;
+}
+
+.reportListDiv table{
+
+    border-top; 1px solid black;
+        
+}
+
+/*https://jsfiddle.net/zinoui/dB93J/ */
+
+.zui-table {
+    border: solid 1px #DDEEEE;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #DDEFEF;
+    border: solid 1px #DDEEEE;
+    color: #336B6B;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #fff;
+}
+.zui-table tbody td {
+    border: solid 1px #DDEEEE;
+    color: #333;
+    padding: 10px;
+    text-shadow: 1px 1px 1px #fff;
 }

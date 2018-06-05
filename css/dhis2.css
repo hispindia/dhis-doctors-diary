@@ -1,0 +1,131 @@
+
+/*----------------------------------------------------------------------------*/
+/* Main page                                                                  */
+/*----------------------------------------------------------------------------*/
+
+.mainPageTable 
+{
+  width: 100%;
+}
+
+.page
+{
+  font-size: 9pt;
+}
+
+.page h1 
+{
+  font-size: 16pt;
+  font-weight: normal;
+  color: #585D61;
+}
+
+.page h2 
+{
+  font-size: 15pt;
+  font-weight: normal;
+  color: #585D61;
+}
+
+.page h3 
+{
+  font-size: 14pt;
+  font-weight: normal;
+  color: #585D61;
+}
+
+.page h4 
+{
+  font-size: 13pt;
+  font-weight: normal;
+  color: #585D61;
+}
+
+.page h5 
+{
+  font-size: 12pt;
+  font-weight: normal;
+  color: #585D61;
+}
+
+.page h6 
+{
+  font-size: 11pt;
+  font-weight: normal;
+  color: #585D61;
+}
+
+.page p,.page td,.page th,.page input,.page select,.page textarea 
+{
+  font-size: 9pt;
+}
+
+.page th
+{
+  text-align: left;
+  color: #39547d;
+  padding: 3px 0 3px 1px;
+  font-size: 13px;
+  font-weight: bold;
+  border-collapse: collapse;
+  border-bottom: 1px solid #cad5e5;
+  min-height: 28px;
+}
+
+#mainPage 
+{
+  margin: 65px 10px 10px 270px;
+}
+
+.required 
+{
+  font-style: normal;
+  color: #ff0000;
+}
+
+.listTable
+{
+  width: 100%;
+  border-collapse: collapse;
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.listTable th
+{
+  background-color: rgba( 0, 0, 0, 0 );
+  border-bottom: 1px solid #cad5e5;
+  padding: 6px 5px 3px 5px;
+  text-align: left;
+}
+
+.listTable td
+{
+  padding: 11px 5px 10px 5px;
+}
+
+.listRow
+{
+  border-bottom: 1px solid #cad5e5;
+}
+
+.listAlternateRow
+{
+  border-bottom: 1px solid #cad5e5;
+  background-color: #ebf0f6;
+}
+
+.listHoverRow
+{
+  background-color: #dfe9f4;
+}
+
+.bold, .bold td
+{
+  font-weight: bold;
+}
+
+.normal
+{
+  font-weight: normal;
+}

@@ -40,7 +40,7 @@ export function CalculatedFieldsComponent(props){
                       <td><input type="button" value="+" onClick={addRow.bind(null,index)}></input></td>
                       <td><input type="button" value="-" onClick={deleteRow.bind(null,index)}></input></td>
                       <td><input type="text" value = {obj.row} onChange={onRowChange.bind(null,obj)} ></input></td>
-                      <td><textarea rows="5" cols="30" value = {obj.expression} onChange = {onExpressionChange.bind(null,obj)}></textarea></td>
+                      <td><textarea rows="5" cols="50" value = {obj.expression} onChange = {onExpressionChange.bind(null,obj)}></textarea></td>
                       <td><div className=""><pre>{JSON.stringify(obj, null, 2) }</pre></div></td>
                       
                       </tr>)
@@ -51,7 +51,7 @@ export function CalculatedFieldsComponent(props){
     }
 
     instance.render = function(){
-        return (
+        return (<div className="calcDiv">
                 <table key="calcFields" className="calcTable">
                 <thead>
                 <tr><th>#</th><th>$</th><th>$</th><th>Row</th><th>Expression</th><th><i>Mapping</i></th></tr>
@@ -59,7 +59,8 @@ export function CalculatedFieldsComponent(props){
                 <tbody>
                 {getCalculatedFields()}
             </tbody>
-                </table>            
+                </table>
+                </div>
                
         )        
     }

@@ -4,9 +4,31 @@
         <title> Report </title>
         <script type="text/javascript" src="./dist/bundle.js"></script>
         <link rel="stylesheet" href="./css/main.css">
+        <link rel="stylesheet" href="./css/dhis2.css">
+
+ 
     </head>
     <body>
-      <div id="app"></div>
+ <!-- Menu dependencies -->
+    <script type="text/javascript" src="../../../dhis-web-core-resource/react-15/react-15.min.js"></script>
+    <script type="text/javascript" src="../../../dhis-web-core-resource/rxjs/4.1.0/rx.lite.min.js"></script>
+    <script type="text/javascript" src="../../../dhis-web-core-resource/lodash/4.15.0/lodash.min.js"></script>
+    <script type="text/javascript" src="../../../dhis-web-core-resource/lodash-functional/lodash-functional.js"></script>
+
+    <script type="text/javascript" src="../../../dhis-web-commons/javascripts/header-bar/babel-polyfill.js?_rev=0.1.7"></script>
+    <script type="text/javascript" src="../../../dhis-web-commons/javascripts/header-bar/header-bar.js?_rev=0.1.7"></script>
+
+
+     <div id="header">
+      <img id="headerBanner" src="../api/staticContent/logo_banner" onclick="window.location.href='../dhis-web-commons-about/redirect.action'" style="cursor:pointer" title="View home page">
+
+      <div id="dhisDropDownMenu"></div>
+    </div>
+   
+    <!-- // End menu -->
+
+    <div id="main" class="page"></div>
+    <h2>Xl Import - Mapping</h2>
         <div id="excelTemplate"></div>
         <div id="xml"></div>
         <div id="reportContainer"></div>

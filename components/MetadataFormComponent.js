@@ -19,6 +19,14 @@ export function MetadataFormComponent(props){
         state.metadata.reportType = e.target.selectedOptions[0].value;
         instance.setState(state);
     }
+
+    function excelUploaded(e){
+        state.metadata.excel = {
+            name : e.target.files[0].name,
+            size : e.target.files[0].size,
+            file : e.target.files[0]
+        }
+    }
     
     function goToReportList(){
         window.location.href = "./index.html#/reports";        
@@ -40,6 +48,8 @@ export function MetadataFormComponent(props){
                 <tr>
                 <td>Period Type : </td><td><select id="periodType" value={state.metadata.periodType} onChange={onPeriodTypeChange}>
                 <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+
                 </select></td>
                 </tr>
                 <tr><td>Report Type: <select id="reportType" value={state.metadata.reportType} onChange={onReportTypeChange}>
@@ -50,7 +60,9 @@ export function MetadataFormComponent(props){
                 <td>Org Unit Level : </td><td><input type="text" id="orgUnitLevel" value={state.metadata.orgUnitLevel} onChange={textInputChangedMetadata.bind(null,'orgUnitLevel')} ></input></td>
                 </tr>
                 <tr>
-                <td>Upload Excel Template </td><td><input type="file" id="excelFile"/></td>
+                <td>Upload Excel Template </td><td><input type="file"
+                                                          id="excelFile"
+                                                          onChange={excelUploaded} /></td>
                 </tr>
                 <tr>
                 <td>Upload Mapping File : </td><td><input type="file" id="jsonFile" /></td>

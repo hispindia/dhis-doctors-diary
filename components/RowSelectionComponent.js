@@ -8,7 +8,7 @@ export function RowSelectionComponent(props){
     var decocChangeState = function(){};
     
     var state = {
-        de:"",
+        de:"-1",
         coc:"",
         ougroup:"",
         row:""
@@ -31,17 +31,16 @@ export function RowSelectionComponent(props){
             
             list.push(<option key={obj.id} value={obj.id}>{obj.name}</option>);
             return list;
-        },[<option disabled value = "">--please select a de--</option>]);
+        },[<option disabled value = "-1">--please select a de--</option>]);
         return options;
     }
 
     function getCOCOptions(){
-        if (state.de == ""){return}
+        if (state.de == "-1"){return;}
         
         var coc = init.deMap[state.de].categoryCombo.categoryOptionCombos;
 
         var options = coc.reduce((list,obj) =>{
-
             list.push(<option value={obj.id}>{obj.name}</option>);
             return list;
         },[]);
@@ -53,9 +52,11 @@ export function RowSelectionComponent(props){
         
         var options = [];        
         options =  init.ougs.reduce((list,obj)=>{            
-            list.push(<option key={obj.id} value={obj.id}>{obj.name}</option>)
+            list.push(<option key={obj.id}
+                      value={obj.id}>{obj.name}</option>);
             return list;
-             },[<option value="nogroup">nogroup</option>])
+        },[<option value="nogroup">nogroup</option>]);
+        
         return options;
     }
     
@@ -89,18 +90,24 @@ export function RowSelectionComponent(props){
         decocChangeState(state);
     }
 
-    function onRowChange(obj,e){
-        obj.row = e.target.value;
-        decocChangeState(state);
+    function onRowChange(e){
+        state.row = e.target.value;
         instance.setState(state);
+        decocChangeState(state);
     }
     
     instance.render = function(){
         return (
-            <div className="rowSelection">
+                <div className="rowSelection">
+                
               <table>
                 <tbody>
-
+                <tr> <td> Row : </td><td> <input type="text"
+            value = {state.row}
+                                                   onChange={onRowChange}>
+                </input>
+                </td> </tr>
+                
                   <tr> <td>DE : </td>
                     <td><select className="decocDE"
                                 value={state.de}
@@ -118,7 +125,8 @@ export function RowSelectionComponent(props){
                       </select>
                   </td> </tr>
                   
-                  <tr> <td>OUGroup :</td><td> <select multiple className="ougroupSelect"
+                  <tr> <td>OUGroup :</td><td> <select multiple
+                                                      className="ougroupSelect"
                                                       key={"oug"}
                                                       value={state.ougroup.split("-") }
                                                       onChange = {onOUGroupChange}
@@ -127,16 +135,13 @@ export function RowSelectionComponent(props){
                       </select>
                   </td> </tr>
                   
-                  <tr> <td> Row : </td><td> <input type="text"
-                                                   value = {state.row}
-                                                   onChange={onRowChange}>
-                      </input>
-                  </td> </tr>
                   
                   
                 </tbody>
               </table>
-              
+                
+                <pre>{JSON.stringify(state, null, 2) }</pre>
+                
               
             </div>
             
