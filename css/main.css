@@ -20,7 +20,17 @@
 background: #cccccc;
 }
 
+.highlightRow{
+    float:right;
+    margin-right:3%;
+    font-size:1vw;
+    
+}
 
+.pink{
+    background: #E7D5D2;
+
+}
 .grey {
     background: #aaaaaa;
 
@@ -64,7 +74,7 @@ a {
     float:right;
     margin-right:10%;
     height: 700px;
-    margin-top:11%;
+    margin-top:13%;
 
 
 }
@@ -101,27 +111,4 @@ pre {
 
     border-top; 1px solid black;
         
-}
-
-/*https://jsfiddle.net/zinoui/dB93J/ */
-
-.zui-table {
-    border: solid 1px #DDEEEE;
-    border-collapse: collapse;
-    border-spacing: 0;
-    font: normal 13px Arial, sans-serif;
-}
-.zui-table thead th {
-    background-color: #DDEFEF;
-    border: solid 1px #DDEEEE;
-    color: #336B6B;
-    padding: 10px;
-    text-align: left;
-    text-shadow: 1px 1px 1px #fff;
-}
-.zui-table tbody td {
-    border: solid 1px #DDEEEE;
-    color: #333;
-    padding: 10px;
-    text-shadow: 1px 1px 1px #fff;
 }

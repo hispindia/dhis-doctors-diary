@@ -20,9 +20,13 @@ export function NewReportForm(props){
             name : "",
             key : "XLReport_"+Math.floor(Math.random(1)*100000),
             description : "",
-            periodType : "monthly",
+            periodType : "Monthly",
             reportType : "OUWiseProgressive",
-            orgUnitLevel : "-1",         
+            orgUnitLevel : "-1",
+            excel : {
+                name : "",
+                size : ""
+            }
         },
         data : {
             excelTemplate : null,
@@ -119,8 +123,6 @@ export function NewReportForm(props){
         }
 
         function saveReport(){
-            state;
-
             fileService.loadExcelFile(state.data.excelTemplate).then((wbBase64) =>{
 
                 state.data.excelTemplate = wbBase64;
@@ -162,6 +164,10 @@ export function NewReportForm(props){
 
     function onChangeFileInput(name,e){
         state.data[name] = e.target.files[0];
+        if (name == 'excelTemplate'){
+            state.metadata.excel.name = e.target.files[0].name;
+            state.metadata.excel.size = e.target.files[0].size;
+        }
         instance.setState(state);
     }
     
@@ -184,8 +190,8 @@ export function NewReportForm(props){
                 </tr>
                 <tr>
                 <td>Period Type : </td><td><select id="periodType" value={state.metadata.periodType} onChange={onPeriodTypeChange}>
-                <option value="monthly">Monthly</option>
-                <option value="yearly">Yearly</option></select></td>
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option></select></td>
                 </tr>
                 <tr><td>Report Type: <select id="reportType" value={state.metadata.reportType} onChange={onReportTypeChange}>
                 <option value="OUWiseProgressive">OUWiseProgressive</option>

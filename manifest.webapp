@@ -1,5 +1,5 @@
 {
-  "launch_path": "index.html",
+  "launch_path": "index.html#/reports",
   "default_locale": "en",
   "activities": {
     "dhis": {

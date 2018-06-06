@@ -1,5 +1,5 @@
 import React,{propTypes} from 'react';
-import { BrowserRouter as Router , Route, Link,Switch  } from 'react-router-dom'
+import { BrowserRouter as Router , Route, Link,Switch,Redirect  } from 'react-router-dom'
 
 import {ReportList} from './reportList'
 import {EditReportForm} from './editReportFormX'
@@ -13,14 +13,16 @@ export function App(props){
     instance.render = function(){
         var baseName = props.baseURL.split("/")
         baseName = baseName[baseName.length-1];
-        
+        document
+        debugger
         return (  <Router basename={baseName+"/api/apps/react-skeleton/index.html#"} >                 
                   <Switch>
                   <Route exact path="/reports"  component={ReportList}  />
                   <Route exact path="/reports/add"  component={NewReportForm}  />
-                  <Route  path="/reports/edit/"  component={EditReportForm}  />
+                  <Route path="/reports/edit/"  component={EditReportForm}  />
 
                   </Switch>
+
                   </Router>
                )
     }

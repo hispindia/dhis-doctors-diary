@@ -62,6 +62,7 @@ export function RowSelectionComponent(props){
     
     function onDeChange(e){
         state.de = e.target.value;
+        state.coc = init.deMap[state.de].categoryCombo.categoryOptionCombos[0].id
         instance.setState(state);        
         decocChangeState(state);
     }
@@ -102,9 +103,9 @@ export function RowSelectionComponent(props){
                 
               <table>
                 <tbody>
-                <tr> <td> Row : </td><td> <input type="text"
+                <tr> <td> Row : </td><td> <input type="number"
             value = {state.row}
-                                                   onChange={onRowChange}>
+            onChange={onRowChange}>
                 </input>
                 </td> </tr>
                 

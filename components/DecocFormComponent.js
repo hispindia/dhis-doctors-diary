@@ -42,11 +42,10 @@ export function DecocFormComponent(props){
         var row = Object.assign({},decocRow);
         state.decoc.splice(index+1,0,row);
         instance.setState(state);
-            
     }
     
     function textInputChangedData(name,e) {
-        state.data.mapping[name] = e.target.value
+        state[name] = e.target.value
         instance.setState(state)
     }
     
@@ -82,7 +81,7 @@ export function DecocFormComponent(props){
                  <table key="conf" >
                 <tbody>
                 <tr><td>Sheet Name: <input type="text" value={state.sheetName} onChange={textInputChangedData.bind(null,'sheetName')} ></input></td></tr>
-                <tr><td>Start Column: <input type="text" value={state.pivotStartCol} onChange={textInputChangedData.bind(null,'pivotStartCol')} ></input></td></tr>
+                <tr><td>Start Column: <input type="text" value={state.pivotStartColumn} onChange={textInputChangedData.bind(null,'pivotStartColumn')} ></input></td></tr>
                 <tr><td>Start Row: <input type="text" value={state.pivotStartRow} onChange={textInputChangedData.bind(null,'pivotStartRow')} ></input></td></tr>
                 <tr><td>End Row: <input type="text" value={state.pivotEndRow} onChange={textInputChangedData.bind(null,'pivotEndRow')} ></input></td></tr>
                 <tr><td>Period Cell: <input type="text" value={state.periodCell} onChange={textInputChangedData.bind(null,'periodCell')} ></input></td></tr>
@@ -145,12 +144,12 @@ function Decoc(props){
     instance.render = function(){
         return(
                 <div key={"div_decoc_"+props.index}>
-            <div onClick={onClick} className={state.click?'decocSelected':''}>
-            <div> De : {init.deMap[state.decoc.de].name} </div>
-            <div> Coc : {init.cocMap[state.decoc.coc].name} </div>
-            <div> Row : {state.decoc.row} </div>
-            <div> <ul>{getGroups(state.decoc.ougroup)}</ul> </div>
-            </div>
+                <div onClick={onClick} className={state.click?'decocSelected':''}>
+                <div> <b>De:</b> {init.deMap[state.decoc.de].name} </div>
+                <div> <b>Coc:</b> {init.cocMap[state.decoc.coc].name} </div>
+                <div className="highlightRow"><b> Row:</b> {state.decoc.row} </div>
+                <div> <ul>{getGroups(state.decoc.ougroup)}</ul> </div>
+                </div>
                 </div>
         )
     }

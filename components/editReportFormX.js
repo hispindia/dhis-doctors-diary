@@ -1,9 +1,9 @@
 import React,{propTypes} from 'react';
 import dhis2API from '../lib/dhis2API';
-import {RowSelectionComponent} from './RowSelectionComponent'
-import {DecocFormComponent} from './DecocFormComponent'
-import {MetadataFormComponent} from './MetadataFormComponent'
-import {CalculatedFieldsComponent} from './CalculatedFieldsComponent'
+import {RowSelectionComponent} from './RowSelectionComponent';
+import {DecocFormComponent} from './DecocFormComponent';
+import {MetadataFormComponent} from './MetadataFormComponent';
+import {CalculatedFieldsComponent} from './CalculatedFieldsComponent';
 
 export function EditReportForm(props){
     var instance = Object.create(React.Component.prototype)
@@ -72,8 +72,6 @@ export function EditReportForm(props){
                                          name:"nogroup"}
 
                 state.init.ouGroupMap = ouGroupMap;
-                
-                //  state.data.mapping = JSON.parse(state.data.mapping);
                 
                 instance.setState(Object.assign({},state));
             })
@@ -162,7 +160,28 @@ function saveForm(state,e){
             });
         });
         
-    }    
+    }else{
+        save();
+    }
+
+    function save(){
+
+        var dsServiceMetadata = new dhis2API.dataStoreService("XLReport_Metadata");
+        var dsServiceData = new dhis2API.dataStoreService("XLReport_Data");
+        
+        dsServiceMetadata.saveOrUpdate(metadata,function(error,response,body){
+            if (error){
+                console.log("Error saving metadata");            
+                    return;
+            }
+            
+            dsServiceData.saveOrUpdate(data,function(error,response,body){
+                if (error){
+                    console.log("Error saving data");            
+                }
+            });
+        });
+    }
 }
 
 function validate(state){

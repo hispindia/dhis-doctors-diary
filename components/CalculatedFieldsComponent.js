@@ -29,7 +29,8 @@ export function CalculatedFieldsComponent(props){
             
         }
         
-        function deleteRow(index){
+         function deleteRow(index){
+             if (state.length == 1){return}
             state.splice(index,1);
             instance.setState(state);
         }

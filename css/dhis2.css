@@ -85,10 +85,11 @@
 
 .listTable
 {
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
   padding-top: 10px;
   cursor: pointer;
+  margin-left:1%;
 }
 
 .listTable th
@@ -115,7 +116,7 @@
   background-color: #ebf0f6;
 }
 
-.listHoverRow
+.listTable tr:hover
 {
   background-color: #dfe9f4;
 }
