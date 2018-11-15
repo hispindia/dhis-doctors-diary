@@ -1,0 +1,119 @@
+ 
+.div-class-test {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+  background-color: grey;
+  list-style-type: none;
+  border: 1px dotted black;
+  margin: 1rem 0;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.loginbox {
+  width: 255px;
+  height: 22px;
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.14);
+}
+
+.button1 {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+}
+
+.button2 {
+  
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  margin-top: 20px;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+}
+
+.whiteText {
+  color: white;
+}
+
+.greenSelect {
+  color: white;
+  background-color: green;
+  border-color: green;
+}
+
+.parent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.textField {
+  margin-bottom: 15px;
+}
+
+.test {
+  max-width: 20%;
+  margin: auto;
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;  
+}
+
+.buttonApproved {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+  color: white;
+  background-color: green;
+  border-color: white;
+}
+
+.buttonRejected {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+  color: white;
+  background-color: Red;
+  border-color: white;
+}
+
+.buttonAwaitApproval {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+  color: black;
+  background-color: Yellow;
+  border-color: white;
+}
