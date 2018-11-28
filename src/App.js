@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import FormElement from "./FormElement";
 import api from "./api.js";
-import "./styles.css";
-import logo  from './loading.gif'
+import "./app.css";
+import "./login.css";
+import 'flatpickr/dist/themes/light.css';
+import Flatpickr from 'react-flatpickr';
+import ReactInterval from 'react-interval';
+import { Offline, Online } from "react-detect-offline";
+
 
 //TODO: FIX generic OU and program in /api-getUnserInfo
-
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
 		login: 1,
+		date: new Date(),
 		//login explained:
 		//1 - login screen
 		//2 - waiting screen
@@ -24,8 +29,9 @@ class App extends Component {
 		trackedEntityInstance: "",
 		enrollment: "",
 		orgUnit: "",
-		chosenProgram: "r6qGL4AmFV4",	   //todo: fix for UP-instance
-		chosenProgramStage: "ZJ9TrNgrtfb", //todo: fix for UP-instance
+		userId: "",
+		chosenProgram: "Bv3DaiOd5Ai",
+		chosenProgramStage: "", //gynecologist:"CLoZpOqTSI8" , paediatrican: "iDYy00hz00M", anestetist: "anSbnUqRxeR" 
 		chosenEvent: "",
 		timeToLogOut: false,
 		handleSubmit: [],
@@ -39,17 +45,22 @@ class App extends Component {
 	this.updateLocalStorage = this.updateLocalStorage.bind(this);
 	this.handleTrackedEntityChange = this.handleTrackedEntityChange.bind(this);
 	this.handleChosenEventChange = this.handleChosenEventChange.bind(this);
+	this.updateProgramsEventFromChosenEvent = this.updateProgramsEventFromChosenEvent.bind(this);
 	this.handleEnrollementChange = this.handleEnrollementChange.bind(this);
 	this.handleOrgUnitChange = this.handleOrgUnitChange.bind(this);
+	this.handleUserIdChange = this.handleUserIdChange.bind(this);
 	this.getLocalStorage = this.getLocalStorage.bind(this);
 	this.getPrograms = this.getPrograms.bind(this);
 	this.getState = this.getState.bind(this);
 	this.getChosenEvent = this.getChosenEvent.bind(this);
 	this.clearChosenEvent = this.clearChosenEvent.bind(this);
 	this.addToHandleSubmit = this.addToHandleSubmit.bind(this);
+	this.disableForm = this.disableForm.bind(this);
+
+	this.setProgramStage = this.setProgramStage.bind(this);
 	}
 
-	componentDidMount = () => {;
+	componentDidMount = () => {
 		this.getLocalStorage()
 		//localStorage.setItem("state", JSON.stringify(this.state));
 	}
@@ -103,11 +114,20 @@ class App extends Component {
 		})
 	}
 
+	handleUserIdChange(userId) {
+		this.setState({
+			userId: userId
+		})
+	}
+
 	handleChosenEventChange(event) {
 		this.setState({
 			chosenEvent: event
 		})
-		
+		this.updateLocalStorage();
+	}
+
+	updateProgramsEventFromChosenEvent(event) {
 		this.state.programs.map(program => {
 			if(program.id === this.state.chosenProgram) {
 				program.programStages.map(programStage => {
@@ -117,17 +137,22 @@ class App extends Component {
 							if(stageEvent.event === event.event) {
 								stageEvent = event;
 								eventFound = true;
+								//console.log("Updated already existing event");
 							}
+							return Promise.resolve();
 						})
 						if(!eventFound) {
-							//new event
+							console.log("created new event");
+							console.log(event);
 							programStage.events.push(event);
 						}
 					}
+					return Promise.resolve();
 				})
 			}
+			return Promise.resolve();
 		})
-
+		this.updateLocalStorage();
 	}
 
 	updateLocalStorage() {
@@ -150,6 +175,7 @@ class App extends Component {
 		this.setState({
 			chosenEvent: ""
 		})
+		this.updateLocalStorage();
 	}
 
 	logOut = () => {
@@ -158,6 +184,7 @@ class App extends Component {
 		this.setState({login:1});
 	}
 
+	//TODO: Update this with all new variables added to state
 	getLocalStorage() {
 		if (typeof(Storage) !== "undefined") {
 			let data = localStorage.getItem("state");
@@ -165,14 +192,19 @@ class App extends Component {
 				data = JSON.parse(data);
 				if(data.login !== 1) {
 					this.setState({
+						date: data.date,
 						login: data.login,
 						programs: data.programs,
 						username: data.username,
 						password: data.password,
 						trackedEntityInstance: data.trackedEntityInstance,
 						enrollment: data.enrollment,
+						orgUnit: data.orgUnit,
+						userId: data.userId,
 						chosenProgram: data.chosenProgram,
+						chosenProgramStage: data.chosenProgramStage,
 						chosenEvent: data.chosenEvent,
+						handleSubmit: data.handleSubmit,
 						//TODO: Fill this up with all new state elements
 					});
 				} else {
@@ -192,46 +224,225 @@ class App extends Component {
 		}
 
 		let handleSubmit = this.state.handleSubmit;
+		try {
+			handleSubmit = handleSubmit.filter(handleSubmit => handleSubmit.endpoint !== submit.endpoint);
+		} catch (error) {
+			console.log(error);
+		}
+		//const result = words.filter(word => word.length > 6);
+
 		handleSubmit.push(submit);
+
 		this.setState({
 			handleSubmit: handleSubmit
 		})
+		this.updateLocalStorage();
 	}
 
 	removeFromHandleSubmit(e) {
-		console.log(e);
 		var array = this.state.handleSubmit; 
 		var index = array.indexOf(e)
 		if (index !== -1) {
 		  array.splice(index, 1);
-		  console.log(array);
 		  this.setState({handleSubmit: array});
 		}
+	}
 
+	//adds href, event ID and programStage to event that's been POSTed.
+	updateEventAfterSubmit(href, event) {
+		let splitHref = href.split("/");
+		let eventId = splitHref[splitHref.length-1];
+		let programs = this.state.programs;
+		programs.map(program => {
+			if(program.id === this.state.chosenProgram) {
+				program.programStages.map(programStage => {
+					if(programStage.programStage === this.state.chosenProgramStage) {
+						programStage.events.map(stageEvent => {
+							if(stageEvent.eventDate === event.events[0].eventDate) {
+								stageEvent.href = href;
+								stageEvent.event = eventId;
+								stageEvent.programStage = event.events[0].programStage;
+							}
+							return Promise.resolve();
+						})
+					}
+					return Promise.resolve();
+				})
+			}
+			return Promise.resolve();
+		})
+		this.setState({
+			programs: programs
+		})
 	}
 
 	handleSubmit() {
 		let que = this.state.handleSubmit;
 		if(que.length > 0) {
 			que.map(submitTask => {
+				console.log("Perfoming + " + submitTask.method);
 				return api.postPayload(submitTask.endpoint, JSON.stringify(submitTask.payload), submitTask.method, this.state.username, this.state.password)
 				.then(response => {
-					console.log(response);
 					if(response.httpStatusCode === 200) {
+						console.log(response);
 						this.removeFromHandleSubmit(submitTask);
+						try {
+							if(submitTask.method === "POST") {
+								this.updateEventAfterSubmit(response.response.importSummaries[0].href, submitTask.payload);
+							}
+						} catch(e) {
+							console.log("Error: " + e);
+						}
 					}
 				})
 				.catch(error => {
 					console.warn('Error!', error);
 				});
 			})
+		}	
+	}
+
+	setProgramStage() {
+		console.log("Setting programstage");
+		if(this.state.username === "test paedeatrician") {
+			console.log("paedeatrician")
+			this.setState({
+				chosenProgramStage: "iDYy00hz00M"
+			})
+		} else if(this.state.username === "test anaesthethist") {
+			console.log("anaesthethist");
+			this.setState({
+				chosenProgramStage: "anSbnUqRxeR"
+			})
+		} else if (this.state.username === "test gynecologist") {
+			console.log("gynecologist");
+			this.setState({
+				chosenProgramStage: "CLoZpOqTSI8"
+			})
+		}
+		this.updateLocalStorage();
+	}
+
+	eventsFirstDate() {
+		let lastEvent = "0000-00-00";
+		let firstEvent = "9999-12-30";
+		try {
+			this.state.programs.map(program => {
+				if(program.id === this.state.chosenProgram) {
+					program.programStages.map(programStage => {
+						if(programStage.programStage === this.state.chosenProgramStage) {
+							programStage.events.map(event => {
+								if(event.eventDate.slice(0,10) > lastEvent) {
+									lastEvent = event.eventDate.slice(0,10);
+								}
+								if(event.eventDate.slice(0,10) < firstEvent) {
+									firstEvent = event.eventDate.slice(0,10);
+								}
+								return Promise.resolve();
+							})
+						}
+						return Promise.resolve();
+					})
+				}
+				return Promise.resolve();
+			})
+		} catch (error) {
+			console.log(error);
+		}
+		//let dates = {firstEvent: firstEvent, lastEvent: lastEvent};
+		return firstEvent;
+
+		//TODO: Find days with no reports - 
+		//TODO: Return values to caledar, use values for min/max dates
+	}
+
+	findEventBasedOnSelectedDate() {
+		let chosenEvent = "";
+		try {
+			let selectedDate = JSON.stringify(this.state.date[0]).slice(1,11);
+			this.state.programs.map(program => {
+				if(program.id === this.state.chosenProgram) {
+					program.programStages.map(programStage => {
+						if(programStage.programStage === this.state.chosenProgramStage) {
+							programStage.events.map(event => {
+								if(selectedDate === event.eventDate.slice(0,10)){
+									chosenEvent = event;
+								}
+								return Promise.resolve();
+							})
+						}
+						return Promise.resolve();
+					})
+				}
+				return Promise.resolve();
+			})
+		} catch (error) {
+			console.log(error);
+		}
+		return chosenEvent;
+	}
+
+	findColorsForCalenderView() {
+		
+	}
+
+	setChosenEventFromCalenderView() {
+		let event = this.findEventBasedOnSelectedDate();
+		if(event !== "") {
+			this.handleChosenEventChange(event);
+		} else {
+			//todo: create new event
+			this.clearChosenEvent();
+		}
+		this.disableForm();
+	}
+
+	//Only way of removing the time-picker from the calendar..
+	removeTimer() {
+		try {
+			var el = document.querySelector( '.flatpickr-time' );
+			el.parentNode.removeChild( el );
+		} catch (error) {
+			
+		}
+	}
+
+
+	//disables all form-elements, as long as their className="item-select".
+	disableForm() {
+		let todaysDate = new Date().toISOString().split('T')[0].split('-').map(i => parseInt(i));
+		let selectedDate = this.state.date[0];
+
+		try {
+			selectedDate = selectedDate.split('T')[0].split('-').map(i => parseInt(i));	
+		} catch (error) {
+			selectedDate = selectedDate.toISOString().split('T')[0].split('-').map(i => parseInt(i));
+		}
+
+		let daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
+		let selectedDateValue = daysInMonth[selectedDate[1]] + selectedDate[2];
+		let todaysDateValue = daysInMonth[todaysDate[1]] + todaysDate[2];
+	
+		if(todaysDateValue - selectedDateValue > 7) { //DISABLE if 7 days difference
+			let elements = document.getElementsByClassName("item-select");
+			for (let i = 0; i < elements.length; i++) {
+				elements[i].setAttribute("disabled", true);
+			}
+			console.log("Disabled form");
+		} else {
+			let elements = document.getElementsByClassName("item-select");
+			for (let i = 0; i < elements.length; i++) {
+				elements[i].removeAttribute("disabled");
+			}
+			console.log("Enabled form");
 		}
 	}
 
 	render() {
+		const { date } = this.state;
 		if(this.state.login === 1) { //login screen
 			return (
-				<div>
+				<div className="loginScreen">
 					<Login
 						onLoginChange={this.handleLoginChange}
 						onUsernameChange={this.handleUsernameChange}
@@ -241,7 +452,10 @@ class App extends Component {
 						onTrackedEntityChange={this.handleTrackedEntityChange}
 						onEnrollmentChange={this.handleEnrollementChange}
 						onOrgunitChange={this.handleOrgUnitChange}
+						onUserIdChange={this.handleUserIdChange}
 						getPrograms={this.getPrograms}
+						getState={this.getState}
+						choseSpecialst={this.setProgramStage}
 					/>
 				</div>
 			)
@@ -249,39 +463,103 @@ class App extends Component {
 			return (
 				<div>
 					<h1 className="whiteText">Loggin into Doctor's Diary</h1>
-					<img src={logo} alt="loading..." />
+					{//<img className="logo" src={logo} alt="loading..." />
+					}
 					<button className="logout" onClick={this.logOut}>Log out</button>
 				</div>
 			)
 		} else if (this.state.login === 3) { //register new user screen
-			return (
-				<div>
-					<RegisterUser
-						onLoginChange={this.handleLoginChange}
-					/>
-					<button className="logout" onClick={this.logOut}>Log out</button>
-				</div>
-			)
 		} else if (this.state.login === 4) { //event page - register new event
 			return (
-				<div>
+				<div className="parent">
+					<Online>
+						<nav className="online-text">
+							ONLINE - TO SEND: {this.state.handleSubmit.length}
+						</nav>
+						
+					</Online>
+					<Offline>
+						<nav className="offline-text">
+							OFFLINE - TO SEND: {this.state.handleSubmit.length}
+						</nav>
+					</Offline>
+					<ReactInterval timeout={20000} enabled={true}
+						callback={() => this.handleSubmit()} 
+					/>
 					<RegsiterTodaysEvent
 						getPrograms={this.getPrograms}
 						onLoginChange={this.handleLoginChange}
 						onEventChange={this.handleChosenEventChange}
 					/>
-					<DisplayEvents
-						getPrograms={this.getPrograms}
-						onLoginChange={this.handleLoginChange}
-						onEventChange={this.handleChosenEventChange}
-					/>
-					<button className="button1" onClick={this.handleSubmit}>POST changes to server</button>
-					<button className="logout" onClick={this.logOut}>Log out</button>
-				</div>
-			)
-		} else if (this.state.login === 5) { //render selected event
-			return (
-				<div>
+					<Flatpickr data-enable-time
+						value={date}
+						onClick={this.removeTimer}
+						onChange={date => { this.setState({date}); this.setChosenEventFromCalenderView(); }}
+						options={
+							{
+							onDayCreate: function(dObj, dStr, fp, dayElem){
+								let curDate = +dayElem.dateObj;
+
+								let datesRed = [
+									{
+										startDate: Date.parse('2018-11-17'),
+										endDate: Date.parse('2018-11-18')
+									},
+									{
+										startDate: Date.parse('2018-11-18'),
+										endDate: Date.parse('2018-11-20')
+									},
+								]
+
+								let datesGreen = [
+								]
+
+								let datesYellow = [
+								]
+
+								datesRed.map(date => {
+									if (curDate >= date.startDate && curDate <= date.endDate) {
+									  dayElem.className += "cool-date-red";
+									}
+									return Promise.resolve();
+								})
+
+								datesGreen.map(date => {
+									if (curDate >= date.startDate && curDate <= date.endDate) {
+									  dayElem.className += "cool-date-green";
+									}
+									return Promise.resolve();
+								})
+
+								datesYellow.map(date => {
+									if (curDate >= date.startDate && curDate <= date.endDate) {
+									  dayElem.className += "cool-date-yellow";
+									}
+									return Promise.resolve();
+								})
+
+							},
+							disable: [
+								{
+									from: "0000-01-01",
+									to: this.eventsFirstDate()
+								},
+								{
+									from: new Date().fp_incr(1),
+									to: "2018-15-1000"
+								}
+							],
+							locale: {
+								"firstDayOfWeek": 1 // start week on Monday
+							//add inline:true to always show calendar
+							},
+							time_24hr:true,
+							dateFormat: "Y-m-d"
+							}
+							//<button onClick={() => this.eventsFirstDate()}>click me</button>
+
+						}
+		  			/>
 					<DisplayEvent
 						onLoginChange={this.handleLoginChange}
 						chosenEvent = {this.getChosenEvent}
@@ -289,8 +567,10 @@ class App extends Component {
 						onEventChange={this.handleChosenEventChange}
 						addToSubmitQue={this.addToHandleSubmit}
 						getState={this.getState}
+						updateProgramsEventFromChosenEvent={this.updateProgramsEventFromChosenEvent}
 					/>
 					<button className="logout" onClick={this.logOut}>Log out</button>
+					<button onClick={this.disableForm}>disable</button>
 				</div>
 			)
 		} else {
@@ -325,6 +605,10 @@ class Login extends Component {
 		this.props.onOrgunitChange(e);
 	}
 
+	handleUserIdChange(e) {
+		this.props.onUserIdChange(e);
+	}
+
 	handleTrackedEntityChange(e) {
 		this.props.onTrackedEntityChange(e);
 	}
@@ -348,16 +632,20 @@ class Login extends Component {
 					this.handlePasswordChange(password);
 					this.getProgramsFromDhis2(username, password)
 						.then(()=> {
+						this.props.choseSpecialst();
 						this.getUsersOrgunitFromDhis2(username, password)
-						.then(() => {
+						.then(data => {
+						this.getEnrollmentAndTrackedEntityData(data.organisationUnits[0].id, this.props.getState().chosenProgram, username, password)
+						.then(() => {						
 						//TODO: This should be generic/ needs to be changed for the doctors diary ID
-						this.getUserInfoFromDhis2("r6qGL4AmFV4", username, password)
+						this.getUserInfoFromDhis2(this.props.getState().chosenProgram, username, password) //programID, username, password
 						.then(() => {
 						//TODO: This sould be genereic/ needs to be changed to the programStages of Doctors Diary proram
-						this.getProgramStageDataFromDhis2("ZJ9TrNgrtfb", username, password)
+						this.getProgramStageDataFromDhis2(this.props.getState().chosenProgramStage, username, password)
 						})
 						})
 						})
+						})	
 				} else {
 					alert("Wrong username/password");
 				}
@@ -381,6 +669,7 @@ class Login extends Component {
 			});
 	}
 
+	//gets organisation unit id and user id 
 	getUsersOrgunitFromDhis2(username, password) {
 		console.log("getUsersOrgunitFromDhis2");
 		return api.getUsersOrgunit(username, password)
@@ -388,7 +677,26 @@ class Login extends Component {
 				if(data.teiSearchOrganisationUnits.length > 1) {
 					alert("might not be correct orgUnit");
 				}
-				this.handleOrgUnitChange(data.teiSearchOrganisationUnits[0].id);
+				this.handleUserIdChange(data.id);
+				this.handleOrgUnitChange(data.organisationUnits[0].id);
+				return data;
+			})
+			.catch(error => {
+				console.warn('Error!', error);
+			});
+	}
+
+	getEnrollmentAndTrackedEntityData(orgUnit, programId, username, password) {
+		console.log("getEnrollmentAndTrackedEntityData");
+		return api.getEnrollmentAndTrackedED(orgUnit, programId, username, password)
+			.then(data => {
+				//console.log(data);
+				try {
+					this.handleTrackedEntityChange(data.trackedEntityInstances[0].trackedEntityInstance);
+					this.handleEnrollementChange(data.trackedEntityInstances[0].enrollments[0].enrollment);
+				} catch (e) {
+					console.log(e)
+				}
 			})
 			.catch(error => {
 				console.warn('Error!', error);
@@ -401,17 +709,11 @@ class Login extends Component {
 		console.log("getUserInfoFromDhis2");
 		return api.getUserInfo(programId, username, password)
 			.then(data => {
-				console.log(data);
+				let foundEvent = false;
 				let programStages = [];
-				let notUpdatedTrackedEnrollemnt = true;
 				data.events.map(event => {
 					if(event.storedBy === username) {
-						if(notUpdatedTrackedEnrollemnt) {
-							notUpdatedTrackedEnrollemnt = false;
-							this.handleTrackedEntityChange(event.trackedEntityInstance);
-							this.handleEnrollementChange(event.enrollment);
-						}
-						
+						foundEvent = true;
 						let foundProgramStage = false;
 						programStages.map(programStage => {
 							if(programStage.programStage === event.programStage) {
@@ -426,6 +728,7 @@ class Login extends Component {
 									dataValues: event.dataValues,
 								});
 							}
+							return Promise.resolve();
 						})
 						if(!foundProgramStage) {
 							programStages.push({
@@ -442,16 +745,26 @@ class Login extends Component {
 							});
 						}
 					}
+					return Promise.resolve();
 				})
+
+				if(!foundEvent && data.events.length > 0) {
+					programStages.push({
+						programStage:data.events[0].programStage,
+						events: [],
+					})
+				}
+
 				let programs = this.props.getPrograms();
 				if(programs.length > 0) {
 					programs.map(program => {
 						if(program.id === programId) {
 							program.programStages = programStages;
 						}
+						return Promise.resolve();
 					})
 				}
-				console.log(programs);
+				//console.log(programs);
 				this.handleProgramsChange(programs);
 			})
 			.catch(error => {
@@ -465,54 +778,62 @@ class Login extends Component {
 		console.log("getProgramStageDataFromDhis2");
 		return api.getProgramStageData(programStageId, username, password)
 			.then(data => {
-				console.log(data);
 				let programs = this.props.getPrograms();
 				if(programs.length > 0) {
 					programs.map(program => {
 						if(program.hasOwnProperty("programStages")) {
-							program.programStages.map(programStage => {
-								if(programStage.programStage === programStageId) {
+							if(program.programStages.length === 0) {
+								//console.log("BUU");
+								//TODO: add programStage with data here. 
+							}else {
+								program.programStages.map(programStage => {
 									programStage.dataElements = data.programStageDataElements;
-									programStage.events.map(event => {
-										data.programStageDataElements.map(programStageDataElement => {
-											event.dataValues.map(dataValue => {
-												if(dataValue.dataElement === programStageDataElement.dataElement.id) {
-													dataValue.displayName = programStageDataElement.dataElement.displayName;
-													dataValue.optionSetValue = programStageDataElement.dataElement.optionSetValue;
-													dataValue.valueType = programStageDataElement.dataElement.valueType;
-													if(dataValue.optionSetValue) {
-														dataValue.optionSet = programStageDataElement.dataElement.optionSet;
+									if(programStage.programStage === programStageId) {
+										programStage.events.map(event => {
+											data.programStageDataElements.map(programStageDataElement => {
+												event.dataValues.map(dataValue => {
+													if(dataValue.dataElement === programStageDataElement.dataElement.id) {
+														dataValue.displayName = programStageDataElement.dataElement.displayName;
+														dataValue.optionSetValue = programStageDataElement.dataElement.optionSetValue;
+														dataValue.valueType = programStageDataElement.dataElement.valueType;
+														if(dataValue.optionSetValue) {
+															dataValue.optionSet = programStageDataElement.dataElement.optionSet;
+														}
 													}
-												}
+													return Promise.resolve();
+												})
+												return Promise.resolve();
 											})
+											return Promise.resolve();
 										})
-									})
-								}
-							})
+									}
+									return Promise.resolve();
+								})
+							}
 						}
+						return Promise.resolve();
 					})
 				}
-				console.log(programs);
+				//console.log(programs);
 				this.handleProgramsChange(programs);
-				this.handleLoginChange(3);
+				this.handleLoginChange(4); //TODO: set to "3" to register user
 			})
 	}
 
 	render() {
 	  return (
-		<article className="login">
-			<h2 className="whiteText">DHIS2</h2>
+		<article>
+			<h2 className="loginText">DHIS2</h2>
 			<div>
-				<label className="parent">
-					<p className="whiteText">Sign in</p>
+				<label className="parent-column">
+					<p className="Sign-in">Sign in</p>
 					<input
 						className="loginbox"
 						id="userName"
 						name="userName"
 						type="text"
 						placeholder="User name"
-						defaultValue="AkselJ" //to be removed
-						onChange={() => console.log("test")}
+						defaultValue="test gynecologist" //to be removed
 					/>
 					<input
 						className="loginbox"
@@ -520,7 +841,7 @@ class Login extends Component {
 						name="password"
 						type="password"
 						placeholder="Password"
-						defaultValue="District1-" //to be removed
+						defaultValue="Test@1234" //to be removed
 					/>
 					<button onClick={() => this.getUserCredentialsFromLogin()} className="button1">Sign in</button>
 				</label>
@@ -530,90 +851,12 @@ class Login extends Component {
 	}
 }
 
-class RegisterUser extends Component {
-
-	finishRegistering(e){
-		this.props.onLoginChange(e)
-	}
-
-	render() {
-		return (
-			<div className="parent">
-			<h1 className="whiteText">This will be a register page</h1>
-			<button className="button2" onClick={() => this.finishRegistering(4)}>Finish Registering</button>
-		</div>
-		)
-	}
-	
-}
-
-class DisplayEvents extends Component {
-
-	handleLoginChange(e) {
-		this.props.onLoginChange(e);
-	}
-
-	handleChosenEventChange(e) {
-		this.props.onEventChange(e);
-	}
-
-	selectEvent = event => {
-		this.handleChosenEventChange(event);
-		this.handleLoginChange(5);
-	}
-	
-	render(){
-		let programs = this.props.getPrograms();
-
-		if(programs.length > 0) {
-			if(programs[0].hasOwnProperty("programStages")){
-				if(programs[0].programStages.length > 0) {
-					let programStage = programs[0].programStages[0]; //TODO- this might need to be fixed. Map through stages?
-					if(programStage.hasOwnProperty("events")) {
-						return (
-							<div>
-								{
-								programStage.events.map(event => {
-									let approvalState;
-			
-									event.dataValues.map(dataValue => {
-										if(dataValue.dataElement === "zrZADVnTtMa") { //TODO: Hardcoded approvalState dataelement
-											approvalState = dataValue.value;
-										}
-									})
-									if(approvalState === "1" || approvalState === 1) { //approved
-										return <button className="buttonApproved" key={event.event} onClick={() => {this.selectEvent(event)}}>{event.eventDate.slice(0, 10)}</button>
-									} else if(approvalState === "2" || approvalState === 2) { //rejected
-										return <button className="buttonRejected" key={event.event} onClick={() => {this.selectEvent(event)}}>{event.eventDate.slice(0, 10)}</button>
-									} else if(approvalState === "3" || approvalState === 3) { //completed, waiting for apporval
-										return <button className="buttonAwaitApproval" key={event.event} onClick={() => {this.selectEvent(event)}}>{event.eventDate.slice(0, 10)}</button>
-									} else {
-										return <button className="button1" key={event.event} onClick={() => {this.selectEvent(event)}}>{event.eventDate.slice(0, 10)}</button>
-									}
-								})
-								}
-							</div>
-						)
-					} else {
-						return <p>no events1</p>
-					}
-				} else {
-					return <p>no events2</p>
-				}
-			} else {
-				return <p>no events3</p>
-			}
-		} else {
-			return <p>no events4</p>
-		}
-	}
-}
-
 class DisplayEvent extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			changeMade: false,
+			enableEdit: true,
 		}
 		this.handleFieldChange = this.handleFieldChange.bind(this);
 	}
@@ -639,35 +882,53 @@ class DisplayEvent extends Component {
 			let event = this.props.chosenEvent();
 			let dataValues = [];
 			let state = this.props.getState();
-	
+
 			event.dataValues.map(dataValue => {
 				let newDataValue = {
 					value: dataValue.value,
 					dataElement: dataValue.dataElement,
 				}
 				dataValues.push(newDataValue);
+				return Promise.resolve();
 			})
-	
-			let eventToPush = {events: [
-				{
-					trackedEntityInstance: state.trackedEntityInstance,
-					program: state.chosenProgram,
-					programStage: state.chosenProgramStage,
-					enrollment: state.enrollment,
-					orgUnit: state.orgUnit,
-					notes: [],
-					dataValues: dataValues,
-					status: "ACTIVE",
-					eventDate: event.eventDate.slice(0, 10),
-				}
-			]}
 
-			this.props.addToSubmitQue("/events", eventToPush, "POST");
+			if(event.hasOwnProperty("event")) {
+				//EVENT exists from before, and needs PUT
+				let eventToPush = {
+						event: event.event,
+						program: state.chosenProgram,
+						programStage: state.chosenProgramStage,
+						status: "COMPLETED",
+						trackedEntityInstance: state.trackedEntityInstance,
+						dataValues: dataValues,
+					}
+
+				this.props.addToSubmitQue(`/events/${event.event}`, eventToPush, "PUT");
+			
+			} else {
+				//EVENT does not exists from before, and needs POST
+				let eventToPush = {events: [
+					{
+						trackedEntityInstance: state.trackedEntityInstance,
+						program: state.chosenProgram,
+						programStage: state.chosenProgramStage,
+						enrollment: state.enrollment,
+						orgUnit: state.orgUnit,
+						notes: [],
+						dataValues: dataValues,
+						status: "COMPLETED",
+						eventDate: event.eventDate,
+					}
+				]}
+
+				this.props.addToSubmitQue("/events", eventToPush, "POST");
+			}
 		}
+		this.clearChosenEvent();
 	}
 
 	registerEvent() {
-		this.clearChosenEvent();
+		this.props.updateProgramsEventFromChosenEvent(this.props.chosenEvent());
 		this.addToHandleSubmit();
 		this.handleLoginChange(4);
 	}
@@ -678,41 +939,104 @@ class DisplayEvent extends Component {
 			event.dataValues.map(dataValue => {
 				if(dataValue.dataElement === dataElement) {
 					dataValue.value = value;
-					//console.log(value);
-					//console.log(dataValue.value);
+					if(dataValue.dataElement === "x2uDVEGfY4K") {
+						if(value === 1) {
+							this.setState({enableEdit:true}) //TODO - jobb her
+						} else {
+							this.setState({enableEdit:false}) //TODO - jobb her
+						}
+					}
 				}
+				return Promise.resolve();
 			})
 		}
-		//console.log(event);
-		this.handleChosenEventChange(event);
+
+		//this ensures that all optionSets are selected, even if not clicked.
+		//default view in optionSets are value=1, so unless changed by user,
+		//the value stays 1.
+		event.dataValues.map(value => {
+			if(value.optionSetValue) {
+				if(value.value === "") {
+					value.value = 1;
+				}
+			}
+			return Promise.resolve();
+		})
+		this.props.onEventChange(event);
 	}
 
-	handleChosenEventChange(e) {
-		this.props.onEventChange(e);
+	enableForm() {
+		return this.state.enableEdit;
+		/*
+		this.props.chosenEvent().dataValues.map(dataValue => {
+			if(dataValue.dataElement === "x2uDVEGfY4K") {
+				console.log(dataValue);
+				if(dataValue.value === 1) {
+					return true;
+				}
+			}
+		})
+		return false;
+		*/
 	}
 
 	render() {
-		if(this.props.chosenEvent().hasOwnProperty("dataValues")) {
-			return <div className="parent">
-				{this.props.chosenEvent().dataValues.map(dataValue => {
-					if(dataValue.optionSetValue) {
-						return <FormElement.CreateOptionElement 
+		if(this.props.chosenEvent.status === "COMPLETED") {
+			return <p>completed</p>
+		} else if(this.props.chosenEvent().hasOwnProperty("dataValues")) {
+			return <div>
+				{
+					this.props.chosenEvent().dataValues.map(dataValue => {
+						if(dataValue.dataElement !== "x2uDVEGfY4K") {
+							if(dataValue.optionSetValue) {
+								if(this.enableForm()) {
+									return <FormElement.CreateOptionElement 
+									handleFieldChange={this.handleFieldChange} 
+									dataValue={dataValue}
+									key={dataValue.dataElement}
+									enableEditForm={true}
+								/>
+								} else {
+									return <FormElement.CreateOptionElement 
+									handleFieldChange={this.handleFieldChange} 
+									dataValue={dataValue}
+									key={dataValue.dataElement}
+									enableEditForm={false}
+								/>
+								}
+							} else {
+								if(this.enableForm()) {
+									return <FormElement.CreateElement 
+									handleFieldChange={this.handleFieldChange} 
+									dataValue={dataValue}
+									key={dataValue.dataElement}
+									enableEditForm={true}
+								/>
+								} else {
+									return <FormElement.CreateElement 
+									handleFieldChange={this.handleFieldChange} 
+									dataValue={dataValue}
+									key={dataValue.dataElement}
+									enableEditForm={false}
+								/>
+								}
+							} 
+						} else {
+							return <FormElement.CreateOptionElement 
 							handleFieldChange={this.handleFieldChange} 
 							dataValue={dataValue}
 							key={dataValue.dataElement}
+							enableEditForm={true}
 						/>
-					} else {
-						return <FormElement.CreateTextElement 
-							handleFieldChange={this.handleFieldChange} 
-							dataValue={dataValue}
-							key={dataValue.dataElement}
-						/>
-					}
-				})}
-				<button className="test" onClick={() => this.registerEvent()}>Register form</button>
+						}
+						return Promise.resolve();
+					})
+				}
+				<button className="send-report-button" onClick={() => this.registerEvent()}>Send Report</button>
+				<button className="send-report-button" onClick={() => { this.handleLoginChange(4); this.clearChosenEvent();}}>Back</button>
 			</div>
 		} else {
-			return <p>nothing here</p>
+			return <p>Select event from calendar</p>
 		}
 	}
 }
@@ -735,66 +1059,82 @@ class RegsiterTodaysEvent extends Component {
 
 	newEvent() {
 		let event = {
-			eventDate: new Date().toISOString(),
+			eventDate: new Date().toISOString(), //GET date from calender
 			status: "",
 			dataValues: [],
 		}
 
 		let programs = this.props.getPrograms();
 		if(programs.length > 0) {
-			if(programs.hasOwnProperty("programStages")){
-				if(programs.programStages.length > 0) {
-					let programStage = programs[0].programStages[0];
-					if(programStage.hasOwnProperty("dataElements")) {
-						programStage.dataElements.map(dataElement => {
-							if(dataElement.dataElement.optionSetValue) {
-								event.dataValues.push(
-									{
-										dataElement: dataElement.dataElement.id,
-										displayName: dataElement.dataElement.displayName,
-										optionSetValue: dataElement.dataElement.optionSetValue,
-										optionSet: dataElement.dataElement.optionSet,
-										value: "",
-									}
-								)
-							} else {
-								event.dataValues.push(
-									{
-										dataElement: dataElement.dataElement.id,
-										displayName: dataElement.dataElement.displayName,
-										optionSetValue: dataElement.dataElement.optionSetValue,
-										value: "",
-									}
-								)
+			programs.map(program => {
+				if(program.id === "Bv3DaiOd5Ai") { //TODO - not hardcode - this is specified in state.
+					if(program.hasOwnProperty("programStages")){
+						if(program.programStages.length > 0) {
+							let programStage = program.programStages[0]; //TODO: This cannot be.. if there is more than one programStage.
+							if(programStage.hasOwnProperty("dataElements")) {
+								if(programStage.dataElements.length > 0) {
+								programStage.dataElements.map(dataElement => {
+										if(dataElement.dataElement.optionSetValue) {
+											event.dataValues.push(
+												{
+													dataElement: dataElement.dataElement.id,
+													displayName: dataElement.dataElement.displayName,
+													optionSetValue: dataElement.dataElement.optionSetValue,
+													optionSet: dataElement.dataElement.optionSet,
+													value: "",
+												}
+											)
+										} else {
+											event.dataValues.push(
+												{
+													dataElement: dataElement.dataElement.id,
+													displayName: dataElement.dataElement.displayName,
+													optionSetValue: dataElement.dataElement.optionSetValue,
+													value: "",
+												}
+											)
+										}
+										return Promise.resolve();
+									})
+								}
 							}
-						})
+						}
 					}
 				}
-			}
+				return Promise.resolve();
+			})
 		}
+		//console.log(event);
 		return event;
 	}
 
+	//TODO: FIX this
 	checkIfRegisteredToday() {
 		let programs = this.props.getPrograms();
 		let date = new Date().toISOString().slice(0, 10);
 
 		if(programs.length > 0) {
+			//console.log("1");
 			if(programs[0].hasOwnProperty("programStages")) {
+				//console.log("2");
 				if(programs[0].programStages.length > 0) {
+					//console.log("3");
 					let programStage = programs[0].programStages[0]; //TODO- this might need to be fixed. Map through stages?
 					if(programStage.hasOwnProperty("events")) {
+						//console.log("4");
 						programStage.events.map(event => {
+							//console.log("5");
 							if(event.eventDate.slice(0, 10) === date) {
+								//console.log("6");
 								return true;
 							}
+							return Promise.resolve();
 						})
 					}
 				}
 			}
 		}
-		return false;
-			
+		return false;	
 	}
 
 	render() {
@@ -807,7 +1147,7 @@ class RegsiterTodaysEvent extends Component {
 		} else {
 			return (
 				<div>
-					<button className="button1" onClick={() => {this.selectEvent(this.newEvent())}}>Register Today</button>
+					<button onClick={() => {this.selectEvent(this.newEvent())}}>Register Today</button>
 				</div>
 			)
 		}

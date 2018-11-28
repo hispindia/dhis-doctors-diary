@@ -4,10 +4,16 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.3.2",
+    "flatpickr": "^4.5.2",
     "react": "^16.5.2",
+    "react-calendar-component": "^2.0.0",
+    "react-detect-offline": "^2.1.2",
     "react-dom": "^16.5.2",
+    "react-flatpickr": "^3.6.4",
+    "react-interval": "^2.0.2",
     "react-scripts": "2.0.4"
   },
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

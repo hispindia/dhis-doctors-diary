@@ -3,8 +3,8 @@
 */
 
 const dhis2 = {
-    baseUrl: `https://course.dhis2.org/dhis/api`,
-    //baseUrl: `http://180.151.233.61/upupgrade/api`,
+    //baseUrl: `https://course.dhis2.org/dhis/api`,
+    baseUrl: `http://180.151.233.61/upupgrade/api`,
 };
 
 //gets programs from DHIS2
@@ -21,7 +21,22 @@ const getPrograms = (username, password) => {
         .then(response => response.json())
 };
 
-//function fills in users' trackedEntityInstance, enrollment and programStage
+//TODO: Filter on attribute in trackedEntityInstance, not storedBy - to get events create dby admin as well
+//function gets enrollment and trackedEntityData
+const getEnrollmentAndTrackedED = (orgUnit, programId, username, password) => {
+    return fetch(`${dhis2.baseUrl}/trackedEntityInstances?ou=${orgUnit}&program=${programId}&fields=*&filter:enrollments.storedBy:eq:${username}`, {
+        method: 'GET',
+        mode: 'cors',
+        //credentials: 'include',
+        headers: {
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+        }
+    })
+    .catch(error => error)
+    .then(response => response.json())
+}
+
+//function fills in users' programStages
 //but requires both orgUnit and program
 const getUserInfo = (programId, username, password) => {
     return fetch(`${dhis2.baseUrl}/events?program=${programId}&fields=storedBy,program,href,event,programStage,
@@ -39,7 +54,7 @@ const getUserInfo = (programId, username, password) => {
 
 //Function fills up userData.dataElements with the programStage's associated dataElements 
 const getProgramStageData = (programStageId, username, password) => {  
-    return fetch(`${dhis2.baseUrl}/programStages/${programStageId}?fields=id,programStageDataElements[dataElement[optionSetValue,id,displayName,optionSet[id,displayName,options[name,id,sortOrder]]]&paging=false`,  {
+    return fetch(`${dhis2.baseUrl}/programStages/${programStageId}?fields=id,programStageDataElements[dataElement[valueType,optionSetValue,id,displayName,optionSet[id,displayName,options[name,id,sortOrder]]]&paging=false`,  {
         method: 'GET',
         mode: 'cors',
         //credentials: 'include',
@@ -101,35 +116,10 @@ const postPayload = (endpoint, payload, method, username, password) => {
 
 export default {
     getPrograms,
+    getEnrollmentAndTrackedED,
     getUserInfo,
     getProgramStageData,
     checkUserCredentials,
     getUsersOrgunit,
     postPayload,
 };
-
-/*
-
-POST to "https://course.dhis2.org/dhis/api/30/events.json"
-
-{"events":[{
-	"trackedEntityInstance":"vjVNrMa4zvc",
-	"program":"r6qGL4AmFV4",
-	"programStage":"ZJ9TrNgrtfb",
-	"enrollment":"t9uszS9mfzD",
-	"orgUnit":"eLLMnNjuluX",
-	"notes":[],
-	"dataValues":[
-		{"value":1,"dataElement":"BIB2zYDYIJp"},
-		{"value":1,"dataElement":"CXL5mg5l0cv"},
-		{"value":1,"dataElement":"EZstOIjb7wN"},
-		{"value":"1","dataElement":"romAEndBlt4"},
-		{"value":"2","dataElement":"p5D5Y9x7yMc"},
-		{"value":"3","dataElement":"LoY92GDoDC6"},
-		{"value":"2","dataElement":"zrZADVnTtMa"}
-		],
-	"status":"ACTIVE",
-	"eventDate":"2018-10-31"}
-	]
-}
-*/

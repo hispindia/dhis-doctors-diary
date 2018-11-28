@@ -1,0 +1,224 @@
+button{
+  background-color: white;
+  padding: 10px 20px;
+  margin: 20px auto;
+  font: 400 14px Arial;
+  align-self: center;
+}
+
+.cool-date-yellow {
+  border: 1.5px solid yellow !important;
+  padding: 7px;
+  border-radius: 150px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #484848;
+  cursor: pointer;
+  font-weight: 400;
+  -webkit-flex-basis: 14.2857143%;
+      -ms-flex-preferred-size: 14.2857143%;
+          flex-basis: 14.2857143%;
+  max-width: 39px;
+  height: 39px;
+  margin: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+
+.cool-date-green {
+  border: 1.5px solid green !important;
+  padding: 7px;
+  border-radius: 150px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #484848;
+  cursor: pointer;
+  font-weight: 400;
+  -webkit-flex-basis: 14.2857143%;
+      -ms-flex-preferred-size: 14.2857143%;
+          flex-basis: 14.2857143%;
+  max-width: 39px;
+  height: 39px;
+  margin: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+.cool-date-red {
+  border: 1.5px solid red !important;
+  padding: 7px;
+  border-radius: 150px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #484848;
+  cursor: pointer;
+  font-weight: 400;
+  -webkit-flex-basis: 14.2857143%;
+      -ms-flex-preferred-size: 14.2857143%;
+          flex-basis: 14.2857143%;
+  max-width: 39px;
+  height: 39px;
+  margin: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+.online-text {
+  color: green;
+} 
+
+
+.offline-text {
+  color: red;
+}
+
+.div-class-test {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+  background-color: grey;
+  list-style-type: none;
+  border: 1px dotted black;
+  margin: 1rem 0;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.button1 {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+}
+
+.button2 {
+  
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  margin-top: 20px;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+}
+
+
+.whiteText {
+  color: white;
+  font-family: Poppins-Regular;
+  font-size: 20px;
+  text-align: center;
+  margin-left: 17px;
+  margin-right: 15px;
+}
+
+.logo{
+  size: 10%;
+}
+
+.DateText {
+  color: white;
+  font-family: Poppins-Regular;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  min-width: 300px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid white;
+}
+
+.greenSelect {
+  color: white;
+  background-color: green;
+  border-color: green;
+}
+
+.parent{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  flex-wrap: wrap;
+}
+
+.parent-column{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-wrap: wrap;
+}
+
+.send-report-button {
+  background-color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font: 400 14px Arial;
+}
+
+.buttonApproved {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+  color: white;
+  background-color: green;
+  border-color: white;
+}
+
+.buttonRejected {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+  color: white;
+  background-color: Red;
+  border-color: white;
+}
+
+.buttonAwaitApproval {
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+  color: black;
+  background-color: Yellow;
+  border-color: white;
+}
+
+.logout {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 1px solid #888;
+  padding: 6px 6px;
+  margin: 4px 0;
+  border-radius: 3px;
+  text-align: center;
+  font: 400 13.3333px Arial;
+}

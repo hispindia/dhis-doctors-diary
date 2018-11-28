@@ -1,0 +1,36 @@
+
+.formText {
+    color: #d9d9d9;
+    font-family: Poppins-Regular;
+    font-size: 16px;
+    text-align: left;
+    
+}
+
+input, select {
+    background: transparent;
+    width: 100%;
+    color: white;
+    font-size: 16px; 
+    border: 0; 
+    outline: none;
+    border-bottom: 1px solid white;
+    
+}
+
+option{
+    background-color: #1d5288;
+    color: white;
+    font-size: 16px;
+}
+
+#right-align {
+    text-align: right;
+    text-align-last: right;
+}
+
+#right-align-disabled {
+    background: rgba(237, 237, 237,0.2);
+    text-align: right;
+    text-align-last: right;
+}

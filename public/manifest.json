@@ -1,6 +1,8 @@
 {
   "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Doctors Diary 0.3"
+  "version": "0.3",
+  "homepage": ".",
   "icons": [
     {
       "src": "favicon.ico",
