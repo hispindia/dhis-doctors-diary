@@ -4,12 +4,13 @@
 
 const dhis2 = {
     //baseUrl: `https://course.dhis2.org/dhis/api`,
-    baseUrl: `http://180.151.233.61/upupgrade/api`,
+    //baseUrl: `http://180.151.233.61/upupgrade/api`,
+    baseUrl: `https://uphmis.in/uphmis/api`,
 };
 
 //gets programs from DHIS2
-const getPrograms = (username, password) => {
-    return fetch(`${dhis2.baseUrl}/programs?paging=false`, {
+const getPrograms = (username, password, programID) => {
+    return fetch(`${dhis2.baseUrl}/programs?paging=false&filter=id:eq:${programID}`, {
         method: 'GET',
         mode: 'cors',
         //credentials: 'include',

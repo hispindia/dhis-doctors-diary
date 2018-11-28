@@ -17,12 +17,6 @@ class App extends Component {
     this.state = {
 		login: 1,
 		date: new Date(),
-		//login explained:
-		//1 - login screen
-		//2 - waiting screen
-		//3 - register new user screen
-		//4 - event page - register new event / view old events
-		//5 - render selected event
 		programs: {}, //fills up from getProgramsFromDhis2
 		username: "",
 		password: "",
@@ -30,8 +24,9 @@ class App extends Component {
 		enrollment: "",
 		orgUnit: "",
 		userId: "",
+		userRole: "",
 		chosenProgram: "Bv3DaiOd5Ai",
-		chosenProgramStage: "", //gynecologist:"CLoZpOqTSI8" , paediatrican: "iDYy00hz00M", anestetist: "anSbnUqRxeR" 
+		chosenProgramStage: "anSbnUqRxeR", //gynecologist:"CLoZpOqTSI8" , paediatrican: "iDYy00hz00M", anestetist: "anSbnUqRxeR" 
 		chosenEvent: "",
 		timeToLogOut: false,
 		handleSubmit: [],
@@ -56,6 +51,7 @@ class App extends Component {
 	this.clearChosenEvent = this.clearChosenEvent.bind(this);
 	this.addToHandleSubmit = this.addToHandleSubmit.bind(this);
 	this.disableForm = this.disableForm.bind(this);
+	this.setUserRole = this.setUserRole.bind(this);
 
 	this.setProgramStage = this.setProgramStage.bind(this);
 	}
@@ -117,6 +113,12 @@ class App extends Component {
 	handleUserIdChange(userId) {
 		this.setState({
 			userId: userId
+		})
+	}
+
+	setUserRole(userRole) {
+		this.setState({
+			userRole: userRole
 		})
 	}
 
@@ -205,6 +207,7 @@ class App extends Component {
 						chosenProgramStage: data.chosenProgramStage,
 						chosenEvent: data.chosenEvent,
 						handleSubmit: data.handleSubmit,
+						userRole: data.userRole,
 						//TODO: Fill this up with all new state elements
 					});
 				} else {
@@ -302,7 +305,17 @@ class App extends Component {
 		}	
 	}
 
+	//used to fill calendar with dates in colors corresponding to their approval status
+	sortEventIntoColorsForCalendar() {
+		//TODO: make diz
+	}
+
+	//TODO: make generic - get ID from userRoles?
 	setProgramStage() {
+
+		//Find programStages from userRoles.
+
+		/*
 		console.log("Setting programstage");
 		if(this.state.username === "test paedeatrician") {
 			console.log("paedeatrician")
@@ -320,9 +333,11 @@ class App extends Component {
 				chosenProgramStage: "CLoZpOqTSI8"
 			})
 		}
+		*/
 		this.updateLocalStorage();
 	}
 
+	//Returns date one day before the first recorded event. 
 	eventsFirstDate() {
 		let lastEvent = "0000-00-00";
 		let firstEvent = "9999-12-30";
@@ -349,13 +364,26 @@ class App extends Component {
 		} catch (error) {
 			console.log(error);
 		}
-		//let dates = {firstEvent: firstEvent, lastEvent: lastEvent};
+
+		let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
+		let intDate = firstEvent.split('-').map(i => parseInt(i));
+		if(intDate[2].toString() === "01" || intDate[2] === 1){
+			intDate[2] = daysInMonth[intDate[1]-1];
+			if(intDate[1].toString() === "01" || intDate[1] === 1) {
+				intDate[1] = 12;
+				intDate[0] = intDate[0]-1;
+			}
+		} else {
+			intDate[2] = intDate[2]-1;
+		}
+		firstEvent = intDate.join("-");
 		return firstEvent;
 
 		//TODO: Find days with no reports - 
 		//TODO: Return values to caledar, use values for min/max dates
 	}
 
+	//returns event if there is an event for given date
 	findEventBasedOnSelectedDate() {
 		let chosenEvent = "";
 		try {
@@ -382,17 +410,67 @@ class App extends Component {
 		return chosenEvent;
 	}
 
-	findColorsForCalenderView() {
-		
+
+	newEvent() {
+		let event = {
+			eventDate: this.state.date[0].toISOString().slice(0,23),
+			status: "",
+			dataValues: [],
+		}
+
+		let programs = this.state.programs;
+		if(programs.length > 0) {
+			programs.map(program => {
+				if(program.id === this.state.chosenProgram) { //TODO - not hardcode - this is specified in state.
+					if(program.hasOwnProperty("programStages")){
+						if(program.programStages.length > 0) {
+							let programStage = program.programStages[0]; //TODO: This cannot be.. if there is more than one programStage.
+							if(programStage.hasOwnProperty("dataElements")) {
+								if(programStage.dataElements.length > 0) {
+								programStage.dataElements.map(dataElement => {
+										if(dataElement.dataElement.optionSetValue) {
+											event.dataValues.push(
+												{
+													dataElement: dataElement.dataElement.id,
+													displayName: dataElement.dataElement.displayName,
+													optionSetValue: dataElement.dataElement.optionSetValue,
+													optionSet: dataElement.dataElement.optionSet,
+													value: "",
+												}
+											)
+										} else {
+											event.dataValues.push(
+												{
+													dataElement: dataElement.dataElement.id,
+													displayName: dataElement.dataElement.displayName,
+													optionSetValue: dataElement.dataElement.optionSetValue,
+													value: "",
+												}
+											)
+										}
+										return Promise.resolve();
+									})
+								}
+							}
+						}
+					}
+				}
+				return Promise.resolve();
+			})
+		}
+		return event;
 	}
+
 
 	setChosenEventFromCalenderView() {
 		let event = this.findEventBasedOnSelectedDate();
 		if(event !== "") {
 			this.handleChosenEventChange(event);
 		} else {
+			let newEvent = this.newEvent();
+			this.handleChosenEventChange(newEvent);
 			//todo: create new event
-			this.clearChosenEvent();
+			//this.clearChosenEvent();
 		}
 		this.disableForm();
 	}
@@ -428,13 +506,11 @@ class App extends Component {
 			for (let i = 0; i < elements.length; i++) {
 				elements[i].setAttribute("disabled", true);
 			}
-			console.log("Disabled form");
 		} else {
 			let elements = document.getElementsByClassName("item-select");
 			for (let i = 0; i < elements.length; i++) {
 				elements[i].removeAttribute("disabled");
 			}
-			console.log("Enabled form");
 		}
 	}
 
@@ -456,6 +532,7 @@ class App extends Component {
 						getPrograms={this.getPrograms}
 						getState={this.getState}
 						choseSpecialst={this.setProgramStage}
+						setUserRole={this.setUserRole}
 					/>
 				</div>
 			)
@@ -474,23 +551,24 @@ class App extends Component {
 				<div className="parent">
 					<Online>
 						<nav className="online-text">
-							ONLINE - TO SEND: {this.state.handleSubmit.length}
+							ONLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}
 						</nav>
 						
 					</Online>
 					<Offline>
 						<nav className="offline-text">
-							OFFLINE - TO SEND: {this.state.handleSubmit.length}
+							OFFLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}
 						</nav>
 					</Offline>
 					<ReactInterval timeout={20000} enabled={true}
 						callback={() => this.handleSubmit()} 
 					/>
-					<RegsiterTodaysEvent
+					{/*<RegsiterTodaysEvent
 						getPrograms={this.getPrograms}
 						onLoginChange={this.handleLoginChange}
 						onEventChange={this.handleChosenEventChange}
-					/>
+					/>*/
+					}
 					<Flatpickr data-enable-time
 						value={date}
 						onClick={this.removeTimer}
@@ -502,12 +580,12 @@ class App extends Component {
 
 								let datesRed = [
 									{
-										startDate: Date.parse('2018-11-17'),
-										endDate: Date.parse('2018-11-18')
+										startDate: Date.parse('2018-11-22'),
+										endDate: Date.parse('2018-11-24')
 									},
 									{
-										startDate: Date.parse('2018-11-18'),
-										endDate: Date.parse('2018-11-20')
+										//startDate: Date.parse('2018-11-18'),
+										//endDate: Date.parse('2018-11-20')
 									},
 								]
 
@@ -542,7 +620,7 @@ class App extends Component {
 							disable: [
 								{
 									from: "0000-01-01",
-									to: this.eventsFirstDate()
+									to: this.eventsFirstDate(),
 								},
 								{
 									from: new Date().fp_incr(1),
@@ -569,8 +647,8 @@ class App extends Component {
 						getState={this.getState}
 						updateProgramsEventFromChosenEvent={this.updateProgramsEventFromChosenEvent}
 					/>
-					<button className="logout" onClick={this.logOut}>Log out</button>
-					<button onClick={this.disableForm}>disable</button>
+					<button className="logout" onClick={() => { if (window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending..")) this.logOut() } }>Log out</button>
+
 				</div>
 			)
 		} else {
@@ -660,7 +738,7 @@ class Login extends Component {
 	//gets all programs from DHIS2.
 	getProgramsFromDhis2(username, password) {
 		console.log("getProgramsFromDhis2");
-		return api.getPrograms(username, password)
+		return api.getPrograms(username, password, this.props.getState().chosenProgram)
 			.then(data => {
 				this.handleProgramsChange(data.programs)
 			})
@@ -677,6 +755,7 @@ class Login extends Component {
 				if(data.teiSearchOrganisationUnits.length > 1) {
 					alert("might not be correct orgUnit");
 				}
+				this.props.setUserRole(data.userCredentials.userRoles[0].id)
 				this.handleUserIdChange(data.id);
 				this.handleOrgUnitChange(data.organisationUnits[0].id);
 				return data;
@@ -783,7 +862,6 @@ class Login extends Component {
 					programs.map(program => {
 						if(program.hasOwnProperty("programStages")) {
 							if(program.programStages.length === 0) {
-								//console.log("BUU");
 								//TODO: add programStage with data here. 
 							}else {
 								program.programStages.map(programStage => {
@@ -833,7 +911,7 @@ class Login extends Component {
 						name="userName"
 						type="text"
 						placeholder="User name"
-						defaultValue="test gynecologist" //to be removed
+						defaultValue="testan" //to be removed
 					/>
 					<input
 						className="loginbox"
@@ -987,7 +1065,7 @@ class DisplayEvent extends Component {
 			return <div>
 				{
 					this.props.chosenEvent().dataValues.map(dataValue => {
-						if(dataValue.dataElement !== "x2uDVEGfY4K") {
+						if(dataValue.dataElement !== "x2uDVEGfY4K") { //this would be the "work status field"
 							if(dataValue.optionSetValue) {
 								if(this.enableForm()) {
 									return <FormElement.CreateOptionElement 
