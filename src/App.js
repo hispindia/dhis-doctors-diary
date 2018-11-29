@@ -63,7 +63,9 @@ class App extends Component {
 
 	componentDidUpdate = () => {
 		if(!this.state.timeToLogOut) {
-			localStorage.setItem("state", JSON.stringify(this.state))
+			if(this.state.username !== "") {
+				localStorage.setItem(this.state.username, JSON.stringify(this.state))
+			}
 		};
 	}
 
@@ -135,6 +137,9 @@ class App extends Component {
 				program.programStages.map(programStage => {
 					if(programStage.programStage === this.state.chosenProgramStage) {
 						let eventFound = false;
+						if(!programStage.hasOwnProperty("events")){
+							programStage.events = [];
+						}
 						programStage.events.map(stageEvent => {
 							if(stageEvent.event === event.event) {
 								stageEvent = event;
@@ -158,7 +163,9 @@ class App extends Component {
 	}
 
 	updateLocalStorage() {
-		localStorage.setItem("state", JSON.stringify(this.state));
+		if(this.state.username !== ""){
+			localStorage.setItem(this.state.username, JSON.stringify(this.state));
+		}
 	}
 
 	getPrograms() {
@@ -181,15 +188,15 @@ class App extends Component {
 	}
 
 	logOut = () => {
-		this.setState({timeToLogOut:true});
-		localStorage.removeItem("state");
+		//this.setState({timeToLogOut:true});
+		//localStorage.removeItem(this.state.username);
 		this.setState({login:1});
 	}
 
 	//TODO: Update this with all new variables added to state
-	getLocalStorage() {
+	getLocalStorage(username) {
 		if (typeof(Storage) !== "undefined") {
-			let data = localStorage.getItem("state");
+			let data = localStorage.getItem(username);
 			if(data !== null) {
 				data = JSON.parse(data);
 				if(data.login !== 1) {
@@ -312,7 +319,34 @@ class App extends Component {
 
 	//TODO: make generic - get ID from userRoles?
 	setProgramStage() {
+		//id = programStage ID.
+		//code = static code found in userGroups 
+		let programStages = [
+			{code: "Doctor_Diary_Anaethetist", id: "anSbnUqRxeR"},
+			{code: "Doctor_Diary_Cardiology", id: "vzgsME7gBw1"},
+			{code: "Doctor_Diary_Chest_Disease", id: "hLtWNeAwwKU"},
+			{code: "Doctor_Diary_Ent_Specialist", id: "Z053EH826P6"},
+			{code: "Doctor_Diary_Gynnacologist", id: "CLoZpOqTSI8"},
+			{code: "Doctor_Diary_Medicine_Specialist", id: "qYk6poPj1d5"},
+			{code: "Doctor_Diary_Nephrology", id: "wi7IoJCW1Hm"},
+			{code: "Doctor_Diary_Neuro_Surgery_Specialist", id: "mVDFt1JK21P"},
+			{code: "Doctor_Diary_Opthamologist", id: "FkNlQ5arLjv"},
+			{code: "Doctor_Diary_Orthopaedics", id: "paJ6xmM0NKb"},
+			{code: "Doctor_Diary_Pediatrician", id: "GY3DLFAuERf"},
+			{code: "Doctor_Diary_Radiologist", id: "bZtzNBFba8z"},
+			{code: "Doctor_Diary_Skin_and_Venereal_Disease", id: "DVmD2rzLJ5E"},
+			{code: "Doctor_Diary_Surgeon", id: "ZVuW1ToOfyG"},
+			{code: "Doctor_Diary_Urology", id: "ugXqDTZBeKt"}
+		];
 
+		//https://uphmis.in/uphmis/api/userGroups.json?paging=false&fields=[id,name,displayName,code]&filter=code:!eq:%22%22
+		//https://uphmis.in/uphmis/api/me.json?fields=[id,name,displayName,userGroups]
+		//https://uphmis.in/uphmis/api/me.json?fields=[id,name,displayName,userGroups[*]] -> does not shot userGroups?
+
+		//Does specialists only hve one userGroup each? My test user has several of them...
+
+
+		console.log("this happens..");
 		//Find programStages from userRoles.
 
 		/*
@@ -365,6 +399,18 @@ class App extends Component {
 			console.log(error);
 		}
 
+		if(firstEvent === "9999-12-30") {
+			let d = new Date(),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+	
+			if (month.length < 2) month = '0' + month;
+			if (day.length < 2) day = '0' + day;
+	
+			firstEvent = [year, month, day].join('-');
+		}
+
 		let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
 		let intDate = firstEvent.split('-').map(i => parseInt(i));
 		if(intDate[2].toString() === "01" || intDate[2] === 1){
@@ -377,10 +423,9 @@ class App extends Component {
 			intDate[2] = intDate[2]-1;
 		}
 		firstEvent = intDate.join("-");
-		return firstEvent;
 
-		//TODO: Find days with no reports - 
-		//TODO: Return values to caledar, use values for min/max dates
+		//console.log(firstEvent);
+		return firstEvent;
 	}
 
 	//returns event if there is an event for given date
@@ -409,7 +454,6 @@ class App extends Component {
 		}
 		return chosenEvent;
 	}
-
 
 	newEvent() {
 		let event = {
@@ -515,6 +559,7 @@ class App extends Component {
 	}
 
 	render() {
+		
 		const { date } = this.state;
 		if(this.state.login === 1) { //login screen
 			return (
@@ -533,6 +578,7 @@ class App extends Component {
 						getState={this.getState}
 						choseSpecialst={this.setProgramStage}
 						setUserRole={this.setUserRole}
+						getLocalStorage={this.getLocalStorage}
 					/>
 				</div>
 			)
@@ -560,7 +606,7 @@ class App extends Component {
 							OFFLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}
 						</nav>
 					</Offline>
-					<ReactInterval timeout={20000} enabled={true}
+					<ReactInterval timeout={5000} enabled={true}
 						callback={() => this.handleSubmit()} 
 					/>
 					{/*<RegsiterTodaysEvent
@@ -580,8 +626,8 @@ class App extends Component {
 
 								let datesRed = [
 									{
-										startDate: Date.parse('2018-11-22'),
-										endDate: Date.parse('2018-11-24')
+										//startDate: Date.parse('2018-11-22'),
+										//endDate: Date.parse('2018-11-24')
 									},
 									{
 										//startDate: Date.parse('2018-11-18'),
@@ -705,6 +751,7 @@ class Login extends Component {
 		this.checkUserCredentialsFromDhis2(username, password)
 			.then(response => {
 				if(response) {
+					this.props.getLocalStorage(username);
 					this.handleLoginChange(2);
 					this.handleUsernameChange(username);
 					this.handlePasswordChange(password);
@@ -725,7 +772,7 @@ class Login extends Component {
 						})
 						})	
 				} else {
-					alert("Wrong username/password");
+					//alert("Wrong username/password");
 				}
 			})
   	}
@@ -733,6 +780,30 @@ class Login extends Component {
 	//returns true if username/password provided is correct, if not => false
 	checkUserCredentialsFromDhis2(username, password) {
 		return api.checkUserCredentials(username, password)
+		.then(respons => {
+			if(!respons) {
+				if (typeof(Storage) !== "undefined") {
+					let data = localStorage.getItem(username);
+					console.log(data);
+					if(data !== null) {
+						data = JSON.parse(data);
+						console.log(data.username);
+						console.log(data.password);
+						if(username === data.username && password === data.password) {
+							this.props.getLocalStorage(username);
+							this.handleLoginChange(4);
+							return false;
+						} else {
+							alert("Wrong username/password");
+						}
+					} else {
+						alert("Wrong username/password");
+					}
+				}
+			} else {
+				return respons;
+			}
+		})
 	}
 
 	//gets all programs from DHIS2.
@@ -788,6 +859,7 @@ class Login extends Component {
 		console.log("getUserInfoFromDhis2");
 		return api.getUserInfo(programId, username, password)
 			.then(data => {
+				console.log(data);
 				let foundEvent = false;
 				let programStages = [];
 				data.events.map(event => {
@@ -860,12 +932,20 @@ class Login extends Component {
 				let programs = this.props.getPrograms();
 				if(programs.length > 0) {
 					programs.map(program => {
-						if(program.hasOwnProperty("programStages")) {
+						if(program.hasOwnProperty("programStages")) { //TODO: needs changing if you want to add monthly event as well.
 							if(program.programStages.length === 0) {
+								program.programStages.push({
+									dataElements: data.programStageDataElements,
+									programStage: data.id,
+									displayName: data.displayName,
+									name: data.name,
+								});
 								//TODO: add programStage with data here. 
-							}else {
+							} else {
 								program.programStages.map(programStage => {
 									programStage.dataElements = data.programStageDataElements;
+									programStage.displayName = data.displayName;
+									programStage.name = data.name;
 									if(programStage.programStage === programStageId) {
 										programStage.events.map(event => {
 											data.programStageDataElements.map(programStageDataElement => {
@@ -921,6 +1001,7 @@ class Login extends Component {
 						placeholder="Password"
 						defaultValue="Test@1234" //to be removed
 					/>
+						<a className="forgot-password" href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action">Forgot your password?</a>
 					<button onClick={() => this.getUserCredentialsFromLogin()} className="button1">Sign in</button>
 				</label>
 			</div>
@@ -945,6 +1026,11 @@ class DisplayEvent extends Component {
 				changeMade: true
 			})
 		}
+		this.checkAprovalStatusForApproved();
+	}
+
+	componentDidMount() {
+		this.checkAprovalStatusForApproved();
 	}
 
 	handleLoginChange(e) {
@@ -966,6 +1052,10 @@ class DisplayEvent extends Component {
 					value: dataValue.value,
 					dataElement: dataValue.dataElement,
 				}
+				if(dataValue.dataElement === "OZUfNtngt0T") { //approvalStatus -> set to Re-submitted after sending
+					newDataValue.value = "Re-submitted";
+				}
+
 				dataValues.push(newDataValue);
 				return Promise.resolve();
 			})
@@ -1018,10 +1108,10 @@ class DisplayEvent extends Component {
 				if(dataValue.dataElement === dataElement) {
 					dataValue.value = value;
 					if(dataValue.dataElement === "x2uDVEGfY4K") {
-						if(value === 1) {
-							this.setState({enableEdit:true}) //TODO - jobb her
+						if(value === "Working") {
+							this.setState({enableEdit:true})
 						} else {
-							this.setState({enableEdit:false}) //TODO - jobb her
+							this.setState({enableEdit:false})
 						}
 					}
 				}
@@ -1045,70 +1135,106 @@ class DisplayEvent extends Component {
 
 	enableForm() {
 		return this.state.enableEdit;
-		/*
-		this.props.chosenEvent().dataValues.map(dataValue => {
-			if(dataValue.dataElement === "x2uDVEGfY4K") {
-				console.log(dataValue);
-				if(dataValue.value === 1) {
-					return true;
-				}
+	}
+
+	checkAprovalStatusForApproved() { //if approved - do not edit any element.
+		if(this.state.enableEdit){
+			try {
+				this.props.chosenEvent().dataValues.map(dataValue => {
+					if(dataValue.dataElement === "OZUfNtngt0T") {
+						if(dataValue.value === "Approved") {
+							this.setState({enableEdit:false})
+						}
+					}
+				})	
+			} catch (error) {
+				console.log(error);
 			}
-		})
-		return false;
-		*/
+		}
 	}
 
 	render() {
+	
 		if(this.props.chosenEvent.status === "COMPLETED") {
 			return <p>completed</p>
 		} else if(this.props.chosenEvent().hasOwnProperty("dataValues")) {
 			return <div>
 				{
-					this.props.chosenEvent().dataValues.map(dataValue => {
-						if(dataValue.dataElement !== "x2uDVEGfY4K") { //this would be the "work status field"
-							if(dataValue.optionSetValue) {
-								if(this.enableForm()) {
-									return <FormElement.CreateOptionElement 
-									handleFieldChange={this.handleFieldChange} 
-									dataValue={dataValue}
-									key={dataValue.dataElement}
-									enableEditForm={true}
-								/>
-								} else {
-									return <FormElement.CreateOptionElement 
-									handleFieldChange={this.handleFieldChange} 
-									dataValue={dataValue}
-									key={dataValue.dataElement}
-									enableEditForm={false}
-								/>
-								}
-							} else {
-								if(this.enableForm()) {
-									return <FormElement.CreateElement 
-									handleFieldChange={this.handleFieldChange} 
-									dataValue={dataValue}
-									key={dataValue.dataElement}
-									enableEditForm={true}
-								/>
-								} else {
-									return <FormElement.CreateElement 
-									handleFieldChange={this.handleFieldChange} 
-									dataValue={dataValue}
-									key={dataValue.dataElement}
-									enableEditForm={false}
-								/>
-								}
-							} 
-						} else {
+				this.props.chosenEvent().dataValues.map(dataValue => {
+					let inputmode = "text";
+					if(dataValue.valueType === "NUMBER") {
+						inputmode = "numeric";
+					}
+					if(dataValue.dataElement === "x2uDVEGfY4K" ) { //working status
+						if(this.state.enableEdit) {
 							return <FormElement.CreateOptionElement 
 							handleFieldChange={this.handleFieldChange} 
 							dataValue={dataValue}
 							key={dataValue.dataElement}
 							enableEditForm={true}
 						/>
+						} else {
+							return <FormElement.CreateOptionElement 
+							handleFieldChange={this.handleFieldChange} 
+							dataValue={dataValue}
+							key={dataValue.dataElement}
+							enableEditForm={false}
+						/>
 						}
-						return Promise.resolve();
-					})
+					} else if (dataValue.dataElement === "CCNnr8s3rgE") { //reason for rejection
+						if(dataValue.value !== ""){
+							return <FormElement.CreateElement 
+								handleFieldChange={this.handleFieldChange} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+							/>
+						}
+					} else if(dataValue.dataElement === "OZUfNtngt0T") { //approval status
+						return <FormElement.CreateOptionElement 
+							handleFieldChange={this.handleFieldChange} 
+							dataValue={dataValue}
+							key={dataValue.dataElement}
+							enableEditForm={false}
+						/>
+					} else if(true){ //TODO: change to (dataValue.dataElement !== "CCNnr8s3rgE")
+						if(dataValue.optionSetValue) {
+							if(this.enableForm()) {
+								return <FormElement.CreateOptionElement 
+								handleFieldChange={this.handleFieldChange} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={true}
+							/>
+							} else {
+								return <FormElement.CreateOptionElement 
+								handleFieldChange={this.handleFieldChange} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+							/>
+							}
+						} else {
+							if(this.enableForm()) {
+								return <FormElement.CreateElement 
+								handleFieldChange={this.handleFieldChange} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={true}
+								inputmode={inputmode}
+							/>
+							} else {
+								return <FormElement.CreateElement 
+								handleFieldChange={this.handleFieldChange} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+								inputmode={inputmode}
+							/>
+							}
+						} 
+					}
+				})
 				}
 				<button className="send-report-button" onClick={() => this.registerEvent()}>Send Report</button>
 				<button className="send-report-button" onClick={() => { this.handleLoginChange(4); this.clearChosenEvent();}}>Back</button>
@@ -1119,6 +1245,7 @@ class DisplayEvent extends Component {
 	}
 }
 
+/*
 //TODO: This needs fixing - does not update when registered event regsitered. Might need to update this.state in App.
 class RegsiterTodaysEvent extends Component {
 
@@ -1231,5 +1358,6 @@ class RegsiterTodaysEvent extends Component {
 		}
 	}
 }
+*/
 
 export default App;

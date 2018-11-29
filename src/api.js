@@ -22,10 +22,9 @@ const getPrograms = (username, password, programID) => {
         .then(response => response.json())
 };
 
-//TODO: Filter on attribute in trackedEntityInstance, not storedBy - to get events create dby admin as well
 //function gets enrollment and trackedEntityData
 const getEnrollmentAndTrackedED = (orgUnit, programId, username, password) => {
-    return fetch(`${dhis2.baseUrl}/trackedEntityInstances?ou=${orgUnit}&program=${programId}&fields=*&filter:enrollments.storedBy:eq:${username}`, {
+    return fetch(`${dhis2.baseUrl}/trackedEntityInstances?ou=${orgUnit}&program=${programId}&fields=*&filter:attributes.value:eq:${username}`, {
         method: 'GET',
         mode: 'cors',
         //credentials: 'include',
@@ -55,7 +54,7 @@ const getUserInfo = (programId, username, password) => {
 
 //Function fills up userData.dataElements with the programStage's associated dataElements 
 const getProgramStageData = (programStageId, username, password) => {  
-    return fetch(`${dhis2.baseUrl}/programStages/${programStageId}?fields=id,programStageDataElements[dataElement[valueType,optionSetValue,id,displayName,optionSet[id,displayName,options[name,id,sortOrder]]]&paging=false`,  {
+    return fetch(`${dhis2.baseUrl}/programStages/${programStageId}?fields=id,name,displayName,programStageDataElements[dataElement[valueType,optionSetValue,id,displayName,optionSet[id,displayName,options[name,id,sortOrder,code]]]&paging=false`,  {
         method: 'GET',
         mode: 'cors',
         //credentials: 'include',

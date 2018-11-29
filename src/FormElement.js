@@ -27,10 +27,6 @@ class CreateElement extends Component {
 		this.props.handleFieldChange(this.props.dataValue.dataElement, value);
 	}
 
-	checkType() {
-	}
-	  
-
 	render() {
 		if(this.props.enableEditForm) {
 			return(
@@ -38,8 +34,26 @@ class CreateElement extends Component {
 					<p className="formText">{this.props.dataValue.displayName}</p>
 					<form>
 						<input
+							inputMode={this.props.inputmode} 
 							className="item-select"
 							onChange={this.changeHandeler.bind(this)} //remove this for disable
+							id="right-align"
+							key={this.props.dataValue.dataElement}
+							type="text"
+							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
+							/> 
+					</form>
+				</div>
+			)
+		} else if(this.props.dataValue.dataElement === "CCNnr8s3rgE") {
+			return(
+				<div className="formElement">
+					<p className="formText">{this.props.dataValue.displayName}</p>
+					<form>
+						<textarea
+							disabled
+							rows="5"
+							className="item-select-disabled"
 							id="right-align"
 							key={this.props.dataValue.dataElement}
 							type="text"
@@ -56,7 +70,6 @@ class CreateElement extends Component {
 						<input
 							disabled
 							className="item-select"
-							onChange={this.changeHandeler.bind(this)} //remove this for disable
 							id="right-align-disabled"
 							key={this.props.dataValue.dataElement}
 							type="text"
@@ -64,7 +77,7 @@ class CreateElement extends Component {
 							/> 
 					</form>
 				</div>
-				)
+			)
 		}
   	}
 }
@@ -83,7 +96,7 @@ class CreateOptionElement extends Component {
 	
 	handleChange(event) {
 		this.setState({value: event.target.value});
-		this.props.handleFieldChange(this.props.dataValue.dataElement, this.state.value);
+		this.props.handleFieldChange(this.props.dataValue.dataElement, event.target.value);
 	}
 	
 	render() {
@@ -93,7 +106,7 @@ class CreateOptionElement extends Component {
 					<p className="formText">{this.props.dataValue.displayName}</p>
 					<select className="item-select" id="right-align" value={this.state.value} onChange={this.handleChange}>
 						{this.props.dataValue.optionSet.options.map(option => {
-							return <option value={option.sortOrder} key={option.id}>{option.name}</option>
+							return <option value={option.code} key={option.id}>{option.name}</option>
 						})}
 					</select>
 				</div>
@@ -102,9 +115,9 @@ class CreateOptionElement extends Component {
 			return (
 				<div className="formElement">
 					<p className="formText">{this.props.dataValue.displayName}</p>
-					<select disabled className="item-select" id="right-align-disabled" value={this.state.value} onChange={this.handleChange}>
+					<select disabled className="item-select" id="right-align-disabled" value={this.state.value}>
 						{this.props.dataValue.optionSet.options.map(option => {
-							return <option value={option.sortOrder} key={option.id}>{option.name}</option>
+							return <option value={option.code} key={option.id}>{option.name}</option>
 						})}
 					</select>
 				</div>
@@ -117,48 +130,3 @@ export default {
 	CreateElement,
   	CreateOptionElement,
 }
- 
-	
-/*	changeHandeler(event) {
-		console.log(event);
-		console.log(event.target);
-		console.log(event.target.value);
-		let value = event.target.value;
-		this.props.dataValue.optionSet.options.map(option => {
-			if(option.id === value) {
-				value = option.sortOrder;
-			}
-			return Promise.resolve();
-		})
-		console.log(value);
-		this.props.handleFieldChange(this.props.dataValue.dataElement, value);
-    }
-
-	render() {
-    	return(
-			<div className="formElement">
-				<p className="formText">{this.props.dataValue.optionSet.displayName}</p>
-				<select className="item-select"
-				//disabled
-				onChange={this.changeHandeler.bind(this)}
-					id="right-align">
-					<option value="" selected disabled hidden>Select option</option>
-					{this.props.dataValue.optionSet.options.map(option => {
-						let value = this.props.dataValue.value;
-						let sortOrder = JSON.stringify(option.sortOrder);
-						if(value === sortOrder) {
-							console.log("Value found");
-							console.log(value);
-							console.log(option);
-							return <option selected key={option.id} value={option.id}>{option.name}</option> 
-						} else {
-							return <option key={option.id} value={option.id}>{option.name}</option> 
-						}
-					})
-				}
-				</select>
-			</div>
-      	)
-    }
-} 
-*/

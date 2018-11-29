@@ -7,7 +7,7 @@
     
 }
 
-input, select {
+input, select,textarea {
     background: transparent;
     width: 100%;
     color: white;
@@ -15,7 +15,8 @@ input, select {
     border: 0; 
     outline: none;
     border-bottom: 1px solid white;
-    
+    resize: none;
+    overflow: auto;
 }
 
 option{

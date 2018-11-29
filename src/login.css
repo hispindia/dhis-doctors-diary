@@ -27,3 +27,13 @@
     margin-left: 17px;
     margin-right: 15px;
   }
+  
+.forgot-password {
+  color: white;
+  font-family: Poppins-Regular;
+  font-size: 15px;
+  text-align: center;
+  margin-left: 17px;
+  margin-right: 15px;
+  margin-bottom: 7px;
+}
