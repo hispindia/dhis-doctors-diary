@@ -26,10 +26,11 @@ class App extends Component {
 		userId: "",
 		userRole: "",
 		chosenProgram: "Bv3DaiOd5Ai",
-		chosenProgramStage: "anSbnUqRxeR", //gynecologist:"CLoZpOqTSI8" , paediatrican: "iDYy00hz00M", anestetist: "anSbnUqRxeR" 
+		chosenProgramStage: "",
 		chosenEvent: "",
 		timeToLogOut: false,
 		handleSubmit: [],
+		userGroups: [],
     };
 	
 	this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,19 +53,24 @@ class App extends Component {
 	this.addToHandleSubmit = this.addToHandleSubmit.bind(this);
 	this.disableForm = this.disableForm.bind(this);
 	this.setUserRole = this.setUserRole.bind(this);
+	this.setUserGroups = this.setUserGroups.bind(this);
 
 	this.setProgramStage = this.setProgramStage.bind(this);
+	this.sortEventIntoColorsForCalendar = this.sortEventIntoColorsForCalendar.bind(this);
 	}
 
 	componentDidMount = () => {
-		this.getLocalStorage()
-		//localStorage.setItem("state", JSON.stringify(this.state));
+		if (typeof(Storage) !== "undefined") {
+			let currentUser = localStorage.getItem("currentUser");
+			this.getLocalStorage(JSON.parse(currentUser))
+		}
 	}
 
 	componentDidUpdate = () => {
 		if(!this.state.timeToLogOut) {
 			if(this.state.username !== "") {
 				localStorage.setItem(this.state.username, JSON.stringify(this.state))
+				localStorage.setItem("currentUser", JSON.stringify(this.state.username))
 			}
 		};
 	}
@@ -121,6 +127,12 @@ class App extends Component {
 	setUserRole(userRole) {
 		this.setState({
 			userRole: userRole
+		})
+	}
+
+	setUserGroups(userGroups) {
+		this.setState({
+			userGroups: userGroups
 		})
 	}
 
@@ -215,6 +227,7 @@ class App extends Component {
 						chosenEvent: data.chosenEvent,
 						handleSubmit: data.handleSubmit,
 						userRole: data.userRole,
+						userGroups: data.userGroups,
 						//TODO: Fill this up with all new state elements
 					});
 				} else {
@@ -314,11 +327,63 @@ class App extends Component {
 
 	//used to fill calendar with dates in colors corresponding to their approval status
 	sortEventIntoColorsForCalendar() {
-		//TODO: make diz
+		let datesRed = [];
+		let datesGreen = [];
+		let datesBlue = [];
+		try {
+			this.state.programs.map(program => {
+				if(program.id === this.state.chosenProgram) {
+					program.programStages.map(programStage => {
+						if(programStage.programStage === this.state.chosenProgramStage) {
+							programStage.events.map(event => {
+								event.dataValues.map(dataValue => {
+									if(dataValue.dataElement === "OZUfNtngt0T") {
+										if(dataValue.value === "Approved") {
+											//put date into datesGreen
+											datesGreen.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
+										} else if(dataValue.value === "Auto-Approved") {
+											//put date into datesGreen
+											datesGreen.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
+										} else if(dataValue.value === "Rejected") {
+											//put date into datesRed
+											datesRed.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
+										} else if(dataValue.value === "Re-submitted") {
+											//put date into datesBlue
+											datesBlue.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
+										}
+									}
+								})
+							})
+						}
+					})
+				}
+			})
+		} catch (error) {
+			//console.log(error);
+		}
+		return [datesRed, datesGreen, datesBlue]
+	}
+
+	//takes in date in "yyyy-mm-dd" format and set the date the day before.
+	setDateToOneDayEarlier(date) {
+		let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
+		date = date.split('-').map(i => parseInt(i));
+		if(date[2].toString() === "01" || date[2] === 1){
+			date[2] = daysInMonth[date[1]-1];
+			if(date[1].toString() === "01" || date[1] === 1) {
+				date[1] = 12;
+				date[0] = date[0]-1;
+			}
+		} else {
+			date[2] = date[2]-1;
+		}
+		date = date.join("-");
+		return date;
 	}
 
 	//TODO: make generic - get ID from userRoles?
 	setProgramStage() {
+		console.log("Setting programStage");
 		//id = programStage ID.
 		//code = static code found in userGroups 
 		let programStages = [
@@ -338,36 +403,21 @@ class App extends Component {
 			{code: "Doctor_Diary_Surgeon", id: "ZVuW1ToOfyG"},
 			{code: "Doctor_Diary_Urology", id: "ugXqDTZBeKt"}
 		];
-
-		//https://uphmis.in/uphmis/api/userGroups.json?paging=false&fields=[id,name,displayName,code]&filter=code:!eq:%22%22
-		//https://uphmis.in/uphmis/api/me.json?fields=[id,name,displayName,userGroups]
-		//https://uphmis.in/uphmis/api/me.json?fields=[id,name,displayName,userGroups[*]] -> does not shot userGroups?
-
-		//Does specialists only hve one userGroup each? My test user has several of them...
-
-
-		console.log("this happens..");
-		//Find programStages from userRoles.
-
-		/*
-		console.log("Setting programstage");
-		if(this.state.username === "test paedeatrician") {
-			console.log("paedeatrician")
-			this.setState({
-				chosenProgramStage: "iDYy00hz00M"
-			})
-		} else if(this.state.username === "test anaesthethist") {
-			console.log("anaesthethist");
-			this.setState({
-				chosenProgramStage: "anSbnUqRxeR"
-			})
-		} else if (this.state.username === "test gynecologist") {
-			console.log("gynecologist");
-			this.setState({
-				chosenProgramStage: "CLoZpOqTSI8"
-			})
-		}
-		*/
+		let userGroups = [];
+		userGroups = this.state.userGroups;
+		console.log(userGroups);
+		userGroups.map(userGroup => {
+			if(userGroup.hasOwnProperty("code")) {
+				programStages.map(programStage => {
+					if(userGroup.code === programStage.code) {
+						this.setState({
+							chosenProgramStage: programStage.id
+						})
+						console.log("chosenProgramStage: " + programStage.id);
+					}
+				})
+			}
+		})
 		this.updateLocalStorage();
 	}
 
@@ -473,15 +523,28 @@ class App extends Component {
 								if(programStage.dataElements.length > 0) {
 								programStage.dataElements.map(dataElement => {
 										if(dataElement.dataElement.optionSetValue) {
-											event.dataValues.push(
-												{
-													dataElement: dataElement.dataElement.id,
-													displayName: dataElement.dataElement.displayName,
-													optionSetValue: dataElement.dataElement.optionSetValue,
-													optionSet: dataElement.dataElement.optionSet,
-													value: "",
-												}
-											)
+											if(dataElement.dataElement.id === "OZUfNtngt0T") { //approval status
+												event.dataValues.push(
+													{
+														dataElement: dataElement.dataElement.id,
+														displayName: dataElement.dataElement.displayName,
+														optionSetValue: dataElement.dataElement.optionSetValue,
+														optionSet: dataElement.dataElement.optionSet,
+														value: "Re-submitted",
+													}
+												)
+											} else {
+												event.dataValues.push(
+													{
+														dataElement: dataElement.dataElement.id,
+														displayName: dataElement.dataElement.displayName,
+														optionSetValue: dataElement.dataElement.optionSetValue,
+														optionSet: dataElement.dataElement.optionSet,
+														value: "",
+													}
+												)
+											}
+
 										} else {
 											event.dataValues.push(
 												{
@@ -558,8 +621,7 @@ class App extends Component {
 		}
 	}
 
-	render() {
-		
+	render() {		
 		const { date } = this.state;
 		if(this.state.login === 1) { //login screen
 			return (
@@ -579,6 +641,7 @@ class App extends Component {
 						choseSpecialst={this.setProgramStage}
 						setUserRole={this.setUserRole}
 						getLocalStorage={this.getLocalStorage}
+						setUserGroups={this.setUserGroups}
 					/>
 				</div>
 			)
@@ -593,108 +656,94 @@ class App extends Component {
 			)
 		} else if (this.state.login === 3) { //register new user screen
 		} else if (this.state.login === 4) { //event page - register new event
+
+			let test = [[],[],[]];
+			test = this.sortEventIntoColorsForCalendar();
+			let datesRed = test[0];
+			let datesGreen = test[1];
+			let datesBlue = test[2];
+
 			return (
-				<div className="parent">
-					<Online>
-						<nav className="online-text">
-							ONLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}
-						</nav>
-						
-					</Online>
-					<Offline>
-						<nav className="offline-text">
-							OFFLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}
-						</nav>
-					</Offline>
+				<div>
 					<ReactInterval timeout={5000} enabled={true}
 						callback={() => this.handleSubmit()} 
 					/>
-					{/*<RegsiterTodaysEvent
-						getPrograms={this.getPrograms}
-						onLoginChange={this.handleLoginChange}
-						onEventChange={this.handleChosenEventChange}
-					/>*/
-					}
-					<Flatpickr data-enable-time
-						value={date}
-						onClick={this.removeTimer}
-						onChange={date => { this.setState({date}); this.setChosenEventFromCalenderView(); }}
-						options={
-							{
-							onDayCreate: function(dObj, dStr, fp, dayElem){
-								let curDate = +dayElem.dateObj;
 
-								let datesRed = [
-									{
-										//startDate: Date.parse('2018-11-22'),
-										//endDate: Date.parse('2018-11-24')
-									},
-									{
-										//startDate: Date.parse('2018-11-18'),
-										//endDate: Date.parse('2018-11-20')
-									},
-								]
+					<Online>
+						<header className="header-online">
+							<p className="whiteText-1" id="top-margin">ONLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}</p>	
+						</header>			
+					</Online>
 
-								let datesGreen = [
-								]
+					<Offline>
+						<header className="header-offline">
+							<p className="whiteText-1" id="top-margin">OFFLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}</p>
+						</header>
+					</Offline>
 
-								let datesYellow = [
-								]
-
-								datesRed.map(date => {
-									if (curDate >= date.startDate && curDate <= date.endDate) {
-									  dayElem.className += "cool-date-red";
-									}
-									return Promise.resolve();
-								})
-
-								datesGreen.map(date => {
-									if (curDate >= date.startDate && curDate <= date.endDate) {
-									  dayElem.className += "cool-date-green";
-									}
-									return Promise.resolve();
-								})
-
-								datesYellow.map(date => {
-									if (curDate >= date.startDate && curDate <= date.endDate) {
-									  dayElem.className += "cool-date-yellow";
-									}
-									return Promise.resolve();
-								})
-
-							},
-							disable: [
+					<div className="calenderAndEvents">
+						<Flatpickr data-enable-time
+							value={date}
+							onClick={this.removeTimer}
+							onChange={date => { this.setState({date}); this.setChosenEventFromCalenderView(); }}
+							options={
 								{
-									from: "0000-01-01",
-									to: this.eventsFirstDate(),
+								onDayCreate: function(dObj, dStr, fp, dayElem){
+									let curDate = +dayElem.dateObj;
+									datesRed.map(date => {
+										if (curDate >= date.startDate && curDate <= date.endDate) {
+										dayElem.className += "cool-date-red";
+										}
+										return Promise.resolve();
+									})
+
+									datesGreen.map(date => {
+										if (curDate >= date.startDate && curDate <= date.endDate) {
+										dayElem.className += "cool-date-green";
+										}
+										return Promise.resolve();
+									})
+
+									datesBlue.map(date => {
+										if (curDate >= date.startDate && curDate <= date.endDate) {
+										dayElem.className += "cool-date-yellow";
+										}
+										return Promise.resolve();
+									})
+
 								},
-								{
-									from: new Date().fp_incr(1),
-									to: "2018-15-1000"
+								disable: [
+									{
+										from: "0000-01-01",
+										to: this.eventsFirstDate(),
+									},
+									{
+										from: new Date().fp_incr(1),
+										to: "2018-15-1000"
+									}
+								],
+								locale: {
+									"firstDayOfWeek": 1 // start week on Monday
+								//add inline:true to always show calendar
+								},
+								time_24hr:true,
+								dateFormat: "Y-m-d"
 								}
-							],
-							locale: {
-								"firstDayOfWeek": 1 // start week on Monday
-							//add inline:true to always show calendar
-							},
-							time_24hr:true,
-							dateFormat: "Y-m-d"
+								//<button onClick={() => this.eventsFirstDate()}>click me</button>
+
 							}
-							//<button onClick={() => this.eventsFirstDate()}>click me</button>
-
-						}
-		  			/>
-					<DisplayEvent
-						onLoginChange={this.handleLoginChange}
-						chosenEvent = {this.getChosenEvent}
-						clearChosenEvent = {this.clearChosenEvent}
-						onEventChange={this.handleChosenEventChange}
-						addToSubmitQue={this.addToHandleSubmit}
-						getState={this.getState}
-						updateProgramsEventFromChosenEvent={this.updateProgramsEventFromChosenEvent}
-					/>
-					<button className="logout" onClick={() => { if (window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending..")) this.logOut() } }>Log out</button>
-
+						/>
+						<DisplayEvent
+							onLoginChange={this.handleLoginChange}
+							chosenEvent = {this.getChosenEvent}
+							clearChosenEvent = {this.clearChosenEvent}
+							onEventChange={this.handleChosenEventChange}
+							addToSubmitQue={this.addToHandleSubmit}
+							getState={this.getState}
+							updateProgramsEventFromChosenEvent={this.updateProgramsEventFromChosenEvent}
+						/>
+						<button className="logout" onClick={() => { if (window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending..")) this.logOut() } }>Log out</button>
+					</div>
 				</div>
 			)
 		} else {
@@ -760,7 +809,7 @@ class Login extends Component {
 						this.props.choseSpecialst();
 						this.getUsersOrgunitFromDhis2(username, password)
 						.then(data => {
-						this.getEnrollmentAndTrackedEntityData(data.organisationUnits[0].id, this.props.getState().chosenProgram, username, password)
+						this.getEnrollmentAndTrackedEntityData(this.props.getState().orgUnit, this.props.getState().chosenProgram, username, password)
 						.then(() => {						
 						//TODO: This should be generic/ needs to be changed for the doctors diary ID
 						this.getUserInfoFromDhis2(this.props.getState().chosenProgram, username, password) //programID, username, password
@@ -784,11 +833,8 @@ class Login extends Component {
 			if(!respons) {
 				if (typeof(Storage) !== "undefined") {
 					let data = localStorage.getItem(username);
-					console.log(data);
 					if(data !== null) {
 						data = JSON.parse(data);
-						console.log(data.username);
-						console.log(data.password);
 						if(username === data.username && password === data.password) {
 							this.props.getLocalStorage(username);
 							this.handleLoginChange(4);
@@ -823,9 +869,7 @@ class Login extends Component {
 		console.log("getUsersOrgunitFromDhis2");
 		return api.getUsersOrgunit(username, password)
 			.then(data => {
-				if(data.teiSearchOrganisationUnits.length > 1) {
-					alert("might not be correct orgUnit");
-				}
+				this.props.setUserGroups(data.userGroups);
 				this.props.setUserRole(data.userCredentials.userRoles[0].id)
 				this.handleUserIdChange(data.id);
 				this.handleOrgUnitChange(data.organisationUnits[0].id);
@@ -859,7 +903,6 @@ class Login extends Component {
 		console.log("getUserInfoFromDhis2");
 		return api.getUserInfo(programId, username, password)
 			.then(data => {
-				console.log(data);
 				let foundEvent = false;
 				let programStages = [];
 				data.events.map(event => {
@@ -991,7 +1034,7 @@ class Login extends Component {
 						name="userName"
 						type="text"
 						placeholder="User name"
-						defaultValue="testan" //to be removed
+						//defaultValue="testan" //to be removed
 					/>
 					<input
 						className="loginbox"
@@ -999,7 +1042,7 @@ class Login extends Component {
 						name="password"
 						type="password"
 						placeholder="Password"
-						defaultValue="Test@1234" //to be removed
+						//defaultValue="Test@1234" //to be removed
 					/>
 						<a className="forgot-password" href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action">Forgot your password?</a>
 					<button onClick={() => this.getUserCredentialsFromLogin()} className="button1">Sign in</button>
@@ -1016,6 +1059,7 @@ class DisplayEvent extends Component {
 		this.state = {
 			changeMade: false,
 			enableEdit: true,
+			approvedStatus: false,
 		}
 		this.handleFieldChange = this.handleFieldChange.bind(this);
 	}
@@ -1026,10 +1070,6 @@ class DisplayEvent extends Component {
 				changeMade: true
 			})
 		}
-		this.checkAprovalStatusForApproved();
-	}
-
-	componentDidMount() {
 		this.checkAprovalStatusForApproved();
 	}
 
@@ -1123,10 +1163,14 @@ class DisplayEvent extends Component {
 		//default view in optionSets are value=1, so unless changed by user,
 		//the value stays 1.
 		event.dataValues.map(value => {
-			if(value.optionSetValue) {
+			if(value.dataElement === "OZUfNtngt0T") {//approval status
 				if(value.value === "") {
-					value.value = 1;
+					value.value = "Re-submitted";
 				}
+			} else if (value.dataElement === "x2uDVEGfY4K") {//working status
+				if(value.value === "") {
+					value.value = "Working";
+				}	
 			}
 			return Promise.resolve();
 		})
@@ -1138,12 +1182,12 @@ class DisplayEvent extends Component {
 	}
 
 	checkAprovalStatusForApproved() { //if approved - do not edit any element.
-		if(this.state.enableEdit){
+		if(!this.state.approvedStatus){
 			try {
 				this.props.chosenEvent().dataValues.map(dataValue => {
 					if(dataValue.dataElement === "OZUfNtngt0T") {
 						if(dataValue.value === "Approved") {
-							this.setState({enableEdit:false})
+							this.setState({approvedStatus:true})
 						}
 					}
 				})	
@@ -1154,85 +1198,111 @@ class DisplayEvent extends Component {
 	}
 
 	render() {
-	
-		if(this.props.chosenEvent.status === "COMPLETED") {
-			return <p>completed</p>
-		} else if(this.props.chosenEvent().hasOwnProperty("dataValues")) {
-			return <div>
+		if(this.props.chosenEvent().hasOwnProperty("dataValues")) {
+		this.checkAprovalStatusForApproved();
+		return <div className="displayEvents">
 				{
 				this.props.chosenEvent().dataValues.map(dataValue => {
 					let inputmode = "text";
 					if(dataValue.valueType === "NUMBER") {
 						inputmode = "numeric";
 					}
-					if(dataValue.dataElement === "x2uDVEGfY4K" ) { //working status
-						if(this.state.enableEdit) {
+
+					//render elements and disable possiblibilty of editing.
+					if(this.state.approvedStatus) {
+						if(dataValue.optionSetValue) {
 							return <FormElement.CreateOptionElement 
-							handleFieldChange={this.handleFieldChange} 
-							dataValue={dataValue}
-							key={dataValue.dataElement}
-							enableEditForm={true}
-						/>
+								handleFieldChange={""}
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+							/>
 						} else {
-							return <FormElement.CreateOptionElement 
-							handleFieldChange={this.handleFieldChange} 
-							dataValue={dataValue}
-							key={dataValue.dataElement}
-							enableEditForm={false}
-						/>
+							return <FormElement.CreateElement 
+								handleFieldChange={""} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+								inputmode={inputmode}
+							/>	
 						}
-					} else if (dataValue.dataElement === "CCNnr8s3rgE") { //reason for rejection
-						if(dataValue.value !== ""){
+						//else if - if working status = "working" -> enable editing
+					} else if(this.state.enableEdit) {
+						if(dataValue.optionSetValue) {
+							if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
+								return <FormElement.CreateOptionElement 
+								handleFieldChange={""} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+							/>
+							} else if(dataValue.dataElement === "CCNnr8s3rgE") { //reason for rejection
+								//dont render...
+							} else {
+								return <FormElement.CreateOptionElement 
+								handleFieldChange={this.handleFieldChange}
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={true}
+							/>
+							}
+						} else {
 							return <FormElement.CreateElement 
 								handleFieldChange={this.handleFieldChange} 
 								dataValue={dataValue}
 								key={dataValue.dataElement}
-								enableEditForm={false}
+								enableEditForm={true}
+								inputmode={inputmode}
 							/>
 						}
-					} else if(dataValue.dataElement === "OZUfNtngt0T") { //approval status
-						return <FormElement.CreateOptionElement 
-							handleFieldChange={this.handleFieldChange} 
+						//else - working status !== "working" -> disale edit
+					} else {
+						if(dataValue.optionSetValue) {
+							if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
+								return <FormElement.CreateOptionElement 
+								handleFieldChange={""} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+							/>
+							} else if(dataValue.dataElement === "CCNnr8s3rgE") { //reason for rej
+								//dont render...
+							} else if(dataValue.dataElement === "x2uDVEGfY4K") { //working status
+								return <FormElement.CreateOptionElement 
+									handleFieldChange={this.handleFieldChange}
+									dataValue={dataValue}
+									key={dataValue.dataElement}
+									enableEditForm={true}
+								/>
+							} else {
+								return <FormElement.CreateOptionElement 
+									handleFieldChange={""} 
+									dataValue={dataValue}
+									key={dataValue.dataElement}
+									enableEditForm={false}
+								/>	
+							}
+						} else {
+								return <FormElement.CreateElement 
+								handleFieldChange={""} 
+								dataValue={dataValue}
+								key={dataValue.dataElement}
+								enableEditForm={false}
+								inputmode={inputmode}
+							/>
+						}
+
+
+						/*
+						if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
+							return <FormElement.CreateOptionElement 
+							handleFieldChange={this.handleFieldChange} //remove?
 							dataValue={dataValue}
 							key={dataValue.dataElement}
 							enableEditForm={false}
 						/>
-					} else if(true){ //TODO: change to (dataValue.dataElement !== "CCNnr8s3rgE")
-						if(dataValue.optionSetValue) {
-							if(this.enableForm()) {
-								return <FormElement.CreateOptionElement 
-								handleFieldChange={this.handleFieldChange} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={true}
-							/>
-							} else {
-								return <FormElement.CreateOptionElement 
-								handleFieldChange={this.handleFieldChange} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-							/>
-							}
-						} else {
-							if(this.enableForm()) {
-								return <FormElement.CreateElement 
-								handleFieldChange={this.handleFieldChange} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={true}
-								inputmode={inputmode}
-							/>
-							} else {
-								return <FormElement.CreateElement 
-								handleFieldChange={this.handleFieldChange} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-								inputmode={inputmode}
-							/>
-							}
 						} 
+						*/
 					}
 				})
 				}
@@ -1240,7 +1310,7 @@ class DisplayEvent extends Component {
 				<button className="send-report-button" onClick={() => { this.handleLoginChange(4); this.clearChosenEvent();}}>Back</button>
 			</div>
 		} else {
-			return <p>Select event from calendar</p>
+			return <p className="whiteText-1">Select event from calendar</p>
 		}
 	}
 }

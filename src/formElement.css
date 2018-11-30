@@ -4,12 +4,22 @@
     font-family: Poppins-Regular;
     font-size: 16px;
     text-align: left;
-    
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
+.formElement{
+    margin: auto;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+
 input, select,textarea {
+    margin: auto;
     background: transparent;
-    width: 100%;
+    width: 90%;
     color: white;
     font-size: 16px; 
     border: 0; 
@@ -26,6 +36,8 @@ option{
 }
 
 #right-align {
+    margin-left: 5%;
+    margin-right: 5%;
     text-align: right;
     text-align-last: right;
 }
@@ -34,4 +46,6 @@ option{
     background: rgba(237, 237, 237,0.2);
     text-align: right;
     text-align-last: right;
+    margin-left: 5%;
+    margin-right: 5%;
 }

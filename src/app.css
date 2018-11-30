@@ -6,6 +6,27 @@ button{
   align-self: center;
 }
 
+.header-offline {
+  top: 0;
+  left: auto;
+  width: 100%;
+  height: 7%;
+  right: 0;
+  position: fixed;
+  background-color: red;
+}
+
+
+.header-online {
+  top: 0;
+  left: auto;
+  width: 100%;
+  height: 7%;
+  right: 0;
+  position: fixed;
+  background-color: green;
+}
+
 .cool-date-yellow {
   border: 1.5px solid yellow !important;
   padding: 7px;
@@ -133,6 +154,23 @@ button{
   margin-right: 15px;
 }
 
+#top-margin {
+  margin-top:13px;
+}
+
+.whiteText-1 {
+  color: white;
+  font-size: 15px;
+  text-align: center;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+
+
 .logo{
   size: 10%;
 }
@@ -163,15 +201,32 @@ button{
 
 .parent-column{
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   height: 100%;
   flex-wrap: wrap;
 }
 
+.calenderAndEvents{
+  margin-top: 50px;
+  height: 100%;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.displayEvents{
+  height: 100%;
+  width: 100%;
+  min-width: 100%;
+}
+
 .send-report-button {
+
+  margin-left: 5%;
   background-color: white;
   padding: 10px 20px;
-  margin-top: 10px;
+  margin-top: 15px;
   font: 400 14px Arial;
 }
 
@@ -213,7 +268,7 @@ button{
 
 .logout {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   border: 1px solid #888;
   padding: 6px 6px;
@@ -221,4 +276,14 @@ button{
   border-radius: 3px;
   text-align: center;
   font: 400 13.3333px Arial;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .calenderAndEvents{
+    margin-top: 15%;
+    height: 100%;
+    width: 100%;
+    min-width: 100%;
+  }
 }

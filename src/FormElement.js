@@ -4,27 +4,33 @@ import "./formElement.css";
 class CreateElement extends Component {
 
 	changeHandeler(event) {
-		let type = this.props.dataValue.valueType;
-		let value = event.target.value;
-		if(type === "TEXT") {
-			//0-255 characters
-			if(value.length > 255) {
-				value = value.slice(0, 255);
+		if(this.props.handleFieldChange !== "") {
+			let type = this.props.dataValue.valueType;
+			let value = event.target.value;
+			if(type === "TEXT") {
+				//0-255 characters
+				if(value.length > 255) {
+					value = value.slice(0, 255);
+					event.target.value = value;
+				}
+			} else if (type === "LONG_TEXT") {
+				//0-65000 characters
+				if(value.length > 65000) {
+					value = value.slice(0, 65000);
+					event.target.value = value;
+				}
+			} else if (type === "NUMBER") {
+				//0-9
+				value = value.replace(/[^0-9]/i, '');
+				event.target.value = value;
+			} else if(type === "INTEGER_ZERO_OR_POSITIVE") {
+				//0-9
+				value = value.replace(/[^0-9]/i, '');
 				event.target.value = value;
 			}
-		} else if (type === "LONG_TEXT") {
-			//0-65000 characters
-			if(value.length > 65000) {
-				value = value.slice(0, 65000);
-				event.target.value = value;
-			}
-		} else if (type === "NUMBER" || type === "INTEGER_ZERO_OR_POSITIVE") {
-			//0-9
-			value = value.replace(/[^0-9]/i, '');
-			event.target.value = value;
-		}
 
-		this.props.handleFieldChange(this.props.dataValue.dataElement, value);
+			this.props.handleFieldChange(this.props.dataValue.dataElement, value);
+			}
 	}
 
 	render() {
@@ -32,7 +38,7 @@ class CreateElement extends Component {
 			return(
 				<div className="formElement">
 					<p className="formText">{this.props.dataValue.displayName}</p>
-					<form>
+					
 						<input
 							inputMode={this.props.inputmode} 
 							className="item-select"
@@ -42,14 +48,14 @@ class CreateElement extends Component {
 							type="text"
 							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
 							/> 
-					</form>
+				
 				</div>
 			)
 		} else if(this.props.dataValue.dataElement === "CCNnr8s3rgE") {
 			return(
 				<div className="formElement">
 					<p className="formText">{this.props.dataValue.displayName}</p>
-					<form>
+				
 						<textarea
 							disabled
 							rows="5"
@@ -59,14 +65,14 @@ class CreateElement extends Component {
 							type="text"
 							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
 							/> 
-					</form>
+				
 				</div>
 			)
 		} else {
 			return(
 				<div className="formElement">
 					<p className="formText">{this.props.dataValue.displayName}</p>
-					<form>
+				
 						<input
 							disabled
 							className="item-select"
@@ -75,7 +81,7 @@ class CreateElement extends Component {
 							type="text"
 							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
 							/> 
-					</form>
+					
 				</div>
 			)
 		}
@@ -96,7 +102,9 @@ class CreateOptionElement extends Component {
 	
 	handleChange(event) {
 		this.setState({value: event.target.value});
-		this.props.handleFieldChange(this.props.dataValue.dataElement, event.target.value);
+		if(this.props.handleFieldChange !== "") {
+			this.props.handleFieldChange(this.props.dataValue.dataElement, event.target.value);
+		}
 	}
 	
 	render() {

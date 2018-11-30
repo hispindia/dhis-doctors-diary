@@ -54,7 +54,7 @@ const getUserInfo = (programId, username, password) => {
 
 //Function fills up userData.dataElements with the programStage's associated dataElements 
 const getProgramStageData = (programStageId, username, password) => {  
-    return fetch(`${dhis2.baseUrl}/programStages/${programStageId}?fields=id,name,displayName,programStageDataElements[dataElement[valueType,optionSetValue,id,displayName,optionSet[id,displayName,options[name,id,sortOrder,code]]]&paging=false`,  {
+    return fetch(`${dhis2.baseUrl}/programStages/${programStageId}?fields=id,name,displayName,programStageDataElements[dataElement[valueType,optionSetValue,sortOrder,id,displayName,optionSet[id,displayName,options[name,id,sortOrder,code]]]&paging=false`,  {
         method: 'GET',
         mode: 'cors',
         //credentials: 'include',
@@ -87,7 +87,7 @@ const checkUserCredentials = (username, password) => {
 };
 
 const getUsersOrgunit = (username, password) => {
-    return fetch(`${dhis2.baseUrl}/me`, {
+    return fetch(`${dhis2.baseUrl}/me?fields=id,userGroups[code,id],userCredentials[userRoles],organisationUnits`, {
         method: 'GET',
         mode: 'cors',
         //credentials: 'include',
