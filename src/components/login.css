@@ -39,3 +39,14 @@
   margin-right: 15px;
   margin-bottom: 7px;
 }
+
+#failed-login {
+  color: white;
+  font-family: Poppins-Regular;
+  font-size: 20px;
+  text-align: center;
+  margin-left: 17px;
+  margin-right: 15px;
+  margin-bottom: 7px;
+  text-decoration: underline;
+}

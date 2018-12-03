@@ -52,29 +52,30 @@ class Login extends Component {
 
 		this.checkUserCredentialsFromDhis2(username, password)
 			.then(response => {
-				if(response) {
-					this.props.getLocalStorage(username);
-					this.handleUsernameChange(username);
-					this.handlePasswordChange(password);
-					this.getProgramsFromDhis2(username, password)
-						.then(()=> {
-						this.props.choseSpecialst();
-						this.getUsersOrgunitFromDhis2(username, password)
-						.then(data => {
-						this.getEnrollmentAndTrackedEntityData(this.props.getState().orgUnit, this.props.getState().chosenProgram, username, password)
-						.then(() => {						
-						//TODO: This should be generic/ needs to be changed for the doctors diary ID
-						this.getUserInfoFromDhis2(this.props.getState().chosenProgram, username, password) //programID, username, password
-						.then(() => {
-						//TODO: This sould be genereic/ needs to be changed to the programStages of Doctors Diary proram
-						this.getProgramStageDataFromDhis2(this.props.getState().chosenProgramStage, username, password)
-						})
-						})
-						})
-						})	
+				if (response === 1) {
+					alert("You are running the application offline");
+				} else if(response) {
+						this.props.getLocalStorage(username);
+						this.handleUsernameChange(username);
+						this.handlePasswordChange(password);
+						this.getProgramsFromDhis2(username, password)
+							.then(()=> {
+							this.props.choseSpecialst();
+							this.getUsersOrgunitFromDhis2(username, password)
+							.then(data => {
+							this.getEnrollmentAndTrackedEntityData(this.props.getState().orgUnit, this.props.getState().chosenProgram, username, password)
+							.then(() => {						
+							//TODO: This should be generic/ needs to be changed for the doctors diary ID
+							this.getUserInfoFromDhis2(this.props.getState().chosenProgram, username, password) //programID, username, password
+							.then(() => {
+							//TODO: This sould be genereic/ needs to be changed to the programStages of Doctors Diary proram
+							this.getProgramStageDataFromDhis2(this.props.getState().chosenProgramStage, username, password)
+							})
+							})
+							})
+							})	
 				} else {
 					this.handleLoginChange(1);
-					//alert("Wrong username/password");
 				}
 			})
   	}
@@ -84,19 +85,23 @@ class Login extends Component {
 		return api.checkUserCredentials(username, password)
 		.then(respons => {
 			if(!respons) {
+				this.handleLoginChange(1);
 				if (typeof(Storage) !== "undefined") {
 					let data = localStorage.getItem(username);
 					if(data !== null) {
 						data = JSON.parse(data);
 						if(username === data.username && password === data.password) {
 							this.props.getLocalStorage(username);
-							this.handleLoginChange(4);
-							return false;
+							return 1;
 						} else {
-							alert("Wrong username/password");
+							let x = document.getElementById("failed-login");
+							x.innerHTML = "Wrong username/password";
+							//alert("Wrong username/password");
 						}
 					} else {
-						alert("Wrong username/password");
+						let x = document.getElementById("failed-login");
+						x.innerHTML = "Wrong username/password";
+						//alert("Wrong username/password");
 					}
 				}
 			} else {
@@ -287,6 +292,7 @@ class Login extends Component {
 			<div>
 				<label className="parent-column">
 					<p className="Sign-in">Sign in</p>
+					<p id="failed-login"></p>
 					<input
 						className="loginbox"
 						id="userName"
@@ -302,7 +308,7 @@ class Login extends Component {
 						placeholder="Password"
 						onKeyPress={e => this.handleKeyPress(e)}
 					/>
-						<a className="forgot-password" href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action">Forgot your password?</a>
+					<a className="forgot-password" href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action">Forgot your password?</a>
 					<button onClick={() => this.getUserCredentialsFromLogin()} className="button1">Sign in</button>
 				</label>
 			</div>

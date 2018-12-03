@@ -212,28 +212,27 @@ class App extends Component {
 			let data = localStorage.getItem(username);
 			if(data !== null) {
 				data = JSON.parse(data);
-				if(data.login !== 1) {
-					this.setState({
-						date: data.date,
-						login: data.login,
-						programs: data.programs,
-						username: data.username,
-						password: data.password,
-						trackedEntityInstance: data.trackedEntityInstance,
-						enrollment: data.enrollment,
-						orgUnit: data.orgUnit,
-						userId: data.userId,
-						chosenProgram: data.chosenProgram,
-						chosenProgramStage: data.chosenProgramStage,
-						chosenEvent: data.chosenEvent,
-						handleSubmit: data.handleSubmit,
-						userRole: data.userRole,
-						userGroups: data.userGroups,
-						//TODO: Fill this up with all new state elements
-					});
-				} else {
-					console.log("Nothing saved from local storage")
-				}
+				this.setState({
+					date: data.date,
+					login: data.login,
+					programs: data.programs,
+					username: data.username,
+					password: data.password,
+					trackedEntityInstance: data.trackedEntityInstance,
+					enrollment: data.enrollment,
+					orgUnit: data.orgUnit,
+					userId: data.userId,
+					chosenProgram: data.chosenProgram,
+					chosenProgramStage: data.chosenProgramStage,
+					chosenEvent: data.chosenEvent,
+					handleSubmit: data.handleSubmit,
+					userRole: data.userRole,
+					userGroups: data.userGroups,
+					//TODO: Fill this up with all new state elements
+				});
+				this.setState({
+					login: 4
+				})
 			}
 		} else {
 			console.log("Sorry! No Web Storage support..")
@@ -304,6 +303,12 @@ class App extends Component {
 		let que = this.state.handleSubmit;
 		if(que.length > 0) {
 			que.map(submitTask => {
+				//testing the submit-function. if post - removes before fetching.
+				if(submitTask.method === "POST") {
+					console.log("Stopped POST");
+					console.log(submitTask);
+					this.removeFromHandleSubmit(submitTask);
+				}
 				console.log("Perfoming + " + submitTask.method);
 				return api.postPayload(submitTask.endpoint, JSON.stringify(submitTask.payload), submitTask.method, this.state.username, this.state.password)
 				.then(response => {
@@ -586,11 +591,31 @@ class App extends Component {
 		try {
 			var el = document.querySelector( '.flatpickr-time' );
 			el.parentNode.removeChild( el );
-		} catch (error) {
-			
-		}
-	}
+		} catch (error) {}
 
+		try {
+			var x = document.getElementsByTagName("span");
+			for (let i = 0; i < x.length; i++) {
+				console.log(x[i])
+				if(x[i].className.includes("day")){
+					x[i].setAttribute("readonly", true);
+					console.log("disabled");
+				}
+			}
+		} catch (error) {}
+
+		try {
+			var x = document.getElementsByClassName("flatpickr-days");
+			x[0].setAttribute("readonly", true);
+			console.log("Meh")
+		} catch (error) {}
+
+		try {
+			var x = document.getElementsByClassName("dayContainer");
+			x[0].setAttribute("readonly", true);
+			console.log("Meh")
+		} catch (error) {}
+	}
 
 	//disables all form-elements, as long as their className="item-select".
 	disableForm() {
@@ -690,8 +715,8 @@ class App extends Component {
 					</Online>
 
 					<Offline>
-						<header className="header-offline" id="parent-row">
-						<p className="whiteText-1">OFFLINE</p>
+					<header className="header-offline" id="parent-row">
+							<p className="whiteText-1">OFFLINE</p>
 							<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
 							<p className="whiteText-1">User: {this.state.username}</p>
 							<button id="logout" onClick={() => {
@@ -707,7 +732,7 @@ class App extends Component {
 						}
 						>Log out
 						</button>
-						</header>
+						</header>	
 					</Offline>
 
 					<div className="calenderAndEvents">
@@ -757,7 +782,7 @@ class App extends Component {
 								//add inline:true to always show calendar
 								},
 								time_24hr:true,
-								dateFormat: "Y-m-d"
+								dateFormat: "Y-m-d",
 								}
 								//<button onClick={() => this.eventsFirstDate()}>click me</button>
 

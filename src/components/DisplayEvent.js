@@ -40,9 +40,6 @@ class DisplayEvent extends Component {
 					value: dataValue.value,
 					dataElement: dataValue.dataElement,
 				}
-				if(dataValue.dataElement === "OZUfNtngt0T") { //approvalStatus -> set to Re-submitted after sending
-					newDataValue.value = "Re-submitted";
-				}
 
 				dataValues.push(newDataValue);
 				return Promise.resolve();
@@ -57,6 +54,7 @@ class DisplayEvent extends Component {
 						status: "COMPLETED",
 						trackedEntityInstance: state.trackedEntityInstance,
 						dataValues: dataValues,
+						date: this.props.getState.date[0],
 					}
 
 				this.props.addToSubmitQue(`/events/${event.event}`, eventToPush, "PUT");
