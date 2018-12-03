@@ -29,6 +29,10 @@ input, select,textarea {
     overflow: auto;
 }
 
+.item-select {
+    min-width: 90%;
+}
+
 option{
     background-color: #1d5288;
     color: white;

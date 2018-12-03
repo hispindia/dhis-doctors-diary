@@ -98,7 +98,6 @@ button{
   color: green;
 } 
 
-
 .offline-text {
   color: red;
 }
@@ -169,10 +168,15 @@ button{
   margin-bottom: auto;
 }
 
-
-
-.logo{
-  size: 10%;
+.whiteText-2 {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  margin-left: auto;
+  
+  margin-top: auto;
+  margin-bottom: auto;
+ 
 }
 
 .DateText {
@@ -206,13 +210,49 @@ button{
   flex-wrap: wrap;
 }
 
-.calenderAndEvents{
-  margin-top: 50px;
+#parent-row {
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;
+}
+
+#parent-column {
+  display: flex;
+  flex-direction: column; 
+  flex-wrap: wrap;
+}
+
+.displayEventsFromApp {
+  text-align: center;
   height: 100%;
   width: 100%;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  font-size: 20px;
+}
+
+.calenderAndEvents{
+  display: flex;
+  flex-direction: row; 
+  text-align: center;
+  margin-top: 70px;
+  height: 100%;
+  width: 100%;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 20px;
+}
+
+.calenderAndEvents input {
+  
+}
+
+input {
+  text-align: center;
+  max-width: 25%;
+  margin: auto;
 }
 
 .displayEvents{
@@ -222,48 +262,12 @@ button{
 }
 
 .send-report-button {
-
-  margin-left: 5%;
+ 
+  margin-right: 10px;
   background-color: white;
   padding: 10px 20px;
   margin-top: 15px;
   font: 400 14px Arial;
-}
-
-.buttonApproved {
-  border: 1px solid #888;
-  padding: 6px 6px;
-  margin: 4px 0;
-  border-radius: 3px;
-  text-align: center;
-  font: 400 13.3333px Arial;
-  color: white;
-  background-color: green;
-  border-color: white;
-}
-
-.buttonRejected {
-  border: 1px solid #888;
-  padding: 6px 6px;
-  margin: 4px 0;
-  border-radius: 3px;
-  text-align: center;
-  font: 400 13.3333px Arial;
-  color: white;
-  background-color: Red;
-  border-color: white;
-}
-
-.buttonAwaitApproval {
-  border: 1px solid #888;
-  padding: 6px 6px;
-  margin: 4px 0;
-  border-radius: 3px;
-  text-align: center;
-  font: 400 13.3333px Arial;
-  color: black;
-  background-color: Yellow;
-  border-color: white;
 }
 
 .logout {
@@ -276,6 +280,10 @@ button{
   border-radius: 3px;
   text-align: center;
   font: 400 13.3333px Arial;
+}
+
+#logout {
+  margin-right: 10px;
 }
 
 

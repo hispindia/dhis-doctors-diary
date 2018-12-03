@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import FormElement from "./FormElement";
 import api from "./api.js";
-import "./app.css";
-import "./login.css";
-import 'flatpickr/dist/themes/light.css';
+import Login from './components/Login';
+import DisplayEvent from './components/DisplayEvent';
 import Flatpickr from 'react-flatpickr';
 import ReactInterval from 'react-interval';
 import { Offline, Online } from "react-detect-offline";
+
+import "./App.css";
+import 'flatpickr/dist/themes/light.css';
 
 
 //TODO: FIX generic OU and program in /api-getUnserInfo
@@ -405,7 +406,6 @@ class App extends Component {
 		];
 		let userGroups = [];
 		userGroups = this.state.userGroups;
-		console.log(userGroups);
 		userGroups.map(userGroup => {
 			if(userGroup.hasOwnProperty("code")) {
 				programStages.map(programStage => {
@@ -568,7 +568,6 @@ class App extends Component {
 		return event;
 	}
 
-
 	setChosenEventFromCalenderView() {
 		let event = this.findEventBasedOnSelectedDate();
 		if(event !== "") {
@@ -666,22 +665,53 @@ class App extends Component {
 			return (
 				<div>
 					<ReactInterval timeout={5000} enabled={true}
-						callback={() => this.handleSubmit()} 
+						//callback={() => this.handleSubmit()} 
 					/>
 
 					<Online>
-						<header className="header-online">
-							<p className="whiteText-1" id="top-margin">ONLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}</p>	
+						<header className="header-online" id="parent-row">
+							<p className="whiteText-1">ONLINE</p>
+							<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
+							<p className="whiteText-1">User: {this.state.username}</p>
+							<button id="logout" onClick={() => {
+							if(this.state.handleSubmit.length > 0) {
+								if(window.confirm
+									('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + 
+										" reports pending.."))
+										 this.logOut()
+							} else {
+								this.logOut()
+							}
+						}
+						}
+						>Log out
+						</button>
 						</header>			
 					</Online>
 
 					<Offline>
-						<header className="header-offline">
-							<p className="whiteText-1" id="top-margin">OFFLINE - TO SEND: {this.state.handleSubmit.length} - {this.state.username}</p>
+						<header className="header-offline" id="parent-row">
+						<p className="whiteText-1">OFFLINE</p>
+							<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
+							<p className="whiteText-1">User: {this.state.username}</p>
+							<button id="logout" onClick={() => {
+							if(this.state.handleSubmit.length > 0) {
+								if(window.confirm
+									('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + 
+										" reports pending.."))
+										 this.logOut()
+							} else {
+								this.logOut()
+							}
+						}
+						}
+						>Log out
+						</button>
 						</header>
 					</Offline>
 
 					<div className="calenderAndEvents">
+						<p className="whiteText-2">Select date: </p>
 						<Flatpickr data-enable-time
 							value={date}
 							onClick={this.removeTimer}
@@ -733,7 +763,9 @@ class App extends Component {
 
 							}
 						/>
-						<DisplayEvent
+					</div>
+					<div className="displayEventsFromApp">
+					<DisplayEvent
 							onLoginChange={this.handleLoginChange}
 							chosenEvent = {this.getChosenEvent}
 							clearChosenEvent = {this.clearChosenEvent}
@@ -742,7 +774,6 @@ class App extends Component {
 							getState={this.getState}
 							updateProgramsEventFromChosenEvent={this.updateProgramsEventFromChosenEvent}
 						/>
-						<button className="logout" onClick={() => { if (window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending..")) this.logOut() } }>Log out</button>
 					</div>
 				</div>
 			)
@@ -756,678 +787,5 @@ class App extends Component {
 		}
 	}
 }
-
-class Login extends Component {
-	handleLoginChange(e) {
-		this.props.onLoginChange(e);
-	}
-
-	handleUsernameChange(e) {
-		this.props.onUsernameChange(e);
-	}
-
-	handlePasswordChange(e) {
-		this.props.onPasswordChange(e);
-	}
-	
-	handleProgramsChange(e) {
-		this.props.onProgramsChange(e);
-	}
-
-	handleOrgUnitChange(e) {
-		this.props.onOrgunitChange(e);
-	}
-
-	handleUserIdChange(e) {
-		this.props.onUserIdChange(e);
-	}
-
-	handleTrackedEntityChange(e) {
-		this.props.onTrackedEntityChange(e);
-	}
-
-	handleEnrollementChange(e) {
-		this.props.onEnrollmentChange(e);
-	}
-
-	//TODO: Make this generic / change ID values to support doctors diary
-	//checks user-login and gets data from system
-  	getUserCredentialsFromLogin() {
-		console.log("getUserCrendtialsFromLogin");
-		let username = document.getElementById("userName").value;
-		let password = document.getElementById("password").value;
-
-		this.checkUserCredentialsFromDhis2(username, password)
-			.then(response => {
-				if(response) {
-					this.props.getLocalStorage(username);
-					this.handleLoginChange(2);
-					this.handleUsernameChange(username);
-					this.handlePasswordChange(password);
-					this.getProgramsFromDhis2(username, password)
-						.then(()=> {
-						this.props.choseSpecialst();
-						this.getUsersOrgunitFromDhis2(username, password)
-						.then(data => {
-						this.getEnrollmentAndTrackedEntityData(this.props.getState().orgUnit, this.props.getState().chosenProgram, username, password)
-						.then(() => {						
-						//TODO: This should be generic/ needs to be changed for the doctors diary ID
-						this.getUserInfoFromDhis2(this.props.getState().chosenProgram, username, password) //programID, username, password
-						.then(() => {
-						//TODO: This sould be genereic/ needs to be changed to the programStages of Doctors Diary proram
-						this.getProgramStageDataFromDhis2(this.props.getState().chosenProgramStage, username, password)
-						})
-						})
-						})
-						})	
-				} else {
-					//alert("Wrong username/password");
-				}
-			})
-  	}
-
-	//returns true if username/password provided is correct, if not => false
-	checkUserCredentialsFromDhis2(username, password) {
-		return api.checkUserCredentials(username, password)
-		.then(respons => {
-			if(!respons) {
-				if (typeof(Storage) !== "undefined") {
-					let data = localStorage.getItem(username);
-					if(data !== null) {
-						data = JSON.parse(data);
-						if(username === data.username && password === data.password) {
-							this.props.getLocalStorage(username);
-							this.handleLoginChange(4);
-							return false;
-						} else {
-							alert("Wrong username/password");
-						}
-					} else {
-						alert("Wrong username/password");
-					}
-				}
-			} else {
-				return respons;
-			}
-		})
-	}
-
-	//gets all programs from DHIS2.
-	getProgramsFromDhis2(username, password) {
-		console.log("getProgramsFromDhis2");
-		return api.getPrograms(username, password, this.props.getState().chosenProgram)
-			.then(data => {
-				this.handleProgramsChange(data.programs)
-			})
-			.catch(error => {
-				console.warn('Error!', error);
-			});
-	}
-
-	//gets organisation unit id and user id 
-	getUsersOrgunitFromDhis2(username, password) {
-		console.log("getUsersOrgunitFromDhis2");
-		return api.getUsersOrgunit(username, password)
-			.then(data => {
-				this.props.setUserGroups(data.userGroups);
-				this.props.setUserRole(data.userCredentials.userRoles[0].id)
-				this.handleUserIdChange(data.id);
-				this.handleOrgUnitChange(data.organisationUnits[0].id);
-				return data;
-			})
-			.catch(error => {
-				console.warn('Error!', error);
-			});
-	}
-
-	getEnrollmentAndTrackedEntityData(orgUnit, programId, username, password) {
-		console.log("getEnrollmentAndTrackedEntityData");
-		return api.getEnrollmentAndTrackedED(orgUnit, programId, username, password)
-			.then(data => {
-				//console.log(data);
-				try {
-					this.handleTrackedEntityChange(data.trackedEntityInstances[0].trackedEntityInstance);
-					this.handleEnrollementChange(data.trackedEntityInstances[0].enrollments[0].enrollment);
-				} catch (e) {
-					console.log(e)
-				}
-			})
-			.catch(error => {
-				console.warn('Error!', error);
-			});
-	}
-
-	//TODO: Change name - to something like getUserData+ProgramStages
-	//gets all programStages assosiated to given program.
-	getUserInfoFromDhis2(programId, username, password) {
-		console.log("getUserInfoFromDhis2");
-		return api.getUserInfo(programId, username, password)
-			.then(data => {
-				let foundEvent = false;
-				let programStages = [];
-				data.events.map(event => {
-					if(event.storedBy === username) {
-						foundEvent = true;
-						let foundProgramStage = false;
-						programStages.map(programStage => {
-							if(programStage.programStage === event.programStage) {
-								foundProgramStage = true;
-								programStage.events.push({
-									event: event.event,
-									programStage: event.programStage,
-									eventDate: event.eventDate,
-									dueDate: event.dueDate,
-									href: event.href,
-									status: event.status,
-									dataValues: event.dataValues,
-								});
-							}
-							return Promise.resolve();
-						})
-						if(!foundProgramStage) {
-							programStages.push({
-								programStage:event.programStage,
-								events: [{
-									event: event.event,
-									programStage: event.programStage,
-									eventDate: event.eventDate,
-									dueDate: event.dueDate,
-									href: event.href,
-									status: event.status,
-									dataValues: event.dataValues,
-								}],
-							});
-						}
-					}
-					return Promise.resolve();
-				})
-
-				if(!foundEvent && data.events.length > 0) {
-					programStages.push({
-						programStage:data.events[0].programStage,
-						events: [],
-					})
-				}
-
-				let programs = this.props.getPrograms();
-				if(programs.length > 0) {
-					programs.map(program => {
-						if(program.id === programId) {
-							program.programStages = programStages;
-						}
-						return Promise.resolve();
-					})
-				}
-				//console.log(programs);
-				this.handleProgramsChange(programs);
-			})
-			.catch(error => {
-				console.warn('Error!', error);
-			});
-	}
-	
-	//fills the given programStage's event's dataValues with displayName, optionSetValue (if true => optionSet as well)
-	//this can only be run after function getUserInfoFromDhis2 has finished. Use .then() 
-	getProgramStageDataFromDhis2(programStageId, username, password) {
-		console.log("getProgramStageDataFromDhis2");
-		return api.getProgramStageData(programStageId, username, password)
-			.then(data => {
-				let programs = this.props.getPrograms();
-				if(programs.length > 0) {
-					programs.map(program => {
-						if(program.hasOwnProperty("programStages")) { //TODO: needs changing if you want to add monthly event as well.
-							if(program.programStages.length === 0) {
-								program.programStages.push({
-									dataElements: data.programStageDataElements,
-									programStage: data.id,
-									displayName: data.displayName,
-									name: data.name,
-								});
-								//TODO: add programStage with data here. 
-							} else {
-								program.programStages.map(programStage => {
-									programStage.dataElements = data.programStageDataElements;
-									programStage.displayName = data.displayName;
-									programStage.name = data.name;
-									if(programStage.programStage === programStageId) {
-										programStage.events.map(event => {
-											data.programStageDataElements.map(programStageDataElement => {
-												event.dataValues.map(dataValue => {
-													if(dataValue.dataElement === programStageDataElement.dataElement.id) {
-														dataValue.displayName = programStageDataElement.dataElement.displayName;
-														dataValue.optionSetValue = programStageDataElement.dataElement.optionSetValue;
-														dataValue.valueType = programStageDataElement.dataElement.valueType;
-														if(dataValue.optionSetValue) {
-															dataValue.optionSet = programStageDataElement.dataElement.optionSet;
-														}
-													}
-													return Promise.resolve();
-												})
-												return Promise.resolve();
-											})
-											return Promise.resolve();
-										})
-									}
-									return Promise.resolve();
-								})
-							}
-						}
-						return Promise.resolve();
-					})
-				}
-				//console.log(programs);
-				this.handleProgramsChange(programs);
-				this.handleLoginChange(4); //TODO: set to "3" to register user
-			})
-	}
-
-	render() {
-	  return (
-		<article>
-			<h2 className="loginText">DHIS2</h2>
-			<div>
-				<label className="parent-column">
-					<p className="Sign-in">Sign in</p>
-					<input
-						className="loginbox"
-						id="userName"
-						name="userName"
-						type="text"
-						placeholder="User name"
-						//defaultValue="testan" //to be removed
-					/>
-					<input
-						className="loginbox"
-						id="password"
-						name="password"
-						type="password"
-						placeholder="Password"
-						//defaultValue="Test@1234" //to be removed
-					/>
-						<a className="forgot-password" href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action">Forgot your password?</a>
-					<button onClick={() => this.getUserCredentialsFromLogin()} className="button1">Sign in</button>
-				</label>
-			</div>
-		</article>
-		);
-	}
-}
-
-class DisplayEvent extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			changeMade: false,
-			enableEdit: true,
-			approvedStatus: false,
-		}
-		this.handleFieldChange = this.handleFieldChange.bind(this);
-	}
-
-	componentDidUpdate() {
-		if(!this.state.changeMade) {
-			this.setState({
-				changeMade: true
-			})
-		}
-		this.checkAprovalStatusForApproved();
-	}
-
-	handleLoginChange(e) {
-		this.props.onLoginChange(e);
-	}
-
-	clearChosenEvent() {
-		this.props.clearChosenEvent();
-	}
-	
-	addToHandleSubmit() {
-		if(this.state.changeMade) {
-			let event = this.props.chosenEvent();
-			let dataValues = [];
-			let state = this.props.getState();
-
-			event.dataValues.map(dataValue => {
-				let newDataValue = {
-					value: dataValue.value,
-					dataElement: dataValue.dataElement,
-				}
-				if(dataValue.dataElement === "OZUfNtngt0T") { //approvalStatus -> set to Re-submitted after sending
-					newDataValue.value = "Re-submitted";
-				}
-
-				dataValues.push(newDataValue);
-				return Promise.resolve();
-			})
-
-			if(event.hasOwnProperty("event")) {
-				//EVENT exists from before, and needs PUT
-				let eventToPush = {
-						event: event.event,
-						program: state.chosenProgram,
-						programStage: state.chosenProgramStage,
-						status: "COMPLETED",
-						trackedEntityInstance: state.trackedEntityInstance,
-						dataValues: dataValues,
-					}
-
-				this.props.addToSubmitQue(`/events/${event.event}`, eventToPush, "PUT");
-			
-			} else {
-				//EVENT does not exists from before, and needs POST
-				let eventToPush = {events: [
-					{
-						trackedEntityInstance: state.trackedEntityInstance,
-						program: state.chosenProgram,
-						programStage: state.chosenProgramStage,
-						enrollment: state.enrollment,
-						orgUnit: state.orgUnit,
-						notes: [],
-						dataValues: dataValues,
-						status: "COMPLETED",
-						eventDate: event.eventDate,
-					}
-				]}
-
-				this.props.addToSubmitQue("/events", eventToPush, "POST");
-			}
-		}
-		this.clearChosenEvent();
-	}
-
-	registerEvent() {
-		this.props.updateProgramsEventFromChosenEvent(this.props.chosenEvent());
-		this.addToHandleSubmit();
-		this.handleLoginChange(4);
-	}
-
-	handleFieldChange(dataElement, value) {
-		let event = this.props.chosenEvent();
-		if(event.hasOwnProperty("dataValues")) {
-			event.dataValues.map(dataValue => {
-				if(dataValue.dataElement === dataElement) {
-					dataValue.value = value;
-					if(dataValue.dataElement === "x2uDVEGfY4K") {
-						if(value === "Working") {
-							this.setState({enableEdit:true})
-						} else {
-							this.setState({enableEdit:false})
-						}
-					}
-				}
-				return Promise.resolve();
-			})
-		}
-
-		//this ensures that all optionSets are selected, even if not clicked.
-		//default view in optionSets are value=1, so unless changed by user,
-		//the value stays 1.
-		event.dataValues.map(value => {
-			if(value.dataElement === "OZUfNtngt0T") {//approval status
-				if(value.value === "") {
-					value.value = "Re-submitted";
-				}
-			} else if (value.dataElement === "x2uDVEGfY4K") {//working status
-				if(value.value === "") {
-					value.value = "Working";
-				}	
-			}
-			return Promise.resolve();
-		})
-		this.props.onEventChange(event);
-	}
-
-	enableForm() {
-		return this.state.enableEdit;
-	}
-
-	checkAprovalStatusForApproved() { //if approved - do not edit any element.
-		if(!this.state.approvedStatus){
-			try {
-				this.props.chosenEvent().dataValues.map(dataValue => {
-					if(dataValue.dataElement === "OZUfNtngt0T") {
-						if(dataValue.value === "Approved") {
-							this.setState({approvedStatus:true})
-						}
-					}
-				})	
-			} catch (error) {
-				console.log(error);
-			}
-		}
-	}
-
-	render() {
-		if(this.props.chosenEvent().hasOwnProperty("dataValues")) {
-		this.checkAprovalStatusForApproved();
-		return <div className="displayEvents">
-				{
-				this.props.chosenEvent().dataValues.map(dataValue => {
-					let inputmode = "text";
-					if(dataValue.valueType === "NUMBER") {
-						inputmode = "numeric";
-					}
-
-					//render elements and disable possiblibilty of editing.
-					if(this.state.approvedStatus) {
-						if(dataValue.optionSetValue) {
-							return <FormElement.CreateOptionElement 
-								handleFieldChange={""}
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-							/>
-						} else {
-							return <FormElement.CreateElement 
-								handleFieldChange={""} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-								inputmode={inputmode}
-							/>	
-						}
-						//else if - if working status = "working" -> enable editing
-					} else if(this.state.enableEdit) {
-						if(dataValue.optionSetValue) {
-							if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
-								return <FormElement.CreateOptionElement 
-								handleFieldChange={""} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-							/>
-							} else if(dataValue.dataElement === "CCNnr8s3rgE") { //reason for rejection
-								//dont render...
-							} else {
-								return <FormElement.CreateOptionElement 
-								handleFieldChange={this.handleFieldChange}
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={true}
-							/>
-							}
-						} else {
-							return <FormElement.CreateElement 
-								handleFieldChange={this.handleFieldChange} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={true}
-								inputmode={inputmode}
-							/>
-						}
-						//else - working status !== "working" -> disale edit
-					} else {
-						if(dataValue.optionSetValue) {
-							if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
-								return <FormElement.CreateOptionElement 
-								handleFieldChange={""} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-							/>
-							} else if(dataValue.dataElement === "CCNnr8s3rgE") { //reason for rej
-								//dont render...
-							} else if(dataValue.dataElement === "x2uDVEGfY4K") { //working status
-								return <FormElement.CreateOptionElement 
-									handleFieldChange={this.handleFieldChange}
-									dataValue={dataValue}
-									key={dataValue.dataElement}
-									enableEditForm={true}
-								/>
-							} else {
-								return <FormElement.CreateOptionElement 
-									handleFieldChange={""} 
-									dataValue={dataValue}
-									key={dataValue.dataElement}
-									enableEditForm={false}
-								/>	
-							}
-						} else {
-								return <FormElement.CreateElement 
-								handleFieldChange={""} 
-								dataValue={dataValue}
-								key={dataValue.dataElement}
-								enableEditForm={false}
-								inputmode={inputmode}
-							/>
-						}
-
-
-						/*
-						if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
-							return <FormElement.CreateOptionElement 
-							handleFieldChange={this.handleFieldChange} //remove?
-							dataValue={dataValue}
-							key={dataValue.dataElement}
-							enableEditForm={false}
-						/>
-						} 
-						*/
-					}
-				})
-				}
-				<button className="send-report-button" onClick={() => this.registerEvent()}>Send Report</button>
-				<button className="send-report-button" onClick={() => { this.handleLoginChange(4); this.clearChosenEvent();}}>Back</button>
-			</div>
-		} else {
-			return <p className="whiteText-1">Select event from calendar</p>
-		}
-	}
-}
-
-/*
-//TODO: This needs fixing - does not update when registered event regsitered. Might need to update this.state in App.
-class RegsiterTodaysEvent extends Component {
-
-	handleLoginChange(e) {
-		this.props.onLoginChange(e);
-	}
-
-	handleChosenEventChange(e) {
-		this.props.onEventChange(e);
-	}
-
-	selectEvent = event => {
-		this.handleChosenEventChange(event);
-		this.handleLoginChange(5);
-	}
-
-	newEvent() {
-		let event = {
-			eventDate: new Date().toISOString(), //GET date from calender
-			status: "",
-			dataValues: [],
-		}
-
-		let programs = this.props.getPrograms();
-		if(programs.length > 0) {
-			programs.map(program => {
-				if(program.id === "Bv3DaiOd5Ai") { //TODO - not hardcode - this is specified in state.
-					if(program.hasOwnProperty("programStages")){
-						if(program.programStages.length > 0) {
-							let programStage = program.programStages[0]; //TODO: This cannot be.. if there is more than one programStage.
-							if(programStage.hasOwnProperty("dataElements")) {
-								if(programStage.dataElements.length > 0) {
-								programStage.dataElements.map(dataElement => {
-										if(dataElement.dataElement.optionSetValue) {
-											event.dataValues.push(
-												{
-													dataElement: dataElement.dataElement.id,
-													displayName: dataElement.dataElement.displayName,
-													optionSetValue: dataElement.dataElement.optionSetValue,
-													optionSet: dataElement.dataElement.optionSet,
-													value: "",
-												}
-											)
-										} else {
-											event.dataValues.push(
-												{
-													dataElement: dataElement.dataElement.id,
-													displayName: dataElement.dataElement.displayName,
-													optionSetValue: dataElement.dataElement.optionSetValue,
-													value: "",
-												}
-											)
-										}
-										return Promise.resolve();
-									})
-								}
-							}
-						}
-					}
-				}
-				return Promise.resolve();
-			})
-		}
-		//console.log(event);
-		return event;
-	}
-
-	//TODO: FIX this
-	checkIfRegisteredToday() {
-		let programs = this.props.getPrograms();
-		let date = new Date().toISOString().slice(0, 10);
-
-		if(programs.length > 0) {
-			//console.log("1");
-			if(programs[0].hasOwnProperty("programStages")) {
-				//console.log("2");
-				if(programs[0].programStages.length > 0) {
-					//console.log("3");
-					let programStage = programs[0].programStages[0]; //TODO- this might need to be fixed. Map through stages?
-					if(programStage.hasOwnProperty("events")) {
-						//console.log("4");
-						programStage.events.map(event => {
-							//console.log("5");
-							if(event.eventDate.slice(0, 10) === date) {
-								//console.log("6");
-								return true;
-							}
-							return Promise.resolve();
-						})
-					}
-				}
-			}
-		}
-		return false;	
-	}
-
-	render() {
-		if(this.checkIfRegisteredToday()) {
-			return (
-				<div>
-					<button className="button1" onClick={console.log("already registered today")}>Todays Registered finished</button>
-				</div>
-			)
-		} else {
-			return (
-				<div>
-					<button onClick={() => {this.selectEvent(this.newEvent())}}>Register Today</button>
-				</div>
-			)
-		}
-	}
-}
-*/
 
 export default App;
