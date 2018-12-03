@@ -136,6 +136,7 @@ class DisplayEvent extends Component {
 							this.setState({approvedStatus:true})
 						}
 					}
+					return Promise.resolve();
 				})	
 			} catch (error) {
 				console.log(error);
@@ -250,6 +251,7 @@ class DisplayEvent extends Component {
 						} 
 						*/
 					}
+					return Promise.resolve();
 				})
 				}
 				<button className="send-report-button" onClick={() => this.registerEvent()}>Send Report</button>

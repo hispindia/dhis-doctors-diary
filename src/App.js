@@ -358,11 +358,15 @@ class App extends Component {
 											datesBlue.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
 										}
 									}
+									return Promise.resolve();
 								})
+								return Promise.resolve();
 							})
 						}
+						return Promise.resolve();
 					})
 				}
+				return Promise.resolve();
 			})
 		} catch (error) {
 			//console.log(error);
@@ -420,8 +424,10 @@ class App extends Component {
 						})
 						console.log("chosenProgramStage: " + programStage.id);
 					}
+					return Promise.resolve();
 				})
 			}
+			return Promise.resolve();
 		})
 		this.updateLocalStorage();
 	}
@@ -587,14 +593,15 @@ class App extends Component {
 	}
 
 	//Only way of removing the time-picker from the calendar..
+	//also disables keyboard prompt on mobile when clicking calendar
 	removeTimer() {
 		try {
-			var el = document.querySelector( '.flatpickr-time' );
+			let el = document.querySelector( '.flatpickr-time' );
 			el.parentNode.removeChild( el );
 		} catch (error) {}
 
 		try {
-			var x = document.getElementsByTagName("span");
+			let x = document.getElementsByTagName("span");
 			for (let i = 0; i < x.length; i++) {
 				console.log(x[i])
 				if(x[i].className.includes("day")){
@@ -605,13 +612,13 @@ class App extends Component {
 		} catch (error) {}
 
 		try {
-			var x = document.getElementsByClassName("flatpickr-days");
+			let x = document.getElementsByClassName("flatpickr-days");
 			x[0].setAttribute("readonly", true);
 			console.log("Meh")
 		} catch (error) {}
 
 		try {
-			var x = document.getElementsByClassName("dayContainer");
+			let x = document.getElementsByClassName("dayContainer");
 			x[0].setAttribute("readonly", true);
 			console.log("Meh")
 		} catch (error) {}
@@ -700,9 +707,7 @@ class App extends Component {
 							<p className="whiteText-1">User: {this.state.username}</p>
 							<button id="logout" onClick={() => {
 							if(this.state.handleSubmit.length > 0) {
-								if(window.confirm
-									('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + 
-										" reports pending.."))
+								if(window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending.."))
 										 this.logOut()
 							} else {
 								this.logOut()
@@ -721,9 +726,7 @@ class App extends Component {
 							<p className="whiteText-1">User: {this.state.username}</p>
 							<button id="logout" onClick={() => {
 							if(this.state.handleSubmit.length > 0) {
-								if(window.confirm
-									('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + 
-										" reports pending.."))
+								if(window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending.."))
 										 this.logOut()
 							} else {
 								this.logOut()
