@@ -336,6 +336,9 @@ class App extends Component {
 		let datesRed = [];
 		let datesGreen = [];
 		let datesBlue = [];
+
+		let approvalStatusFound = false;
+
 		try {
 			this.state.programs.map(program => {
 				if(program.id === this.state.chosenProgram) {
@@ -344,6 +347,7 @@ class App extends Component {
 							programStage.events.map(event => {
 								event.dataValues.map(dataValue => {
 									if(dataValue.dataElement === "OZUfNtngt0T") {
+										approvalStatusFound = true;
 										if(dataValue.value === "Approved") {
 											//put date into datesGreen
 											datesGreen.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
@@ -360,6 +364,9 @@ class App extends Component {
 									}
 									return Promise.resolve();
 								})
+								if(!approvalStatusFound) {
+									datesBlue.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
+								}
 								return Promise.resolve();
 							})
 						}
@@ -603,10 +610,8 @@ class App extends Component {
 		try {
 			let x = document.getElementsByTagName("span");
 			for (let i = 0; i < x.length; i++) {
-				console.log(x[i])
 				if(x[i].className.includes("day")){
 					x[i].setAttribute("readonly", true);
-					console.log("disabled");
 				}
 			}
 		} catch (error) {}
@@ -614,13 +619,11 @@ class App extends Component {
 		try {
 			let x = document.getElementsByClassName("flatpickr-days");
 			x[0].setAttribute("readonly", true);
-			console.log("Meh")
 		} catch (error) {}
 
 		try {
 			let x = document.getElementsByClassName("dayContainer");
 			x[0].setAttribute("readonly", true);
-			console.log("Meh")
 		} catch (error) {}
 	}
 

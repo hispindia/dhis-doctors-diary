@@ -1,16 +1,21 @@
 {
-  "short_name": "React App",
-  "name": "Doctors Diary 0.3"
-  "version": "0.3",
+  "short_name": "Doctors Diary",
+  "name": "Doctors Diary",
+  "version": "0.1",
   "homepage": ".",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "192x192 64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
