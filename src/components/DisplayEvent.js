@@ -36,6 +36,19 @@ class DisplayEvent extends Component {
 			let state = this.props.getState();
 
 			event.dataValues.map(dataValue => {
+
+				//if report is rejected and changes made, set to "re-submitted"
+				if(dataValue.dataElement === "OZUfNtngt0T") {//approval status
+					if(dataValue.value === "Rejected") {
+						dataValue.value = "Re-submitted";
+					}
+				//if doctor forgot to enter working field, enter "working" by default
+				} else if (dataValue.dataElement === "x2uDVEGfY4K") {//working status
+					if(dataValue.value === "") {
+						dataValue.value = "Working";
+					}
+				}
+
 				let newDataValue = {
 					value: dataValue.value,
 					dataElement: dataValue.dataElement,
@@ -84,7 +97,6 @@ class DisplayEvent extends Component {
 	registerEvent() {
 		this.props.updateProgramsEventFromChosenEvent(this.props.chosenEvent());
 		this.addToHandleSubmit();
-		this.handleLoginChange(4);
 	}
 
 	handleFieldChange(dataElement, value) {
@@ -104,22 +116,6 @@ class DisplayEvent extends Component {
 				return Promise.resolve();
 			})
 		}
-
-		//this ensures that all optionSets are selected, even if not clicked.
-		//default view in optionSets are value=1, so unless changed by user,
-		//the value stays 1.
-		event.dataValues.map(value => {
-			if(value.dataElement === "OZUfNtngt0T") {//approval status
-				if(value.value === "") {
-					value.value = "Re-submitted";
-				}
-			} else if (value.dataElement === "x2uDVEGfY4K") {//working status
-				if(value.value === "") {
-					value.value = "Working";
-				}	
-			}
-			return Promise.resolve();
-		})
 		this.props.onEventChange(event);
 	}
 
@@ -155,6 +151,55 @@ class DisplayEvent extends Component {
 						inputmode = "numeric";
 					}
 
+					if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
+						return <FormElement.CreateOptionElement 
+							handleFieldChange={""} 
+							dataValue={dataValue}
+							key={dataValue.dataElement}
+							enableEditForm={false}
+						/>
+					} else if(dataValue.dataElement === "CCNnr8s3rgE") {  //reason for rejection
+						return <FormElement.CreateElement 
+							handleFieldChange={""} 
+							dataValue={dataValue}
+							key={dataValue.dataElement}
+							enableEditForm={false}
+							inputmode={inputmode}
+						/>
+					} else if(dataValue.optionSetValue) {
+						return <FormElement.CreateOptionElement 
+							handleFieldChange={this.handleFieldChange} 
+							dataValue={dataValue}
+							key={dataValue.dataElement}
+							enableEditForm={true}
+							inputmode={inputmode}
+						/>
+					} else {
+						return <FormElement.CreateElement 
+							handleFieldChange={this.handleFieldChange} 
+							dataValue={dataValue}
+							key={dataValue.dataElement}
+							enableEditForm={true}
+							inputmode={inputmode}
+						/>
+					}
+				})
+				}
+				<button className="send-report-button" onClick={() => this.registerEvent()}>Send Report</button>
+				<button className="send-report-button" onClick={() => { this.handleLoginChange(4); this.clearChosenEvent();}}>Back</button>
+			</div>
+		} else {
+			return <p className="whiteText-1">Select event from calendar</p>
+		}
+	}
+}
+
+export default DisplayEvent;
+
+
+//previous cluster used to block certain form elements
+
+				/*
 					//render elements and disable possiblibilty of editing.
 					if(this.state.approvedStatus) {
 						if(dataValue.optionSetValue) {
@@ -238,29 +283,5 @@ class DisplayEvent extends Component {
 								inputmode={inputmode}
 							/>
 						}
-
-
-						/*
-						if(dataValue.dataElement === "OZUfNtngt0T") { //approval status - not to be changed
-							return <FormElement.CreateOptionElement 
-							handleFieldChange={this.handleFieldChange} //remove?
-							dataValue={dataValue}
-							key={dataValue.dataElement}
-							enableEditForm={false}
-						/>
-						} 
-						*/
-					}
-					return Promise.resolve();
-				})
-				}
-				<button className="send-report-button" onClick={() => this.registerEvent()}>Send Report</button>
-				<button className="send-report-button" onClick={() => { this.handleLoginChange(4); this.clearChosenEvent();}}>Back</button>
-			</div>
-		} else {
-			return <p className="whiteText-1">Select event from calendar</p>
-		}
-	}
-}
-
-export default DisplayEvent;
+					} 
+				*/

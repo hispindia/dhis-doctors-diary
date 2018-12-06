@@ -587,6 +587,7 @@ class App extends Component {
 	}
 
 	setChosenEventFromCalenderView() {
+		this.clearChosenEvent();
 		let event = this.findEventBasedOnSelectedDate();
 		if(event !== "") {
 			this.handleChosenEventChange(event);
@@ -594,7 +595,7 @@ class App extends Component {
 			let newEvent = this.newEvent();
 			this.handleChosenEventChange(newEvent);
 			//todo: create new event
-			//this.clearChosenEvent();
+			
 		}
 		this.disableForm();
 	}
@@ -703,43 +704,28 @@ class App extends Component {
 						//callback={() => this.handleSubmit()} 
 					/>
 
-					<Online>
-						<header className="header-online" id="parent-row">
+					<header id="parent-row">
+						<Online>
 							<p className="whiteText-1">ONLINE</p>
-							<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
-							<p className="whiteText-1">User: {this.state.username}</p>
-							<button id="logout" onClick={() => {
-							if(this.state.handleSubmit.length > 0) {
-								if(window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending.."))
-										 this.logOut()
-							} else {
-								this.logOut()
-							}
-						}
-						}
-						>Log out
-						</button>
-						</header>			
-					</Online>
-
-					<Offline>
-					<header className="header-offline" id="parent-row">
+						</Online>
+						<Offline>
 							<p className="whiteText-1">OFFLINE</p>
-							<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
-							<p className="whiteText-1">User: {this.state.username}</p>
-							<button id="logout" onClick={() => {
+						</Offline>
+						
+						<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
+						<p className="whiteText-1">User: {this.state.username}</p>
+						<button id="logout" onClick={() => {
 							if(this.state.handleSubmit.length > 0) {
 								if(window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending.."))
-										 this.logOut()
+											this.logOut()
 							} else {
 								this.logOut()
 							}
-						}
-						}
-						>Log out
+							}
+							}
+							>Log out
 						</button>
-						</header>	
-					</Offline>
+					</header>
 
 					<div className="calenderAndEvents">
 						<p className="whiteText-2">Select date: </p>

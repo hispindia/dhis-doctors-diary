@@ -1,13 +1,14 @@
 {
-    "version": "0.3",
-    "name": "Doctors Diary 0.3",
+    "version": "0.1",
+    "name": "Doctors Diary",
     "description": "My App is a Packaged App",
     "launch_path": "/index.html",
     "appType": "APP",
     "icons": {
         "16": "./icon-16.png",
         "48": "./icon-48.png",
-        "128": "./icon-128.png"
+        "128": "./icon-128.png",
+        "512": "./icon-128.png"
     },
     "developer": {
         "name": "Magnus Nordin",

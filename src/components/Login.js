@@ -52,9 +52,7 @@ class Login extends Component {
 
 		this.checkUserCredentialsFromDhis2(username, password)
 			.then(response => {
-				if (response === 1) {
-					alert("You are running the application offline");
-				} else if(response) {
+				if(response) {
 						this.props.getLocalStorage(username);
 						this.handleUsernameChange(username);
 						this.handlePasswordChange(password);
@@ -76,6 +74,8 @@ class Login extends Component {
 							})	
 				} else {
 					this.handleLoginChange(1);
+					let x = document.getElementById("failed-login");
+					x.innerHTML = "Wrong username/password";
 				}
 			})
   	}
@@ -84,6 +84,8 @@ class Login extends Component {
 	checkUserCredentialsFromDhis2(username, password) {
 		return api.checkUserCredentials(username, password)
 		.then(respons => {
+			return respons;
+			/*
 			if(!respons) {
 				this.handleLoginChange(1);
 				if (typeof(Storage) !== "undefined") {
@@ -107,6 +109,7 @@ class Login extends Component {
 			} else {
 				return respons;
 			}
+			*/
 		})
 	}
 
