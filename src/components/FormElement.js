@@ -34,37 +34,37 @@ class CreateElement extends Component {
 	}
 
 	render() {
+		if(this.props.dataValue.dataElement === "CCNnr8s3rgE") { //reason for rejection
+			return(
+				<div className="formElement">
+					<p className="formText">{this.props.dataValue.displayName}</p>
+					<textarea
+						disabled
+						readOnly
+						rows="5"
+						className="item-select-disabled"
+						id="right-align"
+						key={this.props.dataValue.dataElement}
+						type="text"
+						defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
+					/> 
+				</div>
+			)
+		}
+
 		if(this.props.enableEditForm) {
 			return(
 				<div className="formElement">
 					<p className="formText">{this.props.dataValue.displayName}</p>
-					
-						<input
-							inputMode={this.props.inputmode} 
-							className="item-select"
-							onChange={this.changeHandeler.bind(this)} //remove this for disable
-							id="right-align"
-							key={this.props.dataValue.dataElement}
-							type="text"
-							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
-							/> 
-				
-				</div>
-			)
-		} else if(this.props.dataValue.dataElement === "CCNnr8s3rgE") {
-			return(
-				<div className="formElement">
-					<p className="formText">{this.props.dataValue.displayName}</p>
-				
-						<textarea
-							disabled
-							rows="5"
-							className="item-select-disabled"
-							id="right-align"
-							key={this.props.dataValue.dataElement}
-							type="text"
-							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
-							/> 
+					<input
+						inputMode={this.props.inputmode} 
+						className="item-select"
+						onChange={this.changeHandeler.bind(this)} //remove this for disable
+						id="right-align"
+						key={this.props.dataValue.dataElement}
+						type="text"
+						defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
+					/> 
 				
 				</div>
 			)
@@ -72,16 +72,15 @@ class CreateElement extends Component {
 			return(
 				<div className="formElement">
 					<p className="formText">{this.props.dataValue.displayName}</p>
-				
-						<input
-							disabled
-							className="item-select"
-							id="right-align-disabled"
-							key={this.props.dataValue.dataElement}
-							type="text"
-							defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
-							/> 
-					
+					<input
+						disabled
+						readOnly
+						className="item-select"
+						id="right-align-disabled"
+						key={this.props.dataValue.dataElement}
+						type="text"
+						defaultValue={this.props.dataValue.value} //set this to "value" to disable edit 
+					/> 
 				</div>
 			)
 		}

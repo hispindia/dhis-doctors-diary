@@ -52,9 +52,9 @@ class App extends Component {
 	this.getChosenEvent = this.getChosenEvent.bind(this);
 	this.clearChosenEvent = this.clearChosenEvent.bind(this);
 	this.addToHandleSubmit = this.addToHandleSubmit.bind(this);
-	this.disableForm = this.disableForm.bind(this);
 	this.setUserRole = this.setUserRole.bind(this);
 	this.setUserGroups = this.setUserGroups.bind(this);
+	this.removeFromHandleSubmit = this.removeFromHandleSubmit.bind(this);
 
 	this.setProgramStage = this.setProgramStage.bind(this);
 	this.sortEventIntoColorsForCalendar = this.sortEventIntoColorsForCalendar.bind(this);
@@ -145,33 +145,43 @@ class App extends Component {
 	}
 
 	updateProgramsEventFromChosenEvent(event) {
+
+		let eventUpdated = false;
 		this.state.programs.map(program => {
 			if(program.id === this.state.chosenProgram) {
 				program.programStages.map(programStage => {
 					if(programStage.programStage === this.state.chosenProgramStage) {
-						let eventFound = false;
-						if(!programStage.hasOwnProperty("events")){
-							programStage.events = [];
-						}
-						programStage.events.map(stageEvent => {
-							if(stageEvent.event === event.event) {
-								stageEvent = event;
-								eventFound = true;
-								//console.log("Updated already existing event");
+						programStage.events.map(prevEvent => {
+							if(prevEvent.eventDate.slice(0,10) === event.eventDate.slice(0,10)) {
+								//found previous event.
+								prevEvent = event;
+								eventUpdated = true;
+								console.log("Updated previous event");
 							}
-							return Promise.resolve();
 						})
-						if(!eventFound) {
-							console.log("created new event");
-							console.log(event);
-							programStage.events.push(event);
-						}
 					}
-					return Promise.resolve();
 				})
 			}
-			return Promise.resolve();
 		})
+
+		if(!eventUpdated) {
+			this.state.programs.map(program => {
+				if(program.id === this.state.chosenProgram) {
+					program.programStages.map(programStage => {
+						if(programStage.programStage === this.state.chosenProgramStage) {
+							if(!programStage.hasOwnProperty("events")){
+								programStage.events = [];
+							}
+	
+							programStage.events.push(event);
+							console.log("Added new event to EventList")
+						}
+					})
+				}
+			})
+
+		}
+
 		this.updateLocalStorage();
 	}
 
@@ -248,7 +258,11 @@ class App extends Component {
 
 		let handleSubmit = this.state.handleSubmit;
 		try {
-			handleSubmit = handleSubmit.filter(handleSubmit => handleSubmit.endpoint !== submit.endpoint);
+			//tries to filter out previous events in the que @ the same endpoint, not to get duplicates
+			//dont filter if endpoint = /events
+			if(submit.endpoint !== "/events") {
+				handleSubmit = handleSubmit.filter(handleSubmit => handleSubmit.endpoint !== submit.endpoint);
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -266,9 +280,13 @@ class App extends Component {
 		var array = this.state.handleSubmit; 
 		var index = array.indexOf(e)
 		if (index !== -1) {
-		  array.splice(index, 1);
-		  this.setState({handleSubmit: array});
+			console.log("SLETTER EVENT FRA QUE");
+			array.splice(index, 1);
+			this.setState({handleSubmit: array});
+		} else {
+			console.log("SLETTER IKKE IKKE IKKE IKKE EVENT FRA QUE");
 		}
+		this.updateLocalStorage();
 	}
 
 	//adds href, event ID and programStage to event that's been POSTed.
@@ -303,25 +321,22 @@ class App extends Component {
 		let que = this.state.handleSubmit;
 		if(que.length > 0) {
 			que.map(submitTask => {
-				//testing the submit-function. if post - removes before fetching.
-				if(submitTask.method === "POST") {
-					console.log("Stopped POST");
-					console.log(submitTask);
-					this.removeFromHandleSubmit(submitTask);
-				}
-				console.log("Perfoming + " + submitTask.method);
-				return api.postPayload(submitTask.endpoint, JSON.stringify(submitTask.payload), submitTask.method, this.state.username, this.state.password)
+				let report = submitTask;
+				this.removeFromHandleSubmit(submitTask);
+				console.log("Perfoming + " + report.method);
+				return api.postPayload(report.endpoint, JSON.stringify(report.payload), report.method, this.state.username, this.state.password)
 				.then(response => {
 					if(response.httpStatusCode === 200) {
 						console.log(response);
-						this.removeFromHandleSubmit(submitTask);
 						try {
-							if(submitTask.method === "POST") {
-								this.updateEventAfterSubmit(response.response.importSummaries[0].href, submitTask.payload);
+							if(report.method === "POST") {
+								this.updateEventAfterSubmit(response.response.importSummaries[0].href, report.payload);
 							}
 						} catch(e) {
 							console.log("Error: " + e);
 						}
+					} else {
+						this.addToHandleSubmit(report.endpoint, report.payload, report.method);
 					}
 				})
 				.catch(error => {
@@ -346,7 +361,7 @@ class App extends Component {
 						if(programStage.programStage === this.state.chosenProgramStage) {
 							programStage.events.map(event => {
 								event.dataValues.map(dataValue => {
-									if(dataValue.dataElement === "OZUfNtngt0T") {
+									if(dataValue.dataElement === "OZUfNtngt0T") { //aproval status
 										approvalStatusFound = true;
 										if(dataValue.value === "Approved") {
 											//put date into datesGreen
@@ -358,6 +373,9 @@ class App extends Component {
 											//put date into datesRed
 											datesRed.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
 										} else if(dataValue.value === "Re-submitted") {
+											//put date into datesBlue
+											datesBlue.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
+										} else {
 											//put date into datesBlue
 											datesBlue.push({startDate: Date.parse(this.setDateToOneDayEarlier(event.eventDate.split('T')[0])), endDate: Date.parse(event.eventDate.split('T')[0])});
 										}
@@ -386,15 +404,30 @@ class App extends Component {
 		let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
 		date = date.split('-').map(i => parseInt(i));
 		if(date[2].toString() === "01" || date[2] === 1){
-			date[2] = daysInMonth[date[1]-1];
 			if(date[1].toString() === "01" || date[1] === 1) {
 				date[1] = 12;
 				date[0] = date[0]-1;
+				date[2] = daysInMonth[date[1]-1];
+			} else {
+				date[1] = date[1]-1;
+				date[2] = daysInMonth[date[1]-1];
 			}
 		} else {
 			date[2] = date[2]-1;
 		}
+
 		date = date.join("-");
+		if(date.length === 9) {
+			date = date.split('-');
+			if(date[1].length === 1) {
+				date[1] = "0".concat(date[1]);
+				date = date.join("-");
+			}
+			if(date[2].length === 1) {
+				date[2] = "0".concat(date[2]);
+				date = date.join("-");
+			}
+		}
 		return date;
 	}
 
@@ -429,7 +462,6 @@ class App extends Component {
 						this.setState({
 							chosenProgramStage: programStage.id
 						})
-						console.log("chosenProgramStage: " + programStage.id);
 					}
 					return Promise.resolve();
 				})
@@ -446,20 +478,22 @@ class App extends Component {
 		try {
 			this.state.programs.map(program => {
 				if(program.id === this.state.chosenProgram) {
-					program.programStages.map(programStage => {
-						if(programStage.programStage === this.state.chosenProgramStage) {
-							programStage.events.map(event => {
-								if(event.eventDate.slice(0,10) > lastEvent) {
-									lastEvent = event.eventDate.slice(0,10);
-								}
-								if(event.eventDate.slice(0,10) < firstEvent) {
-									firstEvent = event.eventDate.slice(0,10);
-								}
-								return Promise.resolve();
-							})
-						}
-						return Promise.resolve();
-					})
+					if(program.hasOwnProperty("programStages")) {
+						program.programStages.map(programStage => {
+							if(programStage.programStage === this.state.chosenProgramStage) {
+								programStage.events.map(event => {
+									if(event.eventDate.slice(0,10) > lastEvent) {
+										lastEvent = event.eventDate.slice(0,10);
+									}
+									if(event.eventDate.slice(0,10) < firstEvent) {
+										firstEvent = event.eventDate.slice(0,10);
+									}
+									return Promise.resolve();
+								})
+							}
+							return Promise.resolve();
+						})
+					}
 				}
 				return Promise.resolve();
 			})
@@ -478,22 +512,20 @@ class App extends Component {
 	
 			firstEvent = [year, month, day].join('-');
 		}
+	
+		//if less than 7 days ago, give date thats 7 days ago to enable editing of last weeks reports
+		let weekAgo = new Date();
+			weekAgo.setDate(weekAgo.getDate() - 7);
+			weekAgo = weekAgo.toISOString().split('T')[0];
 
-		let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
-		let intDate = firstEvent.split('-').map(i => parseInt(i));
-		if(intDate[2].toString() === "01" || intDate[2] === 1){
-			intDate[2] = daysInMonth[intDate[1]-1];
-			if(intDate[1].toString() === "01" || intDate[1] === 1) {
-				intDate[1] = 12;
-				intDate[0] = intDate[0]-1;
-			}
+		//if 7 days difference between today and first event, set events date as firstDate,
+		if(weekAgo > firstEvent) {
+			firstEvent = this.setDateToOneDayEarlier(firstEvent);
+			return firstEvent;
+		//else, set firstDate to 7 days before today
 		} else {
-			intDate[2] = intDate[2]-1;
+			return weekAgo;
 		}
-		firstEvent = intDate.join("-");
-
-		//console.log(firstEvent);
-		return firstEvent;
 	}
 
 	//returns event if there is an event for given date
@@ -541,28 +573,15 @@ class App extends Component {
 								if(programStage.dataElements.length > 0) {
 								programStage.dataElements.map(dataElement => {
 										if(dataElement.dataElement.optionSetValue) {
-											if(dataElement.dataElement.id === "OZUfNtngt0T") { //approval status
-												event.dataValues.push(
-													{
-														dataElement: dataElement.dataElement.id,
-														displayName: dataElement.dataElement.displayName,
-														optionSetValue: dataElement.dataElement.optionSetValue,
-														optionSet: dataElement.dataElement.optionSet,
-														value: "Re-submitted",
-													}
-												)
-											} else {
-												event.dataValues.push(
-													{
-														dataElement: dataElement.dataElement.id,
-														displayName: dataElement.dataElement.displayName,
-														optionSetValue: dataElement.dataElement.optionSetValue,
-														optionSet: dataElement.dataElement.optionSet,
-														value: "",
-													}
-												)
-											}
-
+											event.dataValues.push(
+												{
+													dataElement: dataElement.dataElement.id,
+													displayName: dataElement.dataElement.displayName,
+													optionSetValue: dataElement.dataElement.optionSetValue,
+													optionSet: dataElement.dataElement.optionSet,
+													value: "",
+												}
+											)
 										} else {
 											event.dataValues.push(
 												{
@@ -592,12 +611,19 @@ class App extends Component {
 		if(event !== "") {
 			this.handleChosenEventChange(event);
 		} else {
-			let newEvent = this.newEvent();
-			this.handleChosenEventChange(newEvent);
-			//todo: create new event
-			
+			//check if event is less than 7 days old
+			let weekAgo = new Date();
+			weekAgo.setDate(weekAgo.getDate() - 8);
+			weekAgo = weekAgo.toISOString().split('T')[0];
+			let selectedDate = JSON.stringify(this.state.date[0]).slice(1,11);
+
+			if(selectedDate > weekAgo) {
+				let newEvent = this.newEvent();
+				this.handleChosenEventChange(newEvent);
+			} else {
+				//do nothing
+			}
 		}
-		this.disableForm();
 	}
 
 	//Only way of removing the time-picker from the calendar..
@@ -628,34 +654,6 @@ class App extends Component {
 		} catch (error) {}
 	}
 
-	//disables all form-elements, as long as their className="item-select".
-	disableForm() {
-		let todaysDate = new Date().toISOString().split('T')[0].split('-').map(i => parseInt(i));
-		let selectedDate = this.state.date[0];
-
-		try {
-			selectedDate = selectedDate.split('T')[0].split('-').map(i => parseInt(i));	
-		} catch (error) {
-			selectedDate = selectedDate.toISOString().split('T')[0].split('-').map(i => parseInt(i));
-		}
-
-		let daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //ignoring leap year...
-		let selectedDateValue = daysInMonth[selectedDate[1]] + selectedDate[2];
-		let todaysDateValue = daysInMonth[todaysDate[1]] + todaysDate[2];
-	
-		if(todaysDateValue - selectedDateValue > 7) { //DISABLE if 7 days difference
-			let elements = document.getElementsByClassName("item-select");
-			for (let i = 0; i < elements.length; i++) {
-				elements[i].setAttribute("disabled", true);
-			}
-		} else {
-			let elements = document.getElementsByClassName("item-select");
-			for (let i = 0; i < elements.length; i++) {
-				elements[i].removeAttribute("disabled");
-			}
-		}
-	}
-
 	render() {		
 		const { date } = this.state;
 		if(this.state.login === 1) { //login screen
@@ -673,7 +671,7 @@ class App extends Component {
 						onUserIdChange={this.handleUserIdChange}
 						getPrograms={this.getPrograms}
 						getState={this.getState}
-						choseSpecialst={this.setProgramStage}
+						setProgramStage={this.setProgramStage}
 						setUserRole={this.setUserRole}
 						getLocalStorage={this.getLocalStorage}
 						setUserGroups={this.setUserGroups}
@@ -692,28 +690,27 @@ class App extends Component {
 		} else if (this.state.login === 3) { //register new user screen
 		} else if (this.state.login === 4) { //event page - register new event
 
-			let test = [[],[],[]];
-			test = this.sortEventIntoColorsForCalendar();
-			let datesRed = test[0];
-			let datesGreen = test[1];
-			let datesBlue = test[2];
+			let datesArray = [[],[],[]];
+			datesArray = this.sortEventIntoColorsForCalendar();
+			let datesRed = datesArray[0];
+			let datesGreen = datesArray[1];
+			let datesBlue = datesArray[2];
 
 			return (
 				<div>
 					<ReactInterval timeout={5000} enabled={true}
-						//callback={() => this.handleSubmit()} 
+						callback={() => this.handleSubmit()} 
 					/>
-
 					<header id="parent-row">
 						<Online>
-							<p className="whiteText-1">ONLINE</p>
+							<img src={require('./icons/wifi-on.png')} height="32" width="32"/>
 						</Online>
 						<Offline>
-							<p className="whiteText-1">OFFLINE</p>
+						<img src={require('./icons/wifi-off.png')} height="32" width="32"/>
 						</Offline>
 						
-						<p className="whiteText-1">Reports to send: {this.state.handleSubmit.length}</p>
-						<p className="whiteText-1">User: {this.state.username}</p>
+						<p className="whiteText-1">Sending: {this.state.handleSubmit.length}</p>
+						<p className="whiteText-1">{this.state.username}</p>
 						<button id="logout" onClick={() => {
 							if(this.state.handleSubmit.length > 0) {
 								if(window.confirm('Are you sure you want to log out?\nYou have ' + this.state.handleSubmit.length + " reports pending.."))
@@ -735,30 +732,6 @@ class App extends Component {
 							onChange={date => { this.setState({date}); this.setChosenEventFromCalenderView(); }}
 							options={
 								{
-								onDayCreate: function(dObj, dStr, fp, dayElem){
-									let curDate = +dayElem.dateObj;
-									datesRed.map(date => {
-										if (curDate >= date.startDate && curDate <= date.endDate) {
-										dayElem.className += "cool-date-red";
-										}
-										return Promise.resolve();
-									})
-
-									datesGreen.map(date => {
-										if (curDate >= date.startDate && curDate <= date.endDate) {
-										dayElem.className += "cool-date-green";
-										}
-										return Promise.resolve();
-									})
-
-									datesBlue.map(date => {
-										if (curDate >= date.startDate && curDate <= date.endDate) {
-										dayElem.className += "cool-date-yellow";
-										}
-										return Promise.resolve();
-									})
-
-								},
 								disable: [
 									{
 										from: "0000-01-01",
@@ -766,9 +739,32 @@ class App extends Component {
 									},
 									{
 										from: new Date().fp_incr(1),
-										to: "2018-15-1000"
+										to: "3000-12-31"
 									}
 								],
+								onDayCreate: function(dObj, dStr, fp, dayElem){
+									let curDate = +dayElem.dateObj;
+									datesRed.map(date => {
+										if (curDate >= date.startDate && curDate <= date.endDate) {
+										dayElem.className += " cool-date-red";
+										}
+										return Promise.resolve();
+									})
+
+									datesGreen.map(date => {
+										if (curDate >= date.startDate && curDate <= date.endDate) {
+										dayElem.className += " cool-date-green";
+										}
+										return Promise.resolve();
+									})
+
+									datesBlue.map(date => {
+										if (curDate >= date.startDate && curDate <= date.endDate) {
+										dayElem.className += " cool-date-yellow";
+										}
+										return Promise.resolve();
+									})
+								},
 								locale: {
 									"firstDayOfWeek": 1 // start week on Monday
 								//add inline:true to always show calendar
@@ -776,8 +772,6 @@ class App extends Component {
 								time_24hr:true,
 								dateFormat: "Y-m-d",
 								}
-								//<button onClick={() => this.eventsFirstDate()}>click me</button>
-
 							}
 						/>
 					</div>
@@ -790,6 +784,7 @@ class App extends Component {
 							addToSubmitQue={this.addToHandleSubmit}
 							getState={this.getState}
 							updateProgramsEventFromChosenEvent={this.updateProgramsEventFromChosenEvent}
+							removeFromHandleSubmit={this.removeFromHandleSubmit}
 						/>
 					</div>
 				</div>

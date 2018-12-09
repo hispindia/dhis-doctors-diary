@@ -58,9 +58,9 @@ class Login extends Component {
 						this.handlePasswordChange(password);
 						this.getProgramsFromDhis2(username, password)
 							.then(()=> {
-							this.props.choseSpecialst();
 							this.getUsersOrgunitFromDhis2(username, password)
 							.then(data => {
+							this.props.setProgramStage();
 							this.getEnrollmentAndTrackedEntityData(this.props.getState().orgUnit, this.props.getState().chosenProgram, username, password)
 							.then(() => {						
 							//TODO: This should be generic/ needs to be changed for the doctors diary ID
