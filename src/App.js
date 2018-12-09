@@ -156,7 +156,6 @@ class App extends Component {
 								//found previous event.
 								prevEvent = event;
 								eventUpdated = true;
-								console.log("Updated previous event");
 							}
 						})
 					}
@@ -174,7 +173,6 @@ class App extends Component {
 							}
 	
 							programStage.events.push(event);
-							console.log("Added new event to EventList")
 						}
 					})
 				}
@@ -280,11 +278,8 @@ class App extends Component {
 		var array = this.state.handleSubmit; 
 		var index = array.indexOf(e)
 		if (index !== -1) {
-			console.log("SLETTER EVENT FRA QUE");
 			array.splice(index, 1);
 			this.setState({handleSubmit: array});
-		} else {
-			console.log("SLETTER IKKE IKKE IKKE IKKE EVENT FRA QUE");
 		}
 		this.updateLocalStorage();
 	}
