@@ -42,3 +42,4 @@ To be fixed:
 - UI fixes. At least regarding the calendar.
 - There might be a bug, giving submitted reports a approval status by default. Needs looking into.
 - Might not be possible to make changes to rejected reports older than 7 days, this needs to be checked.
+- Encryption of password/authorization
