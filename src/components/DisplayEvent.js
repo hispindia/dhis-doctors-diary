@@ -49,14 +49,11 @@ class DisplayEvent extends Component {
 			//iterate handleSubmitQue and remove this event, before making changes, and adding it again
 			try {
 				state.handleSubmit.map(submit => {
-					//console.log(submit.payload.events[0].eventDate.slice(0,10));
-					//console.log(event.eventDate.slice(0,10));
 					if(submit.payload.events[0].eventDate.slice(0,10) === event.eventDate.slice(0,10)) {
 						//Delete submit from handleSubmit
-						console.log("deleting")
 						this.props.removeFromHandleSubmit(submit);
 					} else {
-						console.log("nothing found")
+						//console.log("nothing found")
 					}
 				})	
 			} catch (error) {
@@ -224,13 +221,10 @@ class DisplayEvent extends Component {
 	}
 
 	checkAprovalStatusForApproved(event) { //if approved - do not edit any element.
-		//console.log(this.state.approvedStatus);
-		//if(!this.state.approvedStatus){
 		if(event !== "") {
 			if(event.hasOwnProperty("dataValues")) {
 				event.dataValues.map(dataValue => {
 					if(dataValue.dataElement === "OZUfNtngt0T") {
-						//console.log(dataValue);
 						if(dataValue.value === "Approved") {
 							if(!this.state.approvedStatus){
 								this.setState({approvedStatus:true})

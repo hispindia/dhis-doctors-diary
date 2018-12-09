@@ -145,7 +145,6 @@ class Login extends Component {
 		console.log("getEnrollmentAndTrackedEntityData");
 		return api.getEnrollmentAndTrackedED(orgUnit, programId, username, password)
 			.then(data => {
-				//console.log(data);
 				try {
 					this.handleTrackedEntityChange(data.trackedEntityInstances[0].trackedEntityInstance);
 					this.handleEnrollementChange(data.trackedEntityInstances[0].enrollments[0].enrollment);
@@ -219,7 +218,6 @@ class Login extends Component {
 						return Promise.resolve();
 					})
 				}
-				//console.log(programs);
 				this.handleProgramsChange(programs);
 			})
 			.catch(error => {
@@ -276,7 +274,6 @@ class Login extends Component {
 						return Promise.resolve();
 					})
 				}
-				//console.log(programs);
 				this.handleProgramsChange(programs);
 				this.handleLoginChange(4); //TODO: set to "3" to register user
 			})
