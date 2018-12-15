@@ -26,18 +26,12 @@ function loginService(){
 
                 var user = JSON.parse(body).users[0];
                 user.password = password;
-                init(user);
+                init(user,callback);
             });
         
     }
     
-    function loginSuccessfull(user){
-
-        // save to cache
-        init(user);
-    }
-
-    function init(user,pswd){
+    function init(user,callback){
         var storage = {
             user : user,
             events : [],
@@ -67,6 +61,8 @@ function loginService(){
             storage.events = JSON.parse(body).events;
             cache.save("dd_"+storage.user.userCredentials.username,
                        storage);
+
+            callback();
         }
 
         

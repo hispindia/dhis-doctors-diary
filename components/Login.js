@@ -27,7 +27,9 @@ export function Login(props){
     }
     
     function postLogin(){
-        
+        window.location.href = window.location.href+"/calendar";        
+
+        debugger
     }
 
     instance.render = function(){
