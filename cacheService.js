@@ -24,8 +24,30 @@ if (!('indexedDB' in window)) {
 })();
 
 
-function cacheService(){
+export function cacheService(){ 
+
+    var db;
+    this.init = function(key,callback){
+        idb.open(key, 2, function(_db) {
+            db = _db;
+            callback();
+        });
+    }
+ 
 
   
+
+    this.saveObjectStore = function(key,value){
+        if (!db.objectStoreNames.contains(key)) {
+            db.createObjectStore(key,value);
+        }
+        
+    }
+    
+    function saveToCache(key,value){
+        
+    }
     
 }
+
+module.exports = new cacheService();

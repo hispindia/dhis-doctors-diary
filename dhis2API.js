@@ -1,6 +1,6 @@
 
 
-function  dhis2API(){
+function  dhis2API(base){
     var request = require('request')
     
     var url = require('url'); 
@@ -22,7 +22,15 @@ function  dhis2API(){
     })();
     
     var base_url = requestParser.base;
-    
+    if (base){
+        base_url = base;
+    }
+
+    var auth;
+
+    this.setCredentials = function(username,password){
+        auth = "Basic " + new Buffer(username + ":" + password).toString("base64");    
+    }
     
      function update(domain,apiObject,_callback){
          request({
@@ -74,6 +82,21 @@ function  dhis2API(){
         
     }
     
+    this.getReq = function(domain,_callback){
+        request({
+            method: "GET",
+            headers :   {
+                'Content-Type': 'application/json',
+                'Authorization': auth
+            },
+            uri: base_url + "/api/"+domain
+        },callback);
+        
+        function callback(error,response,body){
+            _callback(error,response,body);
+        }    
+    }
+    
     this.dataStoreService = function(dataStoreName){
 
         var dataStoreKeys = [];
@@ -123,4 +146,4 @@ debugger
     
 }
 
-module.exports = new dhis2API();
+module.exports = dhis2API;
