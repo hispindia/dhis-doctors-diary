@@ -3,8 +3,9 @@ import { BrowserRouter as Router , Route, Link,Switch,Redirect  } from 'react-ro
 
 import {Login} from './Login'
 import {Calendar} from './Calendar'
+import {Main} from './Main'
 
-import {EditReportForm} from './editReportFormX'
+import {DataEntryForm} from './DataEntryForm'
 import {NewReportForm} from './newReportForm'
 
 export function App(props){
@@ -18,7 +19,7 @@ export function App(props){
                   <Switch>
                   <Route exact path="/login"  component={Login}  />
                   <Route exact path="/calendar"  component={Calendar}  />
-                  <Route path="/reports/edit/"  component={EditReportForm}  />
+                  <Route path="/entry"  component={Main}  />
 
                   </Switch>
 

@@ -26,12 +26,17 @@ function loginService(){
 
                 var user = JSON.parse(body).users[0];
                 user.password = password;
+                cache.save(constants.cache_curr_user,{"username":username})
+
                 init(user,callback);
             });
         
     }
     
     function init(user,callback){
+
+        programMetadata();
+        
         var storage = {
             user : user,
             events : [],
@@ -59,12 +64,31 @@ function loginService(){
             }
             
             storage.events = JSON.parse(body).events;
-            cache.save("dd_"+storage.user.userCredentials.username,
+            cache.save(constants.cache_user_prefix+storage.user.userCredentials.username,
                        storage);
 
             callback();
+        }       
+        
+    }
+
+    function programMetadata(){
+        var md = cache.get(constants.cache_program_metadata);
+
+        if (md != null){
+            return;
         }
 
+        api.getReq(`programs/${constants.program_doc_diary}.json?fields=id,name,programStages[id,name,programStageDataElements[id,sortOrder,dataElement[id,name,displayName,valueType,optionSetValue,optionSet[id,name,valueType,options[id,name,code]]]],userGroupAccesses]`,function(error,response,body){
+            if (error){
+                console.log("Error : programMetadata" + error);
+                return;
+            }
+
+            cache.save(constants.cache_program_metadata,JSON.parse(body))
+
+        });
+        
         
     }
 }

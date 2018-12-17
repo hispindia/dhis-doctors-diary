@@ -1,5 +1,6 @@
 import React,{propTypes} from 'react';
 import loginService from '../login-service';
+import constants from '../constants';
 
 export function Login(props){
     var instance = Object.create(React.Component.prototype)
@@ -9,7 +10,7 @@ export function Login(props){
         username : "testan",
         password : "Test@1234"
     }
-
+    
     function textInputChangedData(name,e) {
         state[name] = e.target.value
         instance.setState(state)
@@ -27,11 +28,14 @@ export function Login(props){
     }
     
     function postLogin(){
-        window.location.href = window.location.origin+
-            window.location.pathname+"#/calendar";        
+    //    window.location.href = window.location.origin+
+      //      window.location.pathname+"#/calendar";        
+        instance.props.state.curr_view = constants.views.calendar;
+        instance.props.state.changeView(instance.props.state)
     }
 
     instance.render = function(){
+        
     return (
             <div>
             <input type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>

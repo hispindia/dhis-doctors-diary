@@ -61,18 +61,20 @@ export function Calendar(props){
                 })
             }</tr>)
         })
-          
 
-        function getDateCell(cell){
-            var date = cell;
-            return (<td key = {date.format('YYYY-MM-DD')} >{date.format('D')}</td>)  
+        function getDateCell(date){
+            
+            var event = instance.props.state.curr_user_eventMapByDate[date.format('YYYY-MM-DD')];
+            
+            return (<td key = {date.format('YYYY-MM-DD')} onClick={goToDataEntry.bind(null,event)} >{date.format('D')}</td>)  
         }
-        
     }
 
-
-
-
+    function goToDataEntry(event){
+        
+        debugger
+    }
+    
     function prevMonth(){
         state.selMoment = moment(state.selMoment).subtract(1,'month');
         instance.setState(state)
