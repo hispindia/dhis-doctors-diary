@@ -27,9 +27,8 @@ export function Login(props){
     }
     
     function postLogin(){
-        window.location.href = window.location.href+"/calendar";        
-
-        debugger
+        window.location.href = window.location.origin+
+            window.location.pathname+"#/calendar";        
     }
 
     instance.render = function(){

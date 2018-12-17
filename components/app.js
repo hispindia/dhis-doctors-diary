@@ -17,7 +17,7 @@ export function App(props){
         return (  <Router basename={"/xl-report-mapping/index.html#"} >                 
                   <Switch>
                   <Route exact path="/login"  component={Login}  />
-                  <Route exact path="/calendar"  component={NewReportForm}  />
+                  <Route exact path="/calendar"  component={Calendar}  />
                   <Route path="/reports/edit/"  component={EditReportForm}  />
 
                   </Switch>
