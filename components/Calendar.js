@@ -2,6 +2,7 @@ import React,{propTypes} from 'react';
 import cache from '../localstorage';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import constants from '../constants';
 
 const moment = extendMoment(Moment);
 
@@ -25,10 +26,7 @@ export function Calendar(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
 
-    var state = {
-        selMoment : moment(),
-        currRange : null
-    }
+    var state = props.state;
 
     function makeDateRange(){
 
@@ -71,8 +69,10 @@ export function Calendar(props){
     }
 
     function goToDataEntry(event){
+        state.curr_view = constants.views.entry;
+        state.curr_event = event;
+        state.changeView(state);
         
-        debugger
     }
     
     function prevMonth(){

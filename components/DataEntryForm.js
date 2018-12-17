@@ -9,17 +9,23 @@ export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
 
-    var state = {
-        selMoment : moment(),
-        currRange : null
-    }
+    var state = props.state;
 
     instance.render = function(){
          return (
                  <div>
-                 sadfsafd
-             </div>
+                 {state.program_metadata.name}
+                 </div>
          )
     }
     return instance;
+
+    function createForm(){
+        
+    }
+
+    function createQuestion(de){
+     
+
+    }
 }

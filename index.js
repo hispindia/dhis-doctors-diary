@@ -27,8 +27,9 @@ function init(callback){
         curr_view : undefined,
         metadata : undefined,
         curr_user : undefined,
-        calendar : {}
         
+        selMoment : moment(),
+        currRange : null        
     }
     
     state.curr_user = cache.get(constants.cache_curr_user);
@@ -45,10 +46,36 @@ function init(callback){
             list[moment(obj.eventDate).format("YYYY-MM-DD")] = obj;
             return list;
         },[]); 
-        
+        state.curr_user_program_stage = filterPrograStageFromUserGroup();
         
         callback(state);
 
-        debugger
+        
+    }
+
+    function filterPrograStageFromUserGroup(){
+
+        var curr_user_ug_array = state.
+            curr_user_data.
+            user.
+            userGroups.reduce(function(list,obj){
+                list.push(obj.id);
+                return list;
+            },[]);
+        
+        var ps = state.program_metadata.programStages;
+        
+        for (var i=0; i<ps.length;i++){
+            if (ps[i].userGroupAccesses.length > 0){
+                var uga = ps[i].userGroupAccesses;
+                for (var j=0;j<uga.length;j++){
+                    if (curr_user_ug_array.includes(uga[j].id)){
+                        return uga[j].id;
+                    }
+                }
+            }
+        }
+
+        return undefined;
     }
 }

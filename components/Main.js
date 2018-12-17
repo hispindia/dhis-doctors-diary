@@ -33,7 +33,7 @@ export function Main(props){
                    );
         case constants.views.entry :
             return (<div>
-                    <DataEntryForm props={state}/>
+                    <DataEntryForm state={state}/>
 
                     </div>
                    );
