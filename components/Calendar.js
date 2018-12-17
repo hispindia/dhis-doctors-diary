@@ -1,15 +1,24 @@
 import React,{propTypes} from 'react';
 import cache from '../localstorage';
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 
-const dayNameMapping = {
-    'Monday' : 0,
-    'Tuesday' : 1,
-    'Wednesday' : 2,
-    'Thursday' : 3,
-    'Friday' : 4,
-    'Saturday' : 5,
-    'Sunday' : 6
+const moment = extendMoment(Moment);
+
+const splitToChunks = function(array, parts) {
+    let result = [[]];
+    parts = parts -1;
+
+    for (let i = 0,j=0,k=0; i < array.length; i++) {
+        result[j][k] = array[i];
+        if (k%parts == 0 && k!=0 && i< array.length-1){
+            j=j+1;
+            result[j] = [];
+            k=-1;
+        }
+        k=k+1;
+    }
+    return result;
 }
 
 export function Calendar(props){
@@ -17,74 +26,69 @@ export function Calendar(props){
     instance.props = props;
 
     var state = {
-        selMoment : moment()
+        selMoment : moment(),
+        currRange : null
     }
-    
-    function getDates(){
 
-       
-        var dateList = [];
+    function makeDateRange(){
+
         var selMonthFirstDayIndex = parseInt(state.selMoment.startOf('month').format('d'));
-        var selMonthLastDay = parseInt(state.selMoment.endOf('month').format('D'));
-        var prevMonthLastDay = parseInt(state.selMoment.subtract(1, 'months').endOf('month').format('D'));
+        var selMonthLastDay = moment(state.selMoment).endOf('month');
+        var selMonthLastDayIndex = parseInt(state.selMoment.endOf('month').format('d'));
+        var prevMonthLastDay = moment(state.selMoment).subtract(1, 'months').endOf('month');
+        
 
-        var start = new Date(2012, 0, 15)
-  , end   = new Date(2012, 4, 23)
-  , range = moment().range(start, end);
+        var prefixDayLastMonth = moment(prevMonthLastDay).subtract((6 - (7-(selMonthFirstDayIndex-1))),'days');
+        var suffixDayNextMonth = moment(selMonthLastDay).add((7 - selMonthLastDayIndex),'days');
+        
+        var start = prefixDayLastMonth
+        , end   = suffixDayNextMonth
+        , range = moment().range(start, end);
 
-        dateList.push(getfirstWeekDates());
-        dateList.push(getPostFirstWeekDates());
+        return Array.from(range.by('days'))
+    }
 
-        function getfirstWeekDates(){
-            let list = [];
-            for (var i=0,j=prevMonthLastDay - (6 - (7-(selMonthFirstDayIndex-1))); i < 7;i++,j++)
-            {
-                if (j > prevMonthLastDay){
-                    j=1;
-                }
-                console.log(j);
-                list.push(getDateCell(j));
-            }
-            return (<tr>{list}</tr>);
-        }
+    function getDates(){
+           
+        state.currRange = makeDateRange();
+        state.currRange = splitToChunks(state.currRange,7)
 
-        function getPostFirstWeekDates(){
-            let list = [];
-            
-            for (var i=0,j=selMonthFirstDayIndex; j < selMonthLastDay;  i++,j++){
-                console.log(j+1);
-                if (j%7 == 0){
-                //    list.push(getDateCellRowEnd(i+1));
-                }else{
-                    list.push(getDateCell(i+1));
-                }
-            }
-            
-            return list;
-            
+        return state.currRange.map(function(row){
+
+            return (<tr key = {row[1].toString()} >{
+                row.map(function(cell){
+                    return getDateCell(cell);
+                })
+            }</tr>)
+        })
+          
+
+        function getDateCell(cell){
+            var date = cell;
+            return (<td key = {date.format('YYYY-MM-DD')} >{date.format('D')}</td>)  
         }
         
-        function getDateCell(j){
-
-            return  (<td>{j}</td>)            
-        }
-
-    
-
-        
-        return dateList;
     }
 
 
 
 
+    function prevMonth(){
+        state.selMoment = moment(state.selMoment).subtract(1,'month');
+        instance.setState(state)
+    }
 
-
+    function nextMonth(){
+        state.selMoment = moment(state.selMoment).add(1,'month');
+        instance.setState(state)
+    }
     
     instance.render = function(){
          return (
                  <div>
                  <label>{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</label>
+                 <div onClick = {prevMonth}><b>&lt;</b></div>
+                 <div onClick = {nextMonth} ><b>&gt;</b></div>
                  <table>
                  <thead>
                  
