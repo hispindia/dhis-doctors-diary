@@ -5,7 +5,11 @@ function localstorage(){
     }
 
     this.get = function (key){
-        return JSON.parse(localStorage.getItem(key));
+        var val = localStorage.getItem(key);
+        if (val != null){
+            val = JSON.parse(val);
+        }
+        return val;
     }
     
 }
