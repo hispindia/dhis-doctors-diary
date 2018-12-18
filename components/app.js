@@ -5,9 +5,6 @@ import {Login} from './Login'
 import {Calendar} from './Calendar'
 import {Main} from './Main'
 
-import {DataEntryForm} from './DataEntryForm'
-import {NewReportForm} from './newReportForm'
-
 export function App(props){
     
     var instance = Object.create(React.Component.prototype)

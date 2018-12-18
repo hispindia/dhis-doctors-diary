@@ -1,6 +1,5 @@
 import constants from './constants';
 import cache from './localstorage';
-import sync from './sync';
 import _api from './dhis2API';
 
 function syncManager(){
@@ -74,6 +73,9 @@ function syncManager(){
             event.event = body.response.importSummaries[0].reference;
             delete event.offline;
             state.changeView(state);
+            cache.save(constants.cache_user_prefix+state.curr_user.username,
+                       state.curr_user_data);
+            
             
         }
 
@@ -85,7 +87,8 @@ function syncManager(){
 
             delete event.offline;
             state.changeView(state);
-
+            cache.save(constants.cache_user_prefix+state.curr_user.username,
+                       state.curr_user_data);
             
         }
         
