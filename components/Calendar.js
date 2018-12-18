@@ -64,13 +64,14 @@ export function Calendar(props){
             
             var event = instance.props.state.curr_user_eventMapByDate[date.format('YYYY-MM-DD')];
             
-            return (<td key = {date.format('YYYY-MM-DD')} onClick={goToDataEntry.bind(null,event)} >{date.format('D')}</td>)  
+            return (<td key = {date.format('YYYY-MM-DD')} onClick={goToDataEntry.bind(null,event,date.format("YYYY-MM-DD"))} >{date.format('D')}</td>)  
         }
     }
 
-    function goToDataEntry(event){
+    function goToDataEntry(event,date){
         state.curr_view = constants.views.entry;
         state.curr_event = event;
+        state.curr_event_date = date;
         state.changeView(state);
         
     }

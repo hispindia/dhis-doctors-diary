@@ -47,6 +47,10 @@ function init(callback){
             return list;
         },[]); 
         state.curr_user_program_stage = filterPrograStageFromUserGroup();
+        state.program_metadata_programStageByIdMap = state.program_metadata.programStages.reduce(function(map,obj){
+            map[obj.id] = obj;
+            return map;
+        },[]);
         
         callback(state);
 
@@ -70,7 +74,7 @@ function init(callback){
                 var uga = ps[i].userGroupAccesses;
                 for (var j=0;j<uga.length;j++){
                     if (curr_user_ug_array.includes(uga[j].id)){
-                        return uga[j].id;
+                        return ps[i].id;
                     }
                 }
             }

@@ -96,7 +96,41 @@ function  dhis2API(base){
             _callback(error,response,body);
         }    
     }
-    
+
+    this.saveReq = function(domain,apiObject,_callback){
+        request({
+            method: "POST",
+            json : apiObject,
+            headers :   {
+                'Content-Type': 'application/json',
+                'Authorization': auth
+            },
+            data : JSON.stringify(apiObject),
+            uri: base_url + "/api/"+domain
+        },callback);
+        
+        function callback(error,response,body){
+            _callback(error,response,body);
+        }    
+    }
+
+    this.updateReq = function(domain,apiObject,_callback){
+        request({
+            method: "PUT",
+            json : apiObject,
+            headers :   {
+                'Content-Type': 'application/json',
+                'Authorization': auth
+            },
+            data : JSON.stringify(apiObject),
+            uri: base_url + "/api/"+domain
+        },callback);
+        
+        function callback(error,response,body){
+            _callback(error,response,body);
+        }    
+    }
+   
     this.dataStoreService = function(dataStoreName){
 
         var dataStoreKeys = [];

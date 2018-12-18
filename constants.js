@@ -18,3 +18,12 @@ exports.views = {
 exports.cache_curr_user = "dd_current_user";
 exports.cache_user_prefix = "dd_user_";
 exports.cache_program_metadata = "dd_program_metadata";
+
+exports.disabled_fields = [
+    'OZUfNtngt0T',
+    'CCNnr8s3rgE'
+];
+
+exports.required_fields = [
+    'x2uDVEGfY4K'
+]

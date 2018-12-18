@@ -28,10 +28,10 @@ export function Login(props){
     }
     
     function postLogin(){
-    //    window.location.href = window.location.origin+
-      //      window.location.pathname+"#/calendar";        
-        instance.props.state.curr_view = constants.views.calendar;
-        instance.props.state.changeView(instance.props.state)
+        window.location.href = window.location.origin+
+            window.location.pathname+"";        
+       // instance.props.state.curr_view = constants.views.calendar;
+       // instance.props.state.changeView(instance.props.state)
     }
 
     instance.render = function(){
