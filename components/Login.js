@@ -7,8 +7,8 @@ export function Login(props){
     instance.props = props;
     
     var state = {
-        username : "testan",
-        password : "Test@1234"
+        username : "doc",
+        password : "Harsh@1234"
     }
     
     function textInputChangedData(name,e) {
@@ -37,11 +37,12 @@ export function Login(props){
     instance.render = function(){
         
     return (
-            <div>
-            <input type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>
-            <input type="password" placeholder="Password" id = "password" onChange={textInputChangedData.bind(null,'password')} value={state.password} ></input>
+            <div className="loginArea" >
             
-            <button onClick={login}>Sign In</button>
+            <input className="loginField" type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>
+            <input className="loginField" type="password" placeholder="Password" id = "password" onChange={textInputChangedData.bind(null,'password')} value={state.password} ></input>
+            
+            <button className= "button" onClick={login}>Sign In</button>
             </div>
     )
     }

@@ -6,6 +6,7 @@ import {Login} from './Login'
 import {Calendar} from './Calendar'
 import {DataEntryForm} from './DataEntryForm'
 import {Loader} from './Loader'
+import {Header} from './Header'
 
 export function Main(props){
     
@@ -27,12 +28,14 @@ export function Main(props){
                    );
         case constants.views.calendar :
             return (<div>
+                    <Header state={state}></Header>
                     <Calendar state={state}/>
                     
                     </div>
                    );
         case constants.views.entry :
             return (<div>
+                    <Header state={state}></Header>
                     <DataEntryForm state={state}/>
 
                     </div>
