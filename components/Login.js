@@ -26,6 +26,10 @@ export function Login(props){
                    state.password,
                    postLogin)
     }
+
+    function clear(){
+
+    }
     
     function postLogin(){
         window.location.href = window.location.origin+
@@ -38,11 +42,13 @@ export function Login(props){
         
     return (
             <div className="loginArea" >
-            
+            <h3>UPHMIS Daily Diary </h3>
             <input className="loginField" type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>
             <input className="loginField" type="password" placeholder="Password" id = "password" onChange={textInputChangedData.bind(null,'password')} value={state.password} ></input>
-            
+            <div className="buttonDiv">
             <button className= "button" onClick={login}>Sign In</button>
+            <button className= "button" onClick={clear}>Clear</button>
+            </div>
             </div>
     )
     }

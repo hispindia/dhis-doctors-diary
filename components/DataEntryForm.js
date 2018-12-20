@@ -36,11 +36,18 @@ export function DataEntryForm(props){
                 {ps.name}
             {createForm()}
                 <input type="button" value="Save" onClick={save}></input>
+                <input type="button" value="Back" onClick={back}></input>
+                
             </div>
         )
     }
     return instance;
 
+    function back(){
+        state.curr_view = constants.views.calendar;
+        state.changeView(state);    
+    }
+    
     function save(){
         
         sync.saveEvent(dataValueMap,ps,state);

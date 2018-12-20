@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import constants from '../constants';
 
+
 const moment = extendMoment(Moment);
 
 const splitToChunks = function(array, parts) {
@@ -55,20 +56,75 @@ export function Calendar(props){
 
             return (<tr key = {row[1].toString()} >{
                 row.map(function(cell){
-                    return getDateCell(cell);
+                    return getDateCell(cell,state.selMoment);
                 })
             }</tr>)
         })
 
-        function getDateCell(date){
+        function getDateCell(date,refDate){
             
             var event = instance.props.state.curr_user_eventMapByDate[date.format('YYYY-MM-DD')];
             
-            return (<td key = {date.format('YYYY-MM-DD')} onClick={goToDataEntry.bind(null,event,date.format("YYYY-MM-DD"))} >{date.format('D')}</td>)  
+            var className = getClass(date,refDate,event);
+            var img = getImage(event);
+            return (<td className={className}
+                    key = {date.format('YYYY-MM-DD')}
+                    onClick={goToDataEntry.bind(null,event,date.format("YYYY-MM-DD"),className)} >
+                    <div className="cellDiv">
+                    {date.format('D')}
+                    <img className="tick" src={img}></img>
+                    </div>
+                    </td>
+                   )  
         }
     }
 
-    function goToDataEntry(event,date){
+    function getClass(date,refDate,event){
+        var className = "calendarTableCell"; 
+        if(!date.isSame(refDate,'month')){
+            className=className +" fringeDays";
+        }else{
+            className=className + " thisMonth";
+        }
+        
+        if (date.isAfter(moment().subtract(1,'week')) &&
+            date.isBefore(moment().add(1,'days'))){
+            className = className + " entryDate";
+        }
+
+        if(date.isAfter(moment().add(1,'days'))){
+            className=className + " futureDate";
+        }
+
+     
+        
+        
+        return className;
+    }
+
+    function getImage(event){
+        
+        if (event){
+            if (event.offline){
+
+                return constants.images.offline
+            }else{
+                return constants.images.sent
+                
+            }
+        }else{
+            
+        }
+
+        return constants.images.white;
+    }
+    
+    function goToDataEntry(event,date,className){
+
+        if (className.includes("futureDate")){
+            return;
+        }
+        
         state.curr_view = constants.views.entry;
         state.curr_event = event;
         state.curr_event_date = date;
@@ -88,11 +144,14 @@ export function Calendar(props){
     
     instance.render = function(){
          return (
-                 <div>
+                 <div className="calendarArea">
+                 <div className="calendarButton">
+                 <div className="floatLeft"  onClick = {prevMonth}><b>&lt;</b></div>
+
                  <label>{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</label>
-                 <div onClick = {prevMonth}><b>&lt;</b></div>
-                 <div onClick = {nextMonth} ><b>&gt;</b></div>
-                 <table>
+                 <div className="floatRight" onClick = {nextMonth} ><b>&gt;</b></div>
+                 </div>
+                 <table className="calendarTable">
                  <thead>
                  
                  <tr>
