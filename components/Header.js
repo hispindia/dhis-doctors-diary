@@ -14,10 +14,22 @@ export function Header(props){
     }
     
     instance.render = function(){
-  
+        
+        
         return (
-                <div>
-                <input type="button" onClick = {reset} value="Reset"></input>
+                <div className="headerDiv">
+                <table className="headerTable">
+                <tbody>
+                <tr>
+                <td className="userAndFacility"> {state.curr_user_data.user.displayName}</td>
+                
+            </tr>
+                <tr>
+                <td className="userAndFacility"> {state.curr_user_data.user.organisationUnits[0].name}</td>
+                </tr>
+                </tbody>
+                </table>
+              <input className="headerSettings" type="button" onClick = {reset} value="Reset"></input>
             </div>
 
         )

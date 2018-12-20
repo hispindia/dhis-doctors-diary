@@ -13,19 +13,19 @@ function syncManager(){
             orgUnit : state.curr_user_data.tei.orgUnit
         };
         
+     
+        if (!state.curr_event){
+
+            event.eventDate = state.curr_event_date;
+            state.curr_user_data.events.push(event);
+
+        }else{
+            if (state.curr_event){
+                event = state.curr_event;
+            }
+        }
         event.dataValues = populateDataValues();
         event.offline= true;
-        if (!state.curr_event){
-            event.eventDate = state.curr_event_date;
-            
-        }else{
-            if (state.curr_event.event){
-                event.event = state.curr_event.event;
-            }
-            event.eventDate = state.curr_event.eventDate;
-        }
-
-        state.curr_user_data.events.push(event);
         state.curr_user_eventMapByDate[event.eventDate] = event;
         cache.save(constants.cache_user_prefix+state.curr_user.username,
                        state.curr_user_data);
@@ -53,6 +53,7 @@ function syncManager(){
 
 
         var api = new _api(constants.DHIS_URL_BASE);
+
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
 

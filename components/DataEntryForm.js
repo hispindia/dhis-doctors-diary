@@ -9,7 +9,7 @@ export function DataEntryForm(props){
     instance.props = props;
 
     var state = props.state;
-
+    var dirtyBit = false;
     var ps = state.
         program_metadata_programStageByIdMap[state.
                                              curr_user_program_stage];
@@ -32,12 +32,17 @@ export function DataEntryForm(props){
     
     instance.render = function(){
         return (
+                <div className="entryArea">
+                <div className="entryStageDiv">
+                <h2>{ps.name}</h2>
                 <div>
-                {ps.name}
-            {createForm()}
-                <input type="button" value="Save" onClick={save}></input>
-                <input type="button" value="Back" onClick={back}></input>
-                
+                {createForm()}
+            </div>
+                </div>
+                <div className="entrySaveDiv">
+                <input className="button" type="button" value="Save" onClick={save}></input>
+                <input className="button" type="button" value="Back" onClick={back}></input>
+                </div>
             </div>
         )
     }
@@ -49,7 +54,10 @@ export function DataEntryForm(props){
     }
     
     function save(){
-        
+        if(!dirtyBit){
+            back();
+            return;
+        }
         sync.saveEvent(dataValueMap,ps,state);
         state.curr_view = constants.views.calendar;
        // state.changeView(state);
@@ -65,6 +73,7 @@ export function DataEntryForm(props){
     }
     
     function valEntered(de,e){
+        dirtyBit = true;
         dataValueMap[de.id] = e.target.value;
         instance.setState(state)
 
@@ -72,13 +81,23 @@ export function DataEntryForm(props){
     function createQuestion(de){
 
         return (<div
+                className="entryQuestionDiv"
                 hidden = {checkIfToHide(de.dataElement.id)}
                 key ={de.id}>
                 <p>{de.dataElement.name}</p>
+                <div className="entryAnswerDiv">
                 {question(de.dataElement)}
+                </div>
                 </div>)
         
-        function checkIfToHide(deuid){            
+        function checkIfToHide(deuid){
+            if (deuid == "CCNnr8s3rgE"){
+                if (!dataValueMap["OZUfNtngt0T"] || dataValueMap["OZUfNtngt0T"] != "Rejected"){
+                    return true;
+                }
+            }
+
+            
             return false;
         }
         
@@ -129,6 +148,12 @@ export function DataEntryForm(props){
                     return true
                 }
 
+                if (deuid!="x2uDVEGfY4K"){
+                    if (dataValueMap["x2uDVEGfY4K"]!="Working"){
+                        return true;
+                    }
+                }
+                
                 return false;
             }
          

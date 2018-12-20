@@ -1,3 +1,4 @@
+
 .d_page{
 
     display: flex;
@@ -46,8 +47,8 @@
 
 .calendarArea{
     width: 80%;
-  
-    margin: 0 auto;
+    margin-top:50px;
+    margin-left:10%;
     text-align: center;
 
 }
@@ -141,12 +142,80 @@
     height:24px;
     width:24px;
     vertical-align:bottom;
-    float:right;
-    margin-right:9px;
-    
+    margin:0 auto;
 }
 @media only screen and (min-width: 768px){
     .loginArea{width:40%;}
     .calendarArea{width:40%;}
-
+    .entryArea{width:40%;}
 }
+
+
+
+
+
+
+
+
+
+.entryStageDiv{
+       margin-top:50px;
+    margin-left:10%;
+    border-left: 1px solid grey;
+    margin-left:1%;
+}
+
+.entryQuestionDiv{
+    border-left: 1px solid grey;
+     margin-left:2%;
+}
+.entryAnswerDiv{
+   margin-left:1%;
+}
+.entryArea{
+
+    
+}
+
+.entrySaveDiv{
+    padding:10px;
+}
+
+
+
+
+
+
+
+.headerDiv{
+    display:inline-block;
+    top:0;
+    margin-left: 5%;
+    width: 90%;
+    height: 35px;
+    margin-right: 5%;
+    background-color: white;
+    border-bottom: 1px solid grey;
+}
+
+
+.userAndFacility{
+    float:left;
+    display:block;
+    font-size: 15px;
+}
+
+
+.headerSettings{
+    float:right;
+}
+
+.headerTable{
+    display:inline;
+}
+
+
+
+
+
+

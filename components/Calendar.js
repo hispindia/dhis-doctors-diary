@@ -95,10 +95,7 @@ export function Calendar(props){
         if(date.isAfter(moment().add(1,'days'))){
             className=className + " futureDate";
         }
-
-     
-        
-        
+       
         return className;
     }
 
