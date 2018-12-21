@@ -7,6 +7,7 @@ import {Calendar} from './Calendar'
 import {DataEntryForm} from './DataEntryForm'
 import {Loader} from './Loader'
 import {Header} from './Header'
+import {Settings} from './Settings'
 
 export function Main(props){
     
@@ -42,7 +43,15 @@ export function Main(props){
                    );
         case constants.views.loader :
             return (<div>
-                    <Loader props={state}/>
+                    <Loader state={state}/>
+                    
+                    </div>
+                   );
+        case constants.views.settings :
+            return (<div>
+                    <Header state={state}></Header>
+
+                    <Settings state={state}/>
                     
                     </div>
                    );

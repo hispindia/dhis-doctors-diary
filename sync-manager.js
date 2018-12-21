@@ -4,7 +4,7 @@ import _api from './dhis2API';
 
 function syncManager(){
 
-    this.saveEvent = function(dvMap,ps,state){
+    this.saveEvent = function(dvMap,ps,state,callback){
 
         var event = {
             trackedEntityInstance : state.curr_user_data.tei.trackedEntityInstance,
@@ -27,11 +27,13 @@ function syncManager(){
         event.dataValues = populateDataValues();
         event.offline= true;
         state.curr_user_eventMapByDate[event.eventDate] = event;
+        if(!callback){
+            state.offlineEvents = state.offlineEvents+1;
+        }
         cache.save(constants.cache_user_prefix+state.curr_user.username,
                        state.curr_user_data);
         state.changeView(state);
-
-        sendEvent(state,event);
+        sendEvent(state,event,callback);
         
         function populateDataValues(){
             return ps.programStageDataElements.reduce(function(list,obj){
@@ -47,7 +49,7 @@ function syncManager(){
         }        
     }
 
-    function sendEvent(state,event){
+    function sendEvent(state,event,callback){
 
         //check for offline
 
@@ -73,10 +75,14 @@ function syncManager(){
             
             event.event = body.response.importSummaries[0].reference;
             delete event.offline;
+            state.offlineEvents = state.offlineEvents-1;
+
             state.changeView(state);
             cache.save(constants.cache_user_prefix+state.curr_user.username,
                        state.curr_user_data);
-            
+            if(callback){
+                callback()
+            }
             
         }
 
@@ -87,10 +93,13 @@ function syncManager(){
             }
 
             delete event.offline;
+            state.offlineEvents = state.offlineEvents-1;
             state.changeView(state);
             cache.save(constants.cache_user_prefix+state.curr_user.username,
                        state.curr_user_data);
-            
+            if(callback){
+                callback()
+            }
         }
         
     }

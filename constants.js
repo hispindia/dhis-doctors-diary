@@ -11,7 +11,8 @@ exports.views = {
     login : "login",
     calendar : "calendar",
     entry : "entry",
-    loading : "loader"
+    loading : "loader",
+    settings: "settings"
 };
 
 

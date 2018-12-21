@@ -29,7 +29,8 @@ function init(callback){
         curr_user : undefined,
         
         selMoment : moment(),
-        currRange : null        
+        currRange : null   
+
     }
     
     state.curr_user = cache.get(constants.cache_curr_user);
@@ -51,12 +52,24 @@ function init(callback){
             map[obj.id] = obj;
             return map;
         },[]);
-        
+
+        state.offlineEvents = getOfflineEvents();
         callback(state);
 
         
     }
 
+    function getOfflineEvents(){
+
+        return state.curr_user_data.events.reduce(function(count,event){
+            if(event.offline){
+                count=count+1;
+            }
+            return count;
+        },0)
+        
+    }
+    
     function filterPrograStageFromUserGroup(){
 
         var curr_user_ug_array = state.
