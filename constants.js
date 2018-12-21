@@ -58,6 +58,21 @@ exports.required_fields = [
 
 
 
+exports.splitToChunks = function(array, parts) {
+    let result = [[]];
+    parts = parts -1;
+
+    for (let i = 0,j=0,k=0; i < array.length; i++) {
+        result[j][k] = array[i];
+        if (k%parts == 0 && k!=0 && i< array.length-1){
+            j=j+1;
+            result[j] = [];
+            k=-1;
+        }
+        k=k+1;
+    }
+    return result;
+}
 
 
 

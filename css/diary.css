@@ -111,8 +111,19 @@
 
 .floatLeft{
     float:left;
+  
 }
 
+.calendarNavigationArrow:hover{
+   
+  
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 8px 5px grey;
+    -moz-box-shadow: 0px 0px 8px 2px light grey;
+    box-shadow: 0px 0px 8px 2px light grey;
+   
+
+}
 
 .floatRight{
     float:right;
@@ -144,10 +155,17 @@
     vertical-align:bottom;
     margin:0 auto;
 }
+
+.big{
+
+    font-size: large;
+    
+}
+
 @media only screen and (min-width: 768px){
     .loginArea{width:40%;}
-    .calendarArea{width:40%;}
-    .entryArea{width:40%;}
+    .calendarArea{width:40%;margin-left:30%;}
+    .entryArea{width:40%;margin-left:5%;}
 }
 
 
@@ -162,6 +180,7 @@
        margin-top:50px;
     margin-left:10%;
     border-left: 1px solid grey;
+
     margin-left:1%;
 }
 

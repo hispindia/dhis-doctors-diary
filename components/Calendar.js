@@ -7,21 +7,6 @@ import constants from '../constants';
 
 const moment = extendMoment(Moment);
 
-const splitToChunks = function(array, parts) {
-    let result = [[]];
-    parts = parts -1;
-
-    for (let i = 0,j=0,k=0; i < array.length; i++) {
-        result[j][k] = array[i];
-        if (k%parts == 0 && k!=0 && i< array.length-1){
-            j=j+1;
-            result[j] = [];
-            k=-1;
-        }
-        k=k+1;
-    }
-    return result;
-}
 
 export function Calendar(props){
     var instance = Object.create(React.Component.prototype)
@@ -31,13 +16,12 @@ export function Calendar(props){
 
     function makeDateRange(){
 
-        var selMonthFirstDayIndex = parseInt(state.selMoment.startOf('month').format('d'));
         var selMonthLastDay = moment(state.selMoment).endOf('month');
         var selMonthLastDayIndex = parseInt(state.selMoment.endOf('month').format('d'));
         var prevMonthLastDay = moment(state.selMoment).subtract(1, 'months').endOf('month');
         
 
-        var prefixDayLastMonth = moment(prevMonthLastDay).subtract((6 - (7-(selMonthFirstDayIndex-1))),'days');
+        var prefixDayLastMonth = moment(prevMonthLastDay).day("Monday");
         var suffixDayNextMonth = moment(selMonthLastDay).add((7 - selMonthLastDayIndex),'days');
         
         var start = prefixDayLastMonth
@@ -50,7 +34,7 @@ export function Calendar(props){
     function getDates(){
            
         state.currRange = makeDateRange();
-        state.currRange = splitToChunks(state.currRange,7)
+        state.currRange = constants.splitToChunks(state.currRange,7)
 
         return state.currRange.map(function(row){
 
@@ -143,10 +127,10 @@ export function Calendar(props){
          return (
                  <div className="calendarArea">
                  <div className="calendarButton">
-                 <div className="floatLeft"  onClick = {prevMonth}><b>&lt;</b></div>
+                 <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
 
-                 <label>{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</label>
-                 <div className="floatRight" onClick = {nextMonth} ><b>&gt;</b></div>
+                 <div className="big">{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</div>
+                 <div className="floatRight big " onClick = {nextMonth} ><b> &gt;&gt; </b></div>
                  </div>
                  <table className="calendarTable">
                  <thead>
