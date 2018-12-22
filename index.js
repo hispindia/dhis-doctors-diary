@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import dhis2API from './lib/dhis2API'
 import cache from './localstorage';
 import constants from './constants';
 import moment from 'moment';

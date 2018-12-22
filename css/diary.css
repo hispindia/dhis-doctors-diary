@@ -5,6 +5,12 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+}
+
+.body_class{
+
+
 }
 
 
@@ -215,6 +221,7 @@
     margin-right: 5%;
     background-color: white;
     border-bottom: 1px solid grey;
+
 }
 
 
