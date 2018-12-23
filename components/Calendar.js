@@ -50,13 +50,13 @@ export function Calendar(props){
             var event = instance.props.state.curr_user_eventMapByDate[date.format('YYYY-MM-DD')];
             
             var className = getClass(date,refDate,event);
-            var img = getImage(event);
+          //  var img = getImage(event);
             return (<td className={className}
                     key = {date.format('YYYY-MM-DD')}
                     onClick={goToDataEntry.bind(null,event,date.format("YYYY-MM-DD"),className)} >
                     <div className="cellDiv">
                     {date.format('D')}
-                    <img className="tick" src={img}></img>
+                    {getImage(event)}
                     </div>
                     </td>
                    )  
@@ -79,25 +79,47 @@ export function Calendar(props){
         if(date.isAfter(moment().add(1,'days'))){
             className=className + " futureDate";
         }
-       
+
+        if (event && event.status && event.status == "COMPLETED"){
+            className=className + " completedDate";
+        
+        }
+     
+        
         return className;
     }
 
     function getImage(event){
-        
+        var imgUrl = "";
         if (event){
             if (event.offline){
-
-                return constants.images.offline
+                imgUrl = "../images/greytick.png"
             }else{
-                return constants.images.sent
                 
+                var dataValueMap = event.dataValues.
+                    reduce(function(map,obj){
+                        map[obj.dataElement] = obj.value;
+                        return map;
+                    },[]);
+        
+                switch(dataValueMap["OZUfNtngt0T"]){
+                case "Auto-Approved" :
+                case "Approved" : imgUrl = "../images/doublegreentick.png";
+                    break;
+                case "Re-submitted":
+                case "Rejected" : imgUrl = "../images/rejected.png";
+                    break;
+                case undefined : imgUrl = "../images/greenyellowtick.png";;
+                    break;
+                }                
             }
-        }else{
-            
-        }
 
-        return constants.images.white;
+            return(<img className="tick" src={imgUrl}></img> )
+        }else{
+            return (<img className="tick" ></img>)
+        
+        }
+        
     }
     
     function goToDataEntry(event,date,className){
@@ -109,6 +131,8 @@ export function Calendar(props){
         state.curr_view = constants.views.entry;
         state.curr_event = event;
         state.curr_event_date = date;
+        state.curr_event_calendar_classname = className;
+
         state.changeView(state);
         
     }

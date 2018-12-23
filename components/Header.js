@@ -24,12 +24,45 @@ export function Header(props){
     instance.props = props;
 
     var state = props.state;
-
     if(navigator.onLine){
         state.online = true;
         state.changeView(state);
     }
     
+    function getSyncImage(){
+
+        if (state.loading){
+            return (
+                    <img hidden={state.curr_view == constants.views.calendar?false:true}
+                className="headerSyncIcon"
+                src={state.loader?"./images/loader.gif":"./images/sync.png"}
+                onClick={state.loader?function(){debugger}:synchronize}>
+                    </img>
+                    
+            )
+            
+        }else{
+            return (
+
+
+                  <img hidden={state.curr_view == constants.views.calendar?false:true}
+            className="headerSyncIcon"
+            src={state.loader?"./images/loader.gif":"./images/sync.png"}
+            onClick={state.loader?function(){debugger}:synchronize}>
+                </img>
+        
+            )    
+        }       
+    }
+    
+    function getSyncImageNotification(){
+        if (state.offlineEvents>0){
+            return state.offlineEvents; 
+        }
+        
+        return (<img hidden={state.curr_view == constants.views.calendar?false:true}
+                className="headerTick" src="../images/doublegreentick.png"></img>)
+    }
     instance.render = function(){
         
         
@@ -54,12 +87,12 @@ export function Header(props){
                 <td>
                 <img hidden={state.curr_view == constants.views.calendar?false:true}
             className="headerSyncIcon"
-            src="./images/sync.png"
-            onClick={synchronize}>
+            src={state.loading?"./images/loader.gif":"./images/sync.png"}
+            onClick={state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize}>
                 </img>
                 </td>
                 <td rowSpan="2">
-                {state.offlineEvents}
+                {getSyncImageNotification() }
                 </td>
                 </tr>
             
@@ -76,10 +109,10 @@ export function Header(props){
                   <span className={state.online?"internetIcon online":"offline"}></span>
                 </td>
                 <td rowSpan="2">{state.online?"Online":"Offline"}</td>
-                <td rowSpan="2" >
+                <td rowSpan="4" >
                   <img hidden={state.curr_view == constants.views.calendar?false:true}
                      className="headerSettingsIcon"
-                     src="./images/settings.png"
+                     src="./images/settings3.png"
                      onClick={goToSettingsPage}>
                 </img>
                 
@@ -98,6 +131,9 @@ export function Header(props){
     return instance;
 
     function synchronize(){
+        state.loading = true;
+        state.changeView(state);
+
         var ps = state.
             program_metadata_programStageByIdMap[state.
                                                  curr_user_program_stage];     
@@ -106,6 +142,7 @@ export function Header(props){
         
         function importEvent(index,events,ps){
             if (index == events.length){
+                refetchEvents();
                 return;
             }
 
@@ -126,7 +163,14 @@ export function Header(props){
                 importEvent(index+1,events,ps)
             }    
         }
-        
+
+        function refetchEvents(){
+          
+            sync.fetchEvents(state,function(){
+                state.loading = false;
+                state.changeView(state);
+            })
+        }
         
     }
 

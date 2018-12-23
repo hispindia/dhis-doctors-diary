@@ -56,9 +56,6 @@ exports.required_fields = [
 
 
 
-
-
-
 exports.splitToChunks = function(array, parts) {
     let result = [[]];
     parts = parts -1;

@@ -18,7 +18,7 @@ export function DataEntryForm(props){
             return
     }
     
-    
+    var dvRequiredMap = [];
     var dataValueMap = [];
     if (state.curr_event){
         dataValueMap = state.
@@ -34,14 +34,27 @@ export function DataEntryForm(props){
         return (
                 <div className="entryArea">
                 <div className="entryStageDiv">
-                <h2>{ps.name}</h2>
+                <h2>{ps.name} [{moment(state.curr_event_date).format("DD MMM YYYY")}]</h2>
+               
                 <div>
                 {createForm()}
             </div>
                 </div>
                 <div className="entrySaveDiv">
-                <input className="button" type="button" value="Save" onClick={save}></input>
+                
                 <input className="button" type="button" value="Back" onClick={back}></input>
+  <input className={dirtyBit?"button" : "hidden"}
+            type="button"
+            value="Save"
+            onClick={save}></input>
+              
+                <input
+            className={state.curr_event && state.curr_event.status == "COMPLETED"?"hidden":"button floatRight"}
+            type="button"
+            value="Send"
+            onClick={send}></input>
+                <label className={state.curr_event && state.curr_event.status == "COMPLETED"?"floatRight":"hidden"}
+>SENT FOR APPROVAL</label>
                 </div>
             </div>
         )
@@ -58,9 +71,27 @@ export function DataEntryForm(props){
             back();
             return;
         }
+
+        if(!validate()){
+            state.changeView(state);
+
+            return;
+        }
+        
         sync.saveEvent(dataValueMap,ps,state);
         state.curr_view = constants.views.calendar;
        // state.changeView(state);
+    }
+
+    function send(){
+        if(!validate()){
+            state.changeView(state);
+            return;
+        }
+        
+        sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+        state.curr_view = constants.views.calendar;
+
     }
     
     function createForm(){
@@ -71,10 +102,33 @@ export function DataEntryForm(props){
                 return list;
             },[]);        
     }
+
+    function validate(){
+
+        return constants.required_fields.reduce(function(valid,id){
+            if (!dataValueMap[id]){
+                valid = false;
+                dvRequiredMap[id] = "Mandatory Field!";
+            }
+
+            return valid;
+        },true);
+    }
+
+    function numberValEntered(de,e){
+
+        if (!e.target.value.match("^[0-9]+$")){
+            return;
+        }
+
+        valEntered(de,e);
+    }
     
     function valEntered(de,e){
         dirtyBit = true;
         dataValueMap[de.id] = e.target.value;
+        dvRequiredMap[de.id] = "";
+
         instance.setState(state)
 
     }
@@ -87,6 +141,8 @@ export function DataEntryForm(props){
                 <p>{de.dataElement.name}</p>
                 <div className="entryAnswerDiv">
                 {question(de.dataElement)}
+                <label>{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>
+
                 </div>
                 </div>)
         
@@ -130,7 +186,7 @@ export function DataEntryForm(props){
                         key={de.id}
                         type = "number"
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                        onChange={valEntered.bind(null,de)}></input>);
+                        onChange={numberValEntered.bind(null,de)}></input>);
             case "LONG_TEXT":
                 return (<textarea
                         disabled = {checkIfDisabled(de.id)}
@@ -144,6 +200,14 @@ export function DataEntryForm(props){
 
             function checkIfDisabled(deuid){
 
+                if (!state.curr_event_calendar_classname.includes("entryDate")){
+                    return true;
+                }
+
+                if (state.curr_event && state.curr_event.status=="COMPLETED"){
+                    return true;
+                }
+                    
                 if (constants.disabled_fields.includes(deuid)){
                     return true
                 }

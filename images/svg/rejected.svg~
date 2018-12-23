@@ -6,7 +6,7 @@
          l 30,40
          l 70,-100         
          "
-      stroke="green" stroke-width="5"  fill-opacity="0"
+      stroke="green" stroke-width="20"  fill-opacity="0"
       />
 <path d="
          M 110,10
@@ -14,7 +14,7 @@
          M 110,90
          l 80,-80         
          "
-      stroke="red" stroke-width="5"  fill-opacity="0"
+      stroke="red" stroke-width="20"  fill-opacity="0"
       />
 </svg>
 

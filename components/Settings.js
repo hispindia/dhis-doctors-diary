@@ -22,6 +22,11 @@ export function Settings(props){
                     </td>
                   </tr>
                   <tr>
+                    <td>
+                      <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
+                    </td>
+                  </tr>
+                  <tr>
                     <td >
                       <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
                     </td>
@@ -45,6 +50,11 @@ export function Settings(props){
         state.curr_view=constants.views.login;
         state.changeView(state);
     }
-    
+
+    function logout(){
+        state.curr_view=constants.views.login;
+        state.changeView(state);
+   
+    }
     return instance;
 }

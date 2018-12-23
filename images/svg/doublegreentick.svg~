@@ -8,6 +8,6 @@
          l 30,40
          l 70,-100
          "
-      stroke="green" stroke-width="5"  fill-opacity="0"
+      stroke="green" stroke-width="20"  fill-opacity="0"
       />
 </svg>

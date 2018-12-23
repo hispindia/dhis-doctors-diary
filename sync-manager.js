@@ -1,10 +1,38 @@
 import constants from './constants';
 import cache from './localstorage';
 import _api from './dhis2API';
+import moment from 'moment';
 
 function syncManager(){
 
-    this.saveEvent = function(dvMap,ps,state,callback){
+    this.fetchEvents = function(state,callback){
+
+        var api = new _api(constants.DHIS_URL_BASE);
+        api.setCredentials(state.curr_user_data.user.userCredentials.username, state.curr_user_data.user.password);
+
+        
+        api.getReq(`events.json?trackedEntityInstance=${state.curr_user_data.tei.trackedEntityInstance}&paging=false`,gotEvents);
+        
+        function gotEvents(error,response,body){
+            if (error){
+                console.log("Error Header: events fetch");
+                return;
+            }
+            
+            state.curr_user_data.events = JSON.parse(body).events;
+
+            state.curr_user_eventMapByDate = state.curr_user_data.events.reduce(function(list,obj){
+                list[moment(obj.eventDate).format("YYYY-MM-DD")] = obj;
+                return list;
+            },[]);
+            cache.save(constants.cache_user_prefix+state.curr_user_data.user.userCredentials.username,state.curr_user_data);
+            
+            callback();
+        }       
+        
+    }
+    
+    this.saveEvent = function(dvMap,ps,state,callback,status){
 
         var event = {
             trackedEntityInstance : state.curr_user_data.tei.trackedEntityInstance,
@@ -16,13 +44,17 @@ function syncManager(){
      
         if (!state.curr_event){
 
-            event.eventDate = state.curr_event_date;
+            event.eventDate = state.curr_event_date;            
             state.curr_user_data.events.push(event);
 
         }else{
             if (state.curr_event){
                 event = state.curr_event;
             }
+        }
+
+        if (status == "COMPLETED"){
+            event.status = "COMPLETED";
         }
         event.dataValues = populateDataValues();
         event.offline= true;

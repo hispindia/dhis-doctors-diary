@@ -10,7 +10,7 @@
 
 .page
 {
-  font-size: 9pt;
+  font-size: 11pt;
 }
 
 .page h1 
@@ -57,7 +57,7 @@
 
 .page p,.page td,.page th,.page input,.page select,.page textarea 
 {
-  font-size: 9pt;
+  font-size: 13pt;
 }
 
 .page th

@@ -9,10 +9,13 @@
 }
 
 .body_class{
-
+    background-color: #f5f5f5;
 
 }
 
+.hidden{
+    display:none;
+}
 
 .loginArea {
     width: 70%;
@@ -75,7 +78,7 @@
 
 .calendarTableCell{
    
-    border:1px solid black;
+    border:1px solid grey;
     border-spacing: 0px;
 }
 
@@ -102,8 +105,16 @@
 
 }
 
+.completedDate{
+    border:2px solid green;
+
+}
+
+
+
 .entryDate{
   font-weight: bold;
+  font-size : 12pt !important;
 }
 
 .futureDate {
@@ -155,11 +166,14 @@
 }
 
 .tick{
-  
-    height:24px;
     width:24px;
-    vertical-align:bottom;
-    margin:0 auto;
+    margin-left:10px;
+}
+
+
+.headerTick{
+    width:24px;
+    
 }
 
 .big{
@@ -183,19 +197,21 @@
 
 
 .entryStageDiv{
-       margin-top:50px;
-    margin-left:10%;
-    border-left: 1px solid grey;
+    
+    border-left: 2px solid grey;
 
-    margin-left:1%;
+    margin-left:5%;
 }
 
 .entryQuestionDiv{
-    border-left: 1px solid grey;
-     margin-left:2%;
+    border-left: 1px solid white;
+    margin-left:2%;
+        border-left: 1px solid grey;
+
 }
 .entryAnswerDiv{
-   margin-left:1%;
+    margin-left:3%;
+
 }
 .entryArea{
 
@@ -217,9 +233,8 @@
     top:0;
     margin-left: 5%;
     width: 90%;
-    height: 35px;
     margin-right: 5%;
-    background-color: white;
+    background-color: #ede6d6;
     border-bottom: 1px solid grey;
 
 }
@@ -251,11 +266,11 @@
 }
 
 .headerSettingsIcon{
-    height:14%;
+    height:25px;
 }
 
 .headerSyncIcon{
-    height:5%;
+    height:35px;
 }
 
 .red{

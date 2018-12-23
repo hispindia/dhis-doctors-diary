@@ -5,6 +5,6 @@
            l 30,40
            l 70,-100
            "
-        stroke="grey" stroke-width="5"  fill-opacity="0"
+        stroke="grey" stroke-width="20"  fill-opacity="0"
         />  
 </svg>

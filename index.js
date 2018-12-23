@@ -28,7 +28,8 @@ function init(callback){
         curr_user : undefined,
         
         selMoment : moment(),
-        currRange : null   
+        currRange : null,
+        loading : false,
 
     }
     
