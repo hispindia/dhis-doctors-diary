@@ -1,4 +1,15 @@
 
+.watermark{
+    background-image: url("../images/uplogo2.png") ;
+    opacity: 0.9;
+    background-repeat:no-repeat;
+    background-position:center;
+    
+}
+
+.watermark::after {
+    
+}
 .d_page{
 
     display: flex;
