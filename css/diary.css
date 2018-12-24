@@ -55,9 +55,9 @@
 
 
 .calendarArea{
-    width: 80%;
-    margin-top:50px;
-    margin-left:10%;
+    width: 90%;
+    margin-top:10px;
+    margin-left:5%;
     text-align: center;
 
 }
@@ -113,8 +113,9 @@
 
 
 .entryDate{
-  font-weight: bold;
-  font-size : 12pt !important;
+  font-size : 11pt !important;
+  font-style: italic;
+
 }
 
 .futureDate {
@@ -166,15 +167,10 @@
 }
 
 .tick{
-    width:24px;
+    width:15px;
     margin-left:10px;
 }
 
-
-.headerTick{
-    width:24px;
-    
-}
 
 .big{
 
@@ -200,7 +196,7 @@
     
     border-left: 2px solid grey;
 
-    margin-left:5%;
+    margin-left:1%;
 }
 
 .entryQuestionDiv{
@@ -231,9 +227,9 @@
 .headerDiv{
     display:inline-block;
     top:0;
-    margin-left: 5%;
-    width: 90%;
-    margin-right: 5%;
+    margin-left: 0%;
+    width: 100%;
+    margin-right: 0%;
     background-color: #ede6d6;
     border-bottom: 1px solid grey;
 
@@ -270,8 +266,14 @@
 }
 
 .headerSyncIcon{
-    height:35px;
+    height:35px;    
 }
+
+
+.headerTick{
+    width:14px;    
+}
+
 
 .red{
     background-color:red;

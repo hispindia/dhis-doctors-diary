@@ -54,7 +54,7 @@ export function DataEntryForm(props){
             value="Send"
             onClick={send}></input>
                 <label className={state.curr_event && state.curr_event.status == "COMPLETED"?"floatRight":"hidden"}
->SENT FOR APPROVAL</label>
+>COMPLETED</label>
                 </div>
             </div>
         )

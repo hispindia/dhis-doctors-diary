@@ -22,21 +22,21 @@
 
 .page h2 
 {
-  font-size: 15pt;
+  font-size: 13pt;
   font-weight: normal;
   color: #585D61;
 }
 
 .page h3 
 {
-  font-size: 14pt;
+  font-size: 12pt;
   font-weight: normal;
   color: #585D61;
 }
 
 .page h4 
 {
-  font-size: 13pt;
+  font-size: 11pt;
   font-weight: normal;
   color: #585D61;
 }
@@ -50,14 +50,14 @@
 
 .page h6 
 {
-  font-size: 11pt;
+  font-size: 10pt;
   font-weight: normal;
   color: #585D61;
 }
 
 .page p,.page td,.page th,.page input,.page select,.page textarea 
 {
-  font-size: 13pt;
+  font-size: 10pt;
 }
 
 .page th

@@ -93,7 +93,7 @@ export function Calendar(props){
         var imgUrl = "";
         if (event){
             if (event.offline){
-                imgUrl = "../images/greytick.png"
+                imgUrl = "./images/greytick.png"
             }else{
                 
                 var dataValueMap = event.dataValues.
@@ -104,12 +104,12 @@ export function Calendar(props){
         
                 switch(dataValueMap["OZUfNtngt0T"]){
                 case "Auto-Approved" :
-                case "Approved" : imgUrl = "../images/doublegreentick.png";
+                case "Approved" : imgUrl = "./images/doublegreentick.png";
                     break;
                 case "Re-submitted":
-                case "Rejected" : imgUrl = "../images/rejected.png";
+                case "Rejected" : imgUrl = "./images/rejected.png";
                     break;
-                case undefined : imgUrl = "../images/greenyellowtick.png";;
+                case undefined : imgUrl = "./images/greenyellowtick.png";;
                     break;
                 }                
             }

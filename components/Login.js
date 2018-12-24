@@ -1,14 +1,15 @@
 import React,{propTypes} from 'react';
 import loginService from '../login-service';
 import constants from '../constants';
+import cache from '../localstorage';
 
 export function Login(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
     
     var state = {
-        username : "doc",
-        password : "Harsh@1234"
+        username : "",
+        password : ""
     }
     
     function textInputChangedData(name,e) {
@@ -17,8 +18,16 @@ export function Login(props){
     }
     
     function login(){
+        if (state.username == "" || state.password == ""){
+            return;
+        }
         
         //check if already in cache
+        if (cache.get("dd_user_"+state.username)){
+            cache.save("dd_current_user",{"username":state.username});
+            postLogin();
+            return;
+        }
         
         // login
         loginService.
@@ -28,7 +37,9 @@ export function Login(props){
     }
 
     function clear(){
-
+        state.username = "";
+        state.password = "";
+        instance.setState(state);
     }
     
     function postLogin(){

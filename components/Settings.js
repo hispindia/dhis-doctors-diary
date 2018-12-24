@@ -13,7 +13,7 @@ export function Settings(props){
 
         return(
             <div className="calendarArea">
-
+                <label className="floatLeft">Basic</label>
               <table className="calendarTable">
                 <tbody>
                   <tr>
@@ -26,7 +26,13 @@ export function Settings(props){
                       <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
                     </td>
                   </tr>
-                  <tr>
+                </tbody>
+                </table>
+                <label className="floatLeft">Advanced</label>
+                <table className="calendarTable">
+                <tbody>
+            
+                <tr>
                     <td >
                       <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
                     </td>

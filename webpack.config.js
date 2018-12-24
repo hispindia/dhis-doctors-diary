@@ -50,7 +50,8 @@ module.exports = {
         new cleanPlugin(["dist"]),
         new CopyWebpackPlugin([
             //{from:'src/images',to:'images'} ,
-            {from:"./index.html",to:'index.html'},   
+            {from:"./index.html",to:'index.html'},
+            {from:"./manifest.json",to:'manifest.json'},   
             {from:"./hnl.mobileConsole.1.3.js",to:'hnl.mobileConsole.1.3.js'},
             {from:"./css",to:'css',ignore: [ '#*.css' ]},
             {from:"./images",to:'images'}
