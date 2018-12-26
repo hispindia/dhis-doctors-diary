@@ -110,7 +110,8 @@ export function Header(props){
                 </td>
                 <td rowSpan="2">{state.online?"Online":"Offline"}</td>
                 <td rowSpan="4" >
-                  <img hidden={state.curr_view == constants.views.calendar?false:true}
+                <img hidden={state.curr_view == constants.views.calendar ||
+                             state.curr_view == constants.views.entry?false:true}
                      className="headerSettingsIcon"
                      src="./images/settings3.png"
                      onClick={goToSettingsPage}>
