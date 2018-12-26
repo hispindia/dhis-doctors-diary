@@ -61,7 +61,7 @@ export function Header(props){
         }
         
         return (<img hidden={state.curr_view == constants.views.calendar?false:true}
-                className="headerTick" src="../images/doublegreentick.png"></img>)
+                className="headerTick" src="./images/doublegreentick.png"></img>)
     }
     instance.render = function(){
         
