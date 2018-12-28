@@ -14,7 +14,7 @@ window.onload = function(){
         ReactDOM.render(
                 <Main className = "d_page" state={state} />
                 ,
-            document.getElementById('login'));
+            document.getElementById('root'));
         
     });
     

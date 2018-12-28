@@ -8,6 +8,7 @@ import {DataEntryForm} from './DataEntryForm'
 import {Loader} from './Loader'
 import {Header} from './Header'
 import {Settings} from './Settings'
+import {Footer} from './Footer'
 
 export function Main(props){
     
@@ -22,29 +23,30 @@ export function Main(props){
 
         switch(state.curr_view){
         case constants.views.login :
-            return (<div>
-                    <Login state={state}/>
+            return (<div >
+                    <Header state={state}></Header>
 
+                    <Login state={state}/>
+                    <Footer state={state}/>
                     </div>
                    );
         case constants.views.calendar :
             return (<div>
                     <Header state={state}></Header>
                     <Calendar state={state}/>
-                    
+                    <Footer state={state}/>
                     </div>
                    );
         case constants.views.entry :
             return (<div>
                     <Header state={state}></Header>
                     <DataEntryForm state={state}/>
-
+                    <Footer state={state}/>
                     </div>
                    );
         case constants.views.loader :
             return (<div>
                     <Loader state={state}/>
-                    
                     </div>
                    );
         case constants.views.settings :
@@ -52,7 +54,7 @@ export function Main(props){
                     <Header state={state}></Header>
 
                     <Settings state={state}/>
-                    
+                    <Footer state={state}/>
                     </div>
                    );
             

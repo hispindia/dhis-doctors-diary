@@ -150,8 +150,10 @@ export function Calendar(props){
     instance.render = function(){
          return (
                  <div className="calendarArea">
+ <div className="big">{state.curr_user_data.user.organisationUnits[0].name}</div>
                  <div className="calendarButton">
                  <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
+                
 
                  <div className="big">{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</div>
                  <div className="floatRight big " onClick = {nextMonth} ><b> &gt;&gt; </b></div>
