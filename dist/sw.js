@@ -21,7 +21,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "585f07cfc57ff1a7fb1c318121bf068d"
+    "revision": "2878aba55c4837b7abaebd899290c46c"
   },
   {
     "url": "css/dhis2.css",
