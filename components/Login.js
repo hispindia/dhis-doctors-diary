@@ -9,9 +9,10 @@ export function Login(props){
     
     var state = {
         username : "",
-        password : ""
+        password : "",
+        statusMsg : "",
+        loading:false
     }
-    
     function textInputChangedData(name,e) {
         state[name] = e.target.value
         instance.setState(state)
@@ -28,7 +29,10 @@ export function Login(props){
             postLogin();
             return;
         }
-        
+
+        state.loading=true;
+        state.statusMsg="";
+        instance.setState(state);
         // login
         loginService.
             signin(state.username,
@@ -39,10 +43,19 @@ export function Login(props){
     function clear(){
         state.username = "";
         state.password = "";
+        state.statusMsg = "";
         instance.setState(state);
     }
     
-    function postLogin(){
+    function postLogin(error){
+        if (error){
+            state.statusMsg = error;
+            state.loading=false;
+            instance.setState(state);
+            return;
+        }
+
+        
         window.location.href = window.location.origin+
             window.location.pathname+"";        
        // instance.props.state.curr_view = constants.views.calendar;
@@ -59,6 +72,15 @@ export function Login(props){
             <div className="buttonDiv">
             <button className= "button" onClick={login}>Sign In</button>
             <button className= "button" onClick={clear}>Clear</button>
+            <div>{state.statusMsg}</div>
+            <div>
+            <img 
+        className="headerSyncIcon"
+        src={state.loading?"./images/loader.gif":""}
+                       >
+                  </img>
+                
+        </div>
             </div>
             </div>
     )

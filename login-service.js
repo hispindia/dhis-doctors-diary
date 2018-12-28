@@ -17,10 +17,13 @@ function loginService(){
             function(error,response,body){
                 if(error){
                     console.log("Error : Login failed");
+                    callback("Cannot Login");
                     return;
                 }
                 
-                if (body){
+                if (JSON.parse(body).httpStatusCode == "401"){
+                    callback(JSON.parse(body).httpStatus)
+                    return;
                     
                 }
 
