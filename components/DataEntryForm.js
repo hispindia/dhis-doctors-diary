@@ -142,7 +142,7 @@ export function DataEntryForm(props){
                 className="entryQuestionDiv"
                 hidden = {checkIfToHide(de.dataElement.id)}
                 key ={de.id}>
-                <p>{de.dataElement.name}</p>
+                <p>{de.dataElement.formName}</p>
                 <div className="entryAnswerDiv">
                 {question(de.dataElement)}
                 <label>{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>

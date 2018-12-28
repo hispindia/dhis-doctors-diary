@@ -82,7 +82,7 @@ function loginService(){
             return;
         }
 
-        api.getReq(`programs/${constants.program_doc_diary}.json?fields=id,name,programStages[id,name,programStageDataElements[id,sortOrder,dataElement[id,name,displayName,valueType,optionSetValue,optionSet[id,name,valueType,options[id,name,code]]]],userGroupAccesses]`,function(error,response,body){
+        api.getReq(`programs/${constants.program_doc_diary}.json?fields=id,name,programStages[id,name,programStageDataElements[id,sortOrder,dataElement[id,name,displayName,formName,valueType,optionSetValue,optionSet[id,name,valueType,options[id,name,code]]]],userGroupAccesses]`,function(error,response,body){
             if (error){
                 console.log("Error : programMetadata" + error);
                 return;
