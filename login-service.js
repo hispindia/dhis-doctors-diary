@@ -55,6 +55,14 @@ function loginService(){
             }
             storage.tei = JSON.parse(body).trackedEntityInstances[0];
 
+            var teis = JSON.parse(body).trackedEntityInstances;
+            
+            if(!storage.tei){           
+                callback("Not Registered. Please contact admin.");
+                return;
+            }
+            
+            
             api.getReq(`events.json?trackedEntityInstance=${storage.tei.trackedEntityInstance}&paging=false`,gotEvents);
             
             

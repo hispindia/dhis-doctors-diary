@@ -36,13 +36,19 @@ function init(callback){
     state.curr_user = cache.get(constants.cache_curr_user);
     
     if (state.curr_user == null){
-        state.curr_view = constants.views.login;
-        callback(state);
+        backToLogin();
+        return;
     }else{
         state.curr_view = constants.views.calendar;
         state.program_metadata = cache.get(constants.cache_program_metadata);
         
         state.curr_user_data = cache.get(constants.cache_user_prefix+state.curr_user.username);
+        
+        if (!state.curr_user_data){
+            backToLogin();
+            return;
+        }
+        
         state.curr_user_eventMapByDate = state.curr_user_data.events.reduce(function(list,obj){
             list[moment(obj.eventDate).format("YYYY-MM-DD")] = obj;
             return list;
@@ -59,6 +65,11 @@ function init(callback){
         
     }
 
+    function backToLogin(){
+        state.curr_view = constants.views.login;
+        callback(state);
+    
+    }
     function getOfflineEvents(){
 
         return state.curr_user_data.events.reduce(function(count,event){
