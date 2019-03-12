@@ -5,6 +5,19 @@ import moment from 'moment';
 
 function syncManager(){
 
+    this.saveProfile = function(attrValMap,state,callback){
+
+        state.curr_user_data.tei.attributes.forEach(function(obj,index){
+            if (attrValMap[obj.attribute]){
+                obj.value = attrValMap[obj.attribute];
+            }
+        })
+
+        
+        debugger
+        
+    }
+    
     this.fetchEvents = function(state,callback){
 
         var api = new _api(constants.DHIS_URL_BASE);

@@ -9,6 +9,8 @@ import {Loader} from './Loader'
 import {Header} from './Header'
 import {Settings} from './Settings'
 import {Footer} from './Footer'
+import {DoctorProfile} from './Profile'
+
 
 export function Main(props){
     
@@ -58,10 +60,19 @@ export function Main(props){
                     </div>
                    );
             
+        case constants.views.profile :
+            return (<div>
+                    <Header state={state}></Header>
+                    
+                    <DoctorProfile state={state}/>
+                    <Footer state={state}/>
+                    </div>
+                   );
+            
         default :
             return (<div>
                     <Loader props={state}/>
-
+                    
                     </div>
                    );
             
