@@ -64,6 +64,7 @@ export function DoctorProfile(props){
 
         return (<div
                 className="entryQuestionDiv"
+                hidden = {checkIfToHide(tea.trackedEntityAttribute.id)}
                 key ={tea.id}>
                 <p>{tea.trackedEntityAttribute.name}</p>
                 <div className="entryAnswerDiv">
@@ -73,6 +74,13 @@ export function DoctorProfile(props){
                 </div>
                 </div>)
 
+        function checkIfToHide(teauid){
+            if (constants.hidden_fields_attr.includes(teauid)){
+                return true;
+                }            
+            return false;
+        }
+        
         function question(tea){
             
             switch(tea.valueType){
@@ -113,10 +121,12 @@ export function DoctorProfile(props){
                         value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
                         onChange={valEntered.bind(null,tea)} ></input>);
             }
-            
+
 
             function checkIfDisabled(teauid){
-
+                if (constants.disabled_fields_attr.includes(teauid)){
+                    return true;
+                }
                 
                 return false;
             }
@@ -153,10 +163,11 @@ export function DoctorProfile(props){
         }
     */    
         sync.saveProfile(dataValueMap,state,function(){
+            state.curr_view = constants.views.calendar;
+            state.changeView(state);
 
         });
-        state.curr_view = constants.views.calendar;
-        // state.changeView(state);
+        
     }
 
     instance.render = function(){

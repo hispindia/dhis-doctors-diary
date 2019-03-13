@@ -7,14 +7,33 @@ function syncManager(){
 
     this.saveProfile = function(attrValMap,state,callback){
 
-        state.curr_user_data.tei.attributes.forEach(function(obj,index){
-            if (attrValMap[obj.attribute]){
-                obj.value = attrValMap[obj.attribute];
-            }
-        })
+        var oldAttrMap = state.curr_user_data.tei.attributes.reduce(function(map,obj){
+            map[obj.attribute] = obj;
+            return map;
+        },[]);
 
+
+        for (var attrUID  in attrValMap){
+            if (oldAttrMap[attrUID]){
+                oldAttrMap[attrUID].value = attrValMap[attrUID];
+            }else{
+                state.curr_user_data.tei.attributes.push({
+                    attribute : attrUID,
+                    value : attrValMap[attrUID]
+                })
+            }
+        }
         
-        debugger
+        cache.save(constants.cache_user_prefix+state.curr_user.username,
+                   state.curr_user_data);
+
+        sendTEI(state,state.curr_user_data.tei,function(error,body,response){
+            if(error){
+                alert("An unexpected error occurred. Try Again Later.")
+            }
+
+            callback();
+        })               
         
     }
     
@@ -94,6 +113,19 @@ function syncManager(){
         }        
     }
 
+
+    function sendTEI(state,tei,callback){
+        var api = new _api(constants.DHIS_URL_BASE);
+        
+        api.setCredentials(state.curr_user_data.user.userCredentials.username,
+                           state.curr_user_data.user.password);
+
+
+        api.updateReq(`trackedEntityInstances/${tei.trackedEntityInstance}`,tei,callback)
+        
+        
+    }
+    
     function sendEvent(state,event,callback){
 
         //check for offline
