@@ -3,7 +3,7 @@ import cache from '../localstorage';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import constants from '../constants';
-
+import utility from '../utility';
 
 const moment = extendMoment(Moment);
 
@@ -146,11 +146,11 @@ export function Calendar(props){
         state.selMoment = moment(state.selMoment).add(1,'month');
         instance.setState(state)
     }
-    
+
     instance.render = function(){
          return (
                  <div className="calendarArea">
- <div className="big">{state.curr_user_data.user.organisationUnits[0].name}</div>
+                 <div className="big">{utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2)}</div>
                  <div className="calendarButton">
                  <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
                 

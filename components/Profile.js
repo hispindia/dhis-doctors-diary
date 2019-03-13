@@ -2,6 +2,7 @@ import React,{propTypes} from 'react';
 import constants from '../constants';
 import cache from '../localstorage';
 import sync from '../sync-manager';
+import utility from '../utility';
 
 export function DoctorProfile(props){
     var instance = Object.create(React.Component.prototype)
@@ -175,8 +176,10 @@ export function DoctorProfile(props){
         return (
                 <div className="entryArea">
                 <div className="entryStageDiv">
+
                 <h2>Profile</h2>
                 
+                <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) }  </h6>
                 <div>
                 {createForm()}
             </div>

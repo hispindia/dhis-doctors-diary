@@ -3,6 +3,7 @@ import cache from '../localstorage';
 import moment from 'moment';
 import constants from '../constants';
 import sync from '../sync-manager';
+import utility from '../utility';
 
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
@@ -38,7 +39,10 @@ export function DataEntryForm(props){
         return (
                 <div className="entryArea">
                 <div className="entryStageDiv">
-                <h2>{ps.name} [{moment(state.curr_event_date).format("DD MMM YYYY")}]</h2>
+             
+                <h2>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h2>
+
+                <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
                
                 <div>
                 {createForm()}
