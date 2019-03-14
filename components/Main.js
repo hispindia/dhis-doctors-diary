@@ -10,7 +10,7 @@ import {Header} from './Header'
 import {Settings} from './Settings'
 import {Footer} from './Footer'
 import {DoctorProfile} from './Profile'
-
+import {ChangePassword} from './ChangePassword'
 
 export function Main(props){
     
@@ -65,6 +65,15 @@ export function Main(props){
                     <Header state={state}></Header>
                     
                     <DoctorProfile state={state}/>
+                    <Footer state={state}/>
+                    </div>
+                   );
+
+        case constants.views.changePassword :
+            return (<div>
+                    <Header state={state}></Header>
+                    
+                    <ChangePassword state={state}/>
                     <Footer state={state}/>
                     </div>
                    );

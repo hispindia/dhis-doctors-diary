@@ -36,6 +36,44 @@ function syncManager(){
         })               
         
     }
+
+    this.changePassword = function(state,credential,callback){
+
+        var api = new _api(constants.DHIS_URL_BASE);
+        api.setCredentials(state.curr_user_data.user.userCredentials.username, credential.oldpassword);
+
+        var user = Object.assign({},state.curr_user_data.user);
+        user.userCredentials.password = credential.newpassword;
+        api.updateReq(`me?`,user,function(error,body,response){
+            if (error){
+                alert("An error occurred!" + error);
+                return;
+            }
+
+            if (response.httpStatusCode == 401){
+                alert("Unable to Authorize. Please make sure you entered correct current password.");
+                return;
+            }
+
+            if (body.statusCode==409){
+                alert(response.message);
+                return;
+            }
+            
+            if (body.statusCode=200){
+                state.curr_user_data.user.password = credential.newpassword;
+                cache.save(constants.cache_user_prefix+state.curr_user.username,
+                   state.curr_user_data);
+                alert("Password Changed Successfully");
+                
+                callback();
+            }
+            
+        })
+
+        
+    }
+
     
     this.fetchEvents = function(state,callback){
 

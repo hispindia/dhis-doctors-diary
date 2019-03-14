@@ -13,7 +13,8 @@ exports.views = {
     entry : "entry",
     loading : "loader",
     settings: "settings",
-    profile: "profile"
+    profile: "profile",
+    changePassword : "changePassword"
 };
 
 

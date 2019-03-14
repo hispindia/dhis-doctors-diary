@@ -21,14 +21,20 @@ export function Settings(props){
                       <input className="settingsButton" type="button" onClick = {back} value="Back"></input>
                     </td>
                 </tr>
-                
-                  <tr>
-                    <td>
-                      <input className="settingsButton" type="button" onClick = {changeProfile} value="Profile"></input>
+
+                <tr>
+                <td>
+                <input className="settingsButton" type="button" onClick = {changePassword} value="Change Password"></input>
                     </td>
                 </tr>
                 
-                  <tr>
+                <tr>
+                <td>
+                <input className="settingsButton" type="button" onClick = {changeProfile} value="Profile"></input>
+                    </td>
+                </tr>
+                
+                <tr>
                     <td>
                       <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
                     </td>
@@ -76,6 +82,11 @@ export function Settings(props){
         state.changeView(state);
         
     }
-    
+
+    function changePassword(){
+        state.curr_view=constants.views.changePassword;
+        state.changeView(state);
+        
+    }
     return instance;
 }
