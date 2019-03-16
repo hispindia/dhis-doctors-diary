@@ -13,7 +13,8 @@ export function ChangePassword(props){
     var credential = {
         newpassword : "Harsh@12345",
         oldpassword : "Harsh@12347",
-        confirmpassword : "Harsh@1234"
+        confirmpassword : "Harsh@1234",
+        showpassword : true
     }
 
     function textInputChangedData(name,e,qas,ads) {
@@ -40,7 +41,7 @@ export function ChangePassword(props){
                 <div className="entryAnswerDiv">
                 <input
             key="previous"
-            type = "text"
+            type = {credential.showpassword?"text":"password"}
             value = {credential.oldpassword}
             onChange={textInputChangedData.bind(null,'oldpassword')}
                 ></input>
@@ -56,7 +57,7 @@ export function ChangePassword(props){
             
                 <input
             key="new"
-            type = "text"
+            type = {credential.showpassword?"text":"password"}
             value = {credential.newpassword}
             onChange={textInputChangedData.bind(null,'newpassword')}
                 ></input>
@@ -71,7 +72,7 @@ export function ChangePassword(props){
                 <div className="entryAnswerDiv">
                 <input
             key="confirm"
-            type = "text"
+            type = {credential.showpassword?"text":"password"}
             value = {credential.confirmpassword}
             onChange={textInputChangedData.bind(null,'confirmpassword')}
                 ></input>
