@@ -71,7 +71,7 @@ export function Calendar(props){
             className=className + " thisMonth";
         }
         
-        if (date.isAfter(moment().subtract(1,'week')) &&
+        if (date.isAfter(moment().subtract(1,'month')) &&
             date.isBefore(moment().add(1,'days'))){
             className = className + " entryDate";
         }

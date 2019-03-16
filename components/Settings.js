@@ -12,49 +12,49 @@ export function Settings(props){
     instance.render = function(){
 
         return(
-            <div className="calendarArea">
+                <div>
+                <div className="backButtonArea ">
+                <input className="settingsButton floatLeft" type="button" onClick = {back} value="Back"></input>
+                </div>
+                <div className="calendarArea">
+                
                 <label className="floatLeft">Basic</label>
-              <table className="calendarTable">
+                <table className="calendarTable">
                 <tbody>
-                  <tr>
-                    <td>
-                      <input className="settingsButton" type="button" onClick = {back} value="Back"></input>
-                    </td>
-                </tr>
-
                 <tr>
                 <td>
                 <input className="settingsButton" type="button" onClick = {changePassword} value="Change Password"></input>
-                    </td>
+                </td>
                 </tr>
                 
                 <tr>
                 <td>
-                <input className="settingsButton" type="button" onClick = {changeProfile} value="Profile"></input>
-                    </td>
+                <input className="settingsButton" type="button" onClick = {changeProfile} value="My Profile"></input>
+                </td>
                 </tr>
                 
                 <tr>
-                    <td>
-                      <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
-                    </td>
-                  </tr>
+                <td>
+                <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
+                </td>
+                </tr>
                 </tbody>
                 </table>
                 <label className="floatLeft">Advanced</label>
                 <table className="calendarTable">
                 <tbody>
-            
+                
                 <tr>
-                    <td >
-                      <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
-                    </td>
-                  </tr>
-                  
-                </tbody>
-              </table>
-            </div>
-            
+                <td >
+                <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
+                </td>
+                </tr>
+                
+            </tbody>
+                </table>
+                </div>
+                </div>
+                
         )
     }
 
@@ -74,7 +74,7 @@ export function Settings(props){
         state.curr_view=constants.views.login;
         cache.save(constants.cache_curr_user,null);
         state.changeView(state);
-   
+        
     }
 
     function changeProfile(){
