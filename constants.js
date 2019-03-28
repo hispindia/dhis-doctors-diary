@@ -1,4 +1,5 @@
-exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
+//exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
+exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
 exports.username = "admin";
 exports.password = "";
 
@@ -21,6 +22,23 @@ exports.views = {
 exports.cache_curr_user = "dd_current_user";
 exports.cache_user_prefix = "dd_user_";
 exports.cache_program_metadata = "dd_program_metadata";
+
+exports.approval_status_de = "OZUfNtngt0T";
+exports.approvalCMO_OUgroups = ["xfYm6TOHh99","UBuxUMmdz1U"];
+
+exports.approval_status = {
+    approved : "Approved",
+    autoapproved : "Auto-Approved",
+    rejected : "Rejected",
+    resubmitted : "Re-submitted",
+    pendingCMO : "Pending2",
+    pendingMOIC : "Pending1"    
+}
+
+exports.approval_levels = {
+    moic : "approval1stlevel",
+    cmo : "approval2ndlevel"
+}
 
 exports.disabled_fields = [
     'OZUfNtngt0T',

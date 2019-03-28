@@ -48,11 +48,29 @@ function init(callback){
             backToLogin();
             return;
         }
+        if (state.curr_user_data.user.organisationUnits.length == 0){
+            alert("No facility assigned")
+            backToLogin();
+            return;            
+        }
         
         state.curr_user_eventMapByDate = state.curr_user_data.events.reduce(function(list,obj){
             list[moment(obj.eventDate).format("YYYY-MM-DD")] = obj;
             return list;
-        },[]); 
+        },[]);
+
+        if (state.curr_user_data.user.organisationUnits[0].organisationUnitGroups){
+            state.approvalLevelDeValue = state.curr_user_data.user.organisationUnits[0].organisationUnitGroups.reduce(function(str,obj){
+                
+                if (constants.approvalCMO_OUgroups.includes(obj.id)){
+                    str = constants.approval_status.pendingCMO;
+                }
+                
+                return str;
+            },constants.approval_status.pendingMOIC);
+        }else{
+            state.approvalLevelDeValue = constants.approval_status.pendingMOIC
+        }
         state.curr_user_program_stage = filterPrograStageFromUserGroup();
         state.program_metadata_programStageByIdMap = state.program_metadata.programStages.reduce(function(map,obj){
             map[obj.id] = obj;

@@ -109,6 +109,8 @@ export function Calendar(props){
                 case "Re-submitted":
                 case "Rejected" : imgUrl = "./images/rejected.png";
                     break;
+                case constants.approval_status.pendingCMO:
+                case constants.approval_status.pendingMOIC:
                 case undefined : imgUrl = "./images/greenyellowtick.png";;
                     break;
                 }                

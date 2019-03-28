@@ -13,7 +13,7 @@ function loginService(){
         //fields=id,name,userCredentials[username,displayName]
         api.setCredentials(username,password);
         api.getReq(
-            `users?filter=userCredentials.username:eq:${username}&fields=id,name,displayName,organisationUnits[id,code,name,ancestors[id,level,name]],userAccesses,userCredentials[id,name,username],userGroups[id,code,name]`,
+            `users?filter=userCredentials.username:eq:${username}&fields=id,name,displayName,organisationUnits[id,code,name,organisationUnitGroups[id,name],ancestors[id,level,name]],userAccesses,userCredentials[id,name,username],userGroups[id,code,name]`,
             function(error,response,body){
                 if(error){
                     console.log("Error : Login failed");

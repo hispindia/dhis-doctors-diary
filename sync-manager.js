@@ -139,6 +139,7 @@ function syncManager(){
         
         function populateDataValues(){
             return ps.programStageDataElements.reduce(function(list,obj){
+            
                 if(dvMap[obj.dataElement.id]){
                     list.push({
                         dataElement : obj.dataElement.id,
@@ -174,11 +175,21 @@ function syncManager(){
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
 
-        if (!event.event){
+        /* Support for Approval Level
+           First time set approval de value to either Pending1 or Pending 2 
+           based on OU Group. If CMO then ou group = DWH/DCH otherwise MOIC
+            */
+        event.dataValues.push({
+            dataElement : constants.approval_status_de,
+            value : state.approvalLevelDeValue
+        });
+        
+        /* */
+        if (!event.event){         
             api.saveReq(`events`,event,postSave)
         }else{
             api.updateReq(`events/${event.event}`,event,postSend)
-        
+            
         }
 
         function postSave(error,response,body){
