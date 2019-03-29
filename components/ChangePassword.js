@@ -11,9 +11,9 @@ export function ChangePassword(props){
 
     var state = props.state;
     var credential = {
-        newpassword : "Harsh@12345",
-        oldpassword : "Harsh@12347",
-        confirmpassword : "Harsh@1234",
+        newpassword : "",
+        oldpassword : "",
+        confirmpassword : "",
         showpassword : true
     }
 
