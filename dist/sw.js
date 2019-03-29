@@ -21,19 +21,19 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "59e6c87173783aff79c60ca7e7248930"
+    "revision": "532c1e7d8c344e63e59a6034c43c054f"
   },
   {
     "url": "css/dhis2.css",
-    "revision": "d249a2d2c7156eb080d926a0de753256"
+    "revision": "5f836c197f72a0ba1d825a607fd930a7"
   },
   {
     "url": "css/diary.css",
-    "revision": "a80811afca7612dc71b91c8dc680f95b"
+    "revision": "c9cdc53e21c03e29b21c77733c71d228"
   },
   {
     "url": "css/main.css",
-    "revision": "55be500edcd904cb4b7df68b50b45823"
+    "revision": "840e03927f148a3519db644043c6ca11"
   },
   {
     "url": "hnl.mobileConsole.1.3.js",
@@ -106,6 +106,10 @@ self.__precacheManifest = [
   {
     "url": "images/settings3.png",
     "revision": "c94c54c4a726e5bf15090fe2cd1cfb4e"
+  },
+  {
+    "url": "images/show_hide_password.png",
+    "revision": "0d8f913999d2a40964a67a305e69b3fa"
   },
   {
     "url": "images/sync.png",
