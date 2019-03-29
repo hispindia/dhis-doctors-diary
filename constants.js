@@ -1,5 +1,5 @@
-//exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
-exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
+exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
+//exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
 exports.username = "admin";
 exports.password = "";
 
@@ -23,7 +23,7 @@ exports.cache_curr_user = "dd_current_user";
 exports.cache_user_prefix = "dd_user_";
 exports.cache_program_metadata = "dd_program_metadata";
 
-exports.approval_status_de = "OZUfNtngt0T";
+exports.approval_status_de = "W3RxC0UOsGY";
 exports.approvalCMO_OUgroups = ["xfYm6TOHh99","UBuxUMmdz1U"];
 
 exports.approval_status = {
@@ -41,7 +41,7 @@ exports.approval_levels = {
 }
 
 exports.disabled_fields = [
-    'OZUfNtngt0T',
+    'W3RxC0UOsGY',
     'CCNnr8s3rgE'
 ];
 

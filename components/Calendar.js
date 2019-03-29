@@ -102,7 +102,7 @@ export function Calendar(props){
                         return map;
                     },[]);
         
-                switch(dataValueMap["OZUfNtngt0T"]){
+                switch(dataValueMap[constants.approval_status_de]){
                 case "Auto-Approved" :
                 case "Approved" : imgUrl = "./images/doublegreentick.png";
                     break;

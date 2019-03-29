@@ -57,7 +57,7 @@ export function DataEntryForm(props){
             onClick={save}></input>
               
                 <input
-            className={state.curr_event && state.curr_event.status == "COMPLETED"?"hidden":"button floatRight"}
+            className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button floatRight"}
             type="button"
             value="Send"
             onClick={send}></input>
@@ -156,11 +156,10 @@ export function DataEntryForm(props){
         
         function checkIfToHide(deuid){
             if (deuid == "CCNnr8s3rgE"){
-                if (!dataValueMap["OZUfNtngt0T"] || dataValueMap["OZUfNtngt0T"] != "Rejected"){
+                if (!dataValueMap[constants.approval_status_de] || dataValueMap[constants.approval_status_de] != constants.rejected){
                     return true;
                 }
             }
-
             
             return false;
         }

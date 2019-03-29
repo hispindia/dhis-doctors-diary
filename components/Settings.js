@@ -13,8 +13,8 @@ export function Settings(props){
 
         return(
                 <div>
-                <div className="backButtonArea ">
-                <input className="settingsButton floatLeft" type="button" onClick = {back} value="Back"></input>
+                <div className="calendarArea">
+                <input className="settingsButton  " type="button" onClick = {back} value="Back"></input>
                 </div>
                 <div className="calendarArea">
                 
