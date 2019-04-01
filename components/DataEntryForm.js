@@ -155,8 +155,8 @@ export function DataEntryForm(props){
                 </div>)
         
         function checkIfToHide(deuid){
-            if (deuid == "CCNnr8s3rgE"){
-                if (!dataValueMap[constants.approval_status_de] || dataValueMap[constants.approval_status_de] != constants.rejected){
+            if (deuid == constants.rejection_reason_de){
+                if (dataValueMap[constants.approval_status_de] != constants.approval_status.rejected){
                     return true;
                 }
             }

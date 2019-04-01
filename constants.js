@@ -24,6 +24,8 @@ exports.cache_user_prefix = "dd_user_";
 exports.cache_program_metadata = "dd_program_metadata";
 
 exports.approval_status_de = "W3RxC0UOsGY";
+exports.rejection_reason_de= "CCNnr8s3rgE";
+
 exports.approvalCMO_OUgroups = ["xfYm6TOHh99","UBuxUMmdz1U"];
 
 exports.approval_status = {
