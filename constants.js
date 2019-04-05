@@ -37,6 +37,8 @@ exports.approval_status = {
     pendingMOIC : "Pending1"    
 }
 
+exports.other_duties_de = 'h0LSu55rJcK';
+
 exports.approval_levels = {
     moic : "approval1stlevel",
     cmo : "approval2ndlevel"

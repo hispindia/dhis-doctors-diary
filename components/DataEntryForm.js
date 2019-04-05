@@ -160,6 +160,30 @@ export function DataEntryForm(props){
                     return true;
                 }
             }
+
+            switch(deuid){
+            case 'Ed0bvGMTYSS' :
+                if (dataValueMap[constants.other_duties_de] != 'vipduties'){
+                    return true;
+                }
+                break
+            case 'uNVcN37zGxj':
+                if (dataValueMap[constants.other_duties_de] != 'medico legal'){
+                    return true;
+                }
+                break
+            case 'lMlGVCVgR8C':
+                if (dataValueMap[constants.other_duties_de] != 'jailduties'){
+                    return true;
+                }
+                break
+            case 'PRK7JaBpaiU':
+                if (dataValueMap[constants.other_duties_de] != 'other'){
+                    return true;
+                }
+                break
+                
+            }
             
             return false;
         }
