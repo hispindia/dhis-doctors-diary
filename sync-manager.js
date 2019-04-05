@@ -125,6 +125,12 @@ function syncManager(){
 
         if (status == "COMPLETED"){
             event.status = "COMPLETED";
+            /* Support for Approval Level
+               First time set approval de value to either Pending1 or Pending 2 
+               based on OU Group. If CMO then ou group = DWH/DCH otherwise MOIC
+            */
+            dvMap[constants.approval_status_de] = state.approvalLevelDeValue;
+            /* */
         }
         event.dataValues = populateDataValues();
         event.offline= true;
@@ -146,7 +152,7 @@ function syncManager(){
                         value : dvMap[obj.dataElement.id]
                     })
                 }
-                
+              
                 return list;
             },[])
         }        
@@ -175,16 +181,7 @@ function syncManager(){
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
 
-        /* Support for Approval Level
-           First time set approval de value to either Pending1 or Pending 2 
-           based on OU Group. If CMO then ou group = DWH/DCH otherwise MOIC
-            */
-        event.dataValues.push({
-            dataElement : constants.approval_status_de,
-            value : state.approvalLevelDeValue
-        });
-        
-        /* */
+      
         if (!event.event){         
             api.saveReq(`events`,event,postSave)
         }else{
