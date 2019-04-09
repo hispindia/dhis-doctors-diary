@@ -11,7 +11,13 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.2.0/workbox-sw.js");
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
@@ -21,7 +27,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "8b725f6266ea47e711a891fbf861cf1a"
+    "revision": "d436ffc0021d0fe70e262b82e25021c8"
   },
   {
     "url": "css/dhis2.css",
@@ -108,10 +114,6 @@ self.__precacheManifest = [
     "revision": "c94c54c4a726e5bf15090fe2cd1cfb4e"
   },
   {
-    "url": "images/show_hide_password.png",
-    "revision": "0d8f913999d2a40964a67a305e69b3fa"
-  },
-  {
     "url": "images/sync.png",
     "revision": "da4e1661d23979470333eb0a86d6a805"
   },
@@ -132,5 +134,4 @@ self.__precacheManifest = [
     "revision": "5d92bd86ec71abc0d125b74e686d2602"
   }
 ].concat(self.__precacheManifest || []);
-workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
