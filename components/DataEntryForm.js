@@ -257,7 +257,7 @@ export function DataEntryForm(props){
                 return options.reduce(function(list,obj){
                     list.push(<option key={obj.id} value={obj.code}>{obj.name}</option>)
                     return list;
-                },[<option key = {options[0].id+"__"} disabled value={""} > -- </option>]);
+                },[<option key = {options[0].id+"__"} disabled value={""} > --Select-- </option>]);
             
             }
         }
