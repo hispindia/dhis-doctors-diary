@@ -125,7 +125,7 @@ export function DataEntryForm(props){
 
     function numberValEntered(de,e){
 
-        if (!e.target.value.match("^[0-9]+$")){
+        if (!e.target.value.match("^[0-9]+$") && e.target.value !=""){
             return;
         }
 
