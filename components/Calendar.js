@@ -19,7 +19,6 @@ export function Calendar(props){
         var selMonthLastDay = moment(state.selMoment).endOf('month');
         var selMonthLastDayIndex = parseInt(state.selMoment.endOf('month').format('d'));
         var prevMonthLastDay = moment(state.selMoment).subtract(1, 'months').endOf('month');
-        
 
         var prefixDayLastMonth = moment(prevMonthLastDay).day("Monday");
         var suffixDayNextMonth = moment(selMonthLastDay).add((7 - selMonthLastDayIndex),'days');
@@ -71,7 +70,7 @@ export function Calendar(props){
             className=className + " thisMonth";
         }
         
-        if (date.isAfter(moment().subtract(1,'month')) &&
+        if (date.isAfter(moment().subtract(1,'month').subtract(7,'days')) &&
             date.isBefore(moment().add(1,'days'))){
             className = className + " entryDate";
         }
