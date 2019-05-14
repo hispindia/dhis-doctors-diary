@@ -15,7 +15,8 @@ exports.views = {
     loading : "loader",
     settings: "settings",
     profile: "profile",
-    changePassword : "changePassword"
+    changePassword : "changePassword",
+    info:"info"
 };
 
 

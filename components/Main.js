@@ -1,6 +1,6 @@
 import React,{propTypes} from 'react';
 import constants from '../constants';
-import cache from '../localstorage';
+//import cache from '../localstorage';
 
 import {Login} from './Login'
 import {Calendar} from './Calendar'
@@ -11,6 +11,7 @@ import {Settings} from './Settings'
 import {Footer} from './Footer'
 import {DoctorProfile} from './Profile'
 import {ChangePassword} from './ChangePassword'
+import {Info} from './Info'
 
 export function Main(props){
     
@@ -77,7 +78,14 @@ export function Main(props){
                     <Footer state={state}/>
                     </div>
                    );
-            
+        case constants.views.info :
+                return (<div>
+                        <Header state={state}></Header>
+
+                        <Info state={state}/>
+                        <Footer state={state}/>
+                    </div>
+                );
         default :
             return (<div>
                     <Loader props={state}/>

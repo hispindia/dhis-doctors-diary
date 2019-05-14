@@ -66,6 +66,11 @@ export function Footer(props){
         state.curr_view=constants.views.settings;
         state.changeView(state);
     }
+    function goToInformationPage(){
+
+        state.curr_view=constants.views.info;
+        state.changeView(state);
+    }
     
     instance.render = function(){
         return (<div className="footer">
@@ -73,16 +78,23 @@ export function Footer(props){
                   <img hidden={state.curr_view == constants.views.calendar?false:true}
                        className="headerSyncIcon"
                        src={state.loading?"./images/loader.gif":"./images/sync.png"}
-                       onClick={state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize}>
+                       onClick={state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} title="Synchronized data">
                   </img>
                   {getSyncImageNotification() }
                 </div>
                 <div>
+                    <img hidden={state.curr_view == constants.views.calendar?false:true}
+                         className="imgDiv2" src="./images/help.ico" onClick={goToInformationPage} title="Meaning of Symbols" >
+
+                    </img>
+                </div>
+                <div>
+
                   <img hidden={state.curr_view == constants.views.calendar ||
                                state.curr_view == constants.views.entry?false:true}
             className="headerSettingsIcon"
                              src="./images/settings3.png"
-                       onClick={goToSettingsPage}>
+                       onClick={goToSettingsPage} title="Setting">
                 </img>
                 </div>
                 </div>)

@@ -2,7 +2,8 @@ import React,{propTypes} from 'react';
 import cache from '../localstorage';
 import constants from '../constants';
 
-export function Settings(props){
+
+export function Info(props){
     
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
@@ -13,45 +14,58 @@ export function Settings(props){
 
         return(
                 <div>
+
                 <div className="calendarArea">
-                <input className="settingsButton " type="button" onClick = {back} value="Back"></input>
-                </div>
-                <div className="calendarArea">
-                
-                <label className="floatLeft">Basic</label>
-                <table className="calendarTable">
+
+                <table className="tableDiv">
                 <tbody>
                 <tr>
-                <td>
-                <input className="settingsButton" type="button" onClick = {changePassword} value="Change Password"></input>
-                </td>
+                    <td>
+                        <button className="settingsButton" onClick={back}>Back</button>
+                    </td>
                 </tr>
-                
                 <tr>
-                <td>
-                <input className="settingsButton" type="button" onClick = {changeProfile} value="My Profile"></input>
-                </td>
+                    <td >
+                        <img className="imgDiv" src="./images/doublegreentick.png"></img>
+
+                        <h6>Data is Approved</h6>
+                    </td>
                 </tr>
-                
                 <tr>
-                <td>
-                <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
-                </td>
+                    <td>
+                        <img className="imgDiv" src="./images/greenyellowtick.png"></img>
+
+                        <h6>Data not send</h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img className="imgDiv" src="./images/greytick.png"></img>
+                        <h6>Offline Data Save</h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img className="imgDiv" src="./images/rejected.png"></img>
+
+                        <h6>Data is Rejected</h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td >
+                        <div className="div1"></div>
+                        <h6> Data is completed</h6>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+
+                    </td>
                 </tr>
                 </tbody>
                 </table>
-                <label className="floatLeft">Advanced</label>
-                <table className="calendarTable">
-                <tbody>
-                
-                <tr>
-                <td >
-                <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
-                </td>
-                </tr>
-                
-            </tbody>
-                </table>
+
                 </div>
                 </div>
                 
@@ -88,5 +102,6 @@ export function Settings(props){
         state.changeView(state);
         
     }
+
     return instance;
 }
