@@ -44,6 +44,8 @@
     "react-router-dom": "^4.2.2",
     "request": "^2.85.0",
     "webpack": "^4.27.1",
+    "workbox": "0.0.0",
+    "workbox-cli": "^4.2.0",
     "xlsx-populate": "^1.14.0"
   },
   "devDependencies": {

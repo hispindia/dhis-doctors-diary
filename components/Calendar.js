@@ -93,6 +93,8 @@ export function Calendar(props){
         if (event){
             if (event.offline){
                 imgUrl = "./images/greytick.png"
+            }else if (event.status != 'COMPLETED'){
+                imgUrl = "./images/greentick.png"
             }else{
                 
                 var dataValueMap = event.dataValues.
