@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "810220df1d11b068073e8ed85b64baa2"
+    "revision": "34ff9da9fda016fbbde81d63e7c19c8f"
   },
   {
     "url": "css/dhis2.css",
@@ -35,7 +35,7 @@ self.__precacheManifest = [
   },
   {
     "url": "css/diary.css",
-    "revision": "acfe30bee4a51ddfbe5e5ce94b420707"
+    "revision": "e1a9d7639e0abb9b3fa3157ef5733c38"
   },
   {
     "url": "css/main.css",
@@ -56,6 +56,10 @@ self.__precacheManifest = [
   {
     "url": "images/greengreytick.png",
     "revision": "a668e72a8c99c56d1e3c7871afdfa79c"
+  },
+  {
+    "url": "images/greentick.png",
+    "revision": "01c919e37871161015817aeae62e67f0"
   },
   {
     "url": "images/greenyellowtick.png",
