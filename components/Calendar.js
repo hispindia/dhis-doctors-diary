@@ -93,8 +93,6 @@ export function Calendar(props){
         if (event){
             if (event.offline){
                 imgUrl = "./images/greytick.png"
-            }else if (event.status != 'COMPLETED'){
-                imgUrl = "./images/greentick.png"
             }else{
                 
                 var dataValueMap = event.dataValues.
@@ -105,14 +103,29 @@ export function Calendar(props){
         
                 switch(dataValueMap[constants.approval_status_de]){
                 case "Auto-Approved" :
-                case "Approved" : imgUrl = "./images/doublegreentick.png";
+                case "Approved" :
+                    if (event.status=="COMPLETED"){
+                        imgUrl = "./images/doublegreentick.png";
+                    
+                    }else {
+
+                        imgUrl = "./images/greentick.png";    
+                    }
                     break;
                 case "Re-submitted":
                 case "Rejected" : imgUrl = "./images/rejected.png";
                     break;
                 case constants.approval_status.pendingCMO:
                 case constants.approval_status.pendingMOIC:
-                case undefined : imgUrl = "./images/greenyellowtick.png";;
+                case undefined :
+
+                    if (event.status=="COMPLETED"){
+                        
+                        imgUrl = "./images/greenyellowtick.png";
+                    }else {
+                        
+                        imgUrl = "./images/greentick.png";    
+                    }
                     break;
                 }                
             }
