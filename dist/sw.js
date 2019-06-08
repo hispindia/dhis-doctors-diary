@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "bc477791a3c4fbfcaa3678918870d0e5"
+    "revision": "cb540f4b01b81fc157f3017631fd9c16"
   },
   {
     "url": "css/dhis2.css",
