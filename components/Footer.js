@@ -83,10 +83,16 @@ export function Footer(props){
                   {getSyncImageNotification() }
                 </div>
                 <div>
-
+                    <img className="headerSettingsIcon"
+                         hidden={state.curr_view == constants.views.calendar ||
+                    state.curr_view == constants.views.entry?false:true}
+                        src="./images/help.ico" onClick={goToInformationPage}>
+                    </img>
+                </div>
+                <div>
                   <img hidden={state.curr_view == constants.views.calendar ||
                                state.curr_view == constants.views.entry?false:true}
-            className="headerSettingsIcon"
+                               className="headerSettingsIcon"
                              src="./images/settings3.png"
                        onClick={goToSettingsPage} title="Setting">
                 </img>
