@@ -258,18 +258,19 @@ export function DataEntryForm(props){
 
                 if (deuid!="x2uDVEGfY4K"){
                     if (dataValueMap["x2uDVEGfY4K"]!="Working"){
+                        dataValueMap[deuid] = "";
                         return true;
                     }
+                    else if(dataValueMap["x2uDVEGfY4K"] == "Working" && !dataValueMap[deuid])
+                    {
+                        dataValueMap[deuid] = "0";
+                        return false;
+                    }
+
                 }
 
                 return false;
             }
-
-            function getDataElementAttributeValue(de){
-
-                console.log(de.getDataElementAttributeValue);
-            }
-
 
             function getOptions(options){
                 return options.reduce(function(list,obj){
