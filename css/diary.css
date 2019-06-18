@@ -414,8 +414,8 @@
 .tableDiv tr:nth-child(even) {background-color: #C3C3C3;}
 
 .imgDiv{
-    width:20px;
-    height:20px;
+    width:100%;
+    height:700px;
 
 }
 .imgDiv2{

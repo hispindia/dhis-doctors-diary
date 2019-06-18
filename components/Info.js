@@ -26,43 +26,11 @@ export function Info(props){
                 </tr>
                 <tr>
                     <td >
-                        <img className="imgDiv" src="./images/doublegreentick.png"></img>
-
-                        <h6>Data is Approved</h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img className="imgDiv" src="./images/greenyellowtick.png"></img>
-
-                        <h6>Data not send</h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img className="imgDiv" src="./images/greytick.png"></img>
-                        <h6>Offline Data Save</h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img className="imgDiv" src="./images/rejected.png"></img>
-
-                        <h6>Data is Rejected</h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td >
-                        <div className="div1"></div>
-                        <h6> Data is completed</h6>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
+                        <img className="imgDiv" src="./images/manual.jpg"></img>
 
                     </td>
                 </tr>
+           
                 </tbody>
                 </table>
 

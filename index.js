@@ -16,9 +16,7 @@ window.onload = function(){
                 ,
             document.getElementById('root'));
         
-    });
-    
-    
+    });    
 }
 
 function init(callback){

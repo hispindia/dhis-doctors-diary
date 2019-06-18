@@ -177,8 +177,8 @@ export function DataEntryForm(props){
                     return true;
                 }
                 break
-            case 'PRK7JaBpaiU':
-                if (dataValueMap[constants.other_duties_de] != 'other'){
+            case 'mbrP2IkXW4s':
+                if (dataValueMap[constants.other_duties_de] != 'otherduties'){
                     return true;
                 }
                 break
@@ -215,12 +215,14 @@ export function DataEntryForm(props){
             case "NUMBER":
                 return (<input disabled = {checkIfDisabled(de.id)}
                         key={de.id}
-                        type = "number"
+                        type = "text"
+                        maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
                         onChange={numberValEntered.bind(null,de)}></input>);
             case "LONG_TEXT":
                 return (<textarea
                         disabled = {checkIfDisabled(de.id)}
+                        key={de.id}
                         rows="3"
                         cols="20"
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
@@ -245,6 +247,7 @@ export function DataEntryForm(props){
 
                 if (deuid!="x2uDVEGfY4K"){
                     if (dataValueMap["x2uDVEGfY4K"]!="Working"){
+                        utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
                         return true;
                     }
                 }
