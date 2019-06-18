@@ -11,13 +11,7 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.2.0/workbox-sw.js");
-
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
@@ -27,7 +21,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "cb540f4b01b81fc157f3017631fd9c16"
+    "revision": "017175cb471796c128b2acc28b2b2526"
   },
   {
     "url": "css/dhis2.css",
@@ -35,7 +29,7 @@ self.__precacheManifest = [
   },
   {
     "url": "css/diary.css",
-    "revision": "e1a9d7639e0abb9b3fa3157ef5733c38"
+    "revision": "6dacb8c2a9734957cba7417ea9d4df3f"
   },
   {
     "url": "css/main.css",
@@ -94,6 +88,10 @@ self.__precacheManifest = [
     "revision": "dc6d2504637da44d8eb0afd11c9c732a"
   },
   {
+    "url": "images/manual.jpg",
+    "revision": "9f159b88c214ee12190c83c0ea023452"
+  },
+  {
     "url": "images/paper_small.jpg",
     "revision": "4e36767fa1536f8c3998a56f520997f6"
   },
@@ -118,6 +116,10 @@ self.__precacheManifest = [
     "revision": "c94c54c4a726e5bf15090fe2cd1cfb4e"
   },
   {
+    "url": "images/show_hide_password.png",
+    "revision": "0d8f913999d2a40964a67a305e69b3fa"
+  },
+  {
     "url": "images/sync.png",
     "revision": "da4e1661d23979470333eb0a86d6a805"
   },
@@ -138,4 +140,5 @@ self.__precacheManifest = [
     "revision": "5d92bd86ec71abc0d125b74e686d2602"
   }
 ].concat(self.__precacheManifest || []);
+workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
