@@ -139,6 +139,27 @@ _.findValueAgainstId = function (data,idKey,id,valKey){
     return null;
 }
 
+_.getAttributeValueFromId = function(data,id){
+
+    for (var i=0;i<data.length;i++){
+        if (data[i].attribute.id==id){
+            return data[i].value
+        }
+    }
+    return null;
+    
+}
+
+_.setMapExcept = function(map,value,exceptions){
+
+    for (var key in map){
+        if (!exceptions.includes(key)){
+            map[key] = value;
+        }
+    }
+    return map;
+}
+
 _.putValueAgainstId = function (data,idKey,id,valKey,value){
 
     for (var i=0;i<data.length;i++){
