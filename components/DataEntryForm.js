@@ -221,7 +221,7 @@ export function DataEntryForm(props){
                         return (<input className="form-control" disabled = {checkIfDisabled(de.id)}
                                        key={de.id}
                                        type = "text"
-                                       maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
+                                       maxLength={3}
                                        value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
                                        onChange={numberValEntered.bind(null,de)}></input>)
 
