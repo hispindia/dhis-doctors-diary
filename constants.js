@@ -39,7 +39,7 @@ exports.approval_status = {
 }
 
 exports.other_duties_de = 'h0LSu55rJcK';
-
+exports.numeric_de_maxlength = 'b8QLCOFy0Xb';
 exports.approval_levels = {
     moic : "approval1stlevel",
     cmo : "approval2ndlevel"

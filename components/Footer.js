@@ -10,23 +10,23 @@ export function Footer(props){
     var state = props.state;
     function getSyncImageNotification(){
         if (state.offlineEvents>0){
-            return state.offlineEvents; 
+            return state.offlineEvents;
         }
-        
+
         return (<img hidden={state.curr_view == constants.views.calendar?false:true}
-                className="headerTick" src="./images/doublegreentick.png"></img>)
+                     className="headerTick" src="./images/doublegreentick.png"></img>)
     }
-    
+
     function synchronize(){
         state.loading = true;
         state.changeView(state);
-        
+
         var ps = state.
             program_metadata_programStageByIdMap[state.
-                                                 curr_user_program_stage];     
-        
+            curr_user_program_stage];
+
         importEvent(0,state.curr_user_data.events,ps);
-        
+
         function importEvent(index,events,ps){
             if (index == events.length){
                 refetchEvents();
@@ -45,24 +45,24 @@ export function Footer(props){
             }else{
                 callback();
             }
-            
+
             function callback(){
                 importEvent(index+1,events,ps)
-            }    
+            }
         }
 
         function refetchEvents(){
-            
+
             sync.fetchEvents(state,function(){
                 state.loading = false;
                 state.changeView(state);
             })
         }
-        
+
     }
 
     function goToSettingsPage(){
-        
+
         state.curr_view=constants.views.settings;
         state.changeView(state);
     }
@@ -71,35 +71,36 @@ export function Footer(props){
         state.curr_view=constants.views.info;
         state.changeView(state);
     }
-    
+
     instance.render = function(){
         return (<div className="footer">
-                <div>
-                  <img hidden={state.curr_view == constants.views.calendar?false:true}
-                       className="headerSyncIcon"
-                       src={state.loading?"./images/loader.gif":"./images/sync.png"}
-                       onClick={state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} title="Synchronized data">
-                  </img>
-                  {getSyncImageNotification() }
-                </div>
-                <div>
-                    <img className="headerSettingsIcon"
-                         hidden={state.curr_view == constants.views.calendar ||
-                    state.curr_view == constants.views.entry?false:true}
-                        src="./images/help.ico" onClick={goToInformationPage}>
-                    </img>
-                </div>
-                <div>
-                  <img hidden={state.curr_view == constants.views.calendar ||
-                               state.curr_view == constants.views.entry?false:true}
-                               className="headerSettingsIcon"
-                             src="./images/settings3.png"
-                       onClick={goToSettingsPage} title="Setting">
+            <div>
+                <img hidden={state.curr_view == constants.views.calendar?false:true}
+                     className="headerSyncIcon"
+                     src={state.loading?"./images/loader.gif":"./images/sync.png"}
+                     onClick={state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} title="Synchronized data">
                 </img>
-                </div>
-                </div>)
+                {getSyncImageNotification() }
+            </div>
+            <div>
+                <img className="headerSettingsIcon"
+                     hidden={state.curr_view == constants.views.calendar ||
+                     state.curr_view == constants.views.entry?false:true}
+                     src="./images/help.ico" onClick={goToInformationPage}>
+                </img>
+            </div>
+            <div>
+
+                <img hidden={state.curr_view == constants.views.calendar ||
+                state.curr_view == constants.views.entry?false:true}
+                     className="headerSettingsIcon"
+                     src="./images/settings3.png"
+                     onClick={goToSettingsPage} title="Setting">
+                </img>
+            </div>
+        </div>)
 
     }
-    
+
     return instance;
 }

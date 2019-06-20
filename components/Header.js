@@ -68,8 +68,8 @@ export function Header(props){
         
         return (
             <div className="headerDiv">
-              <div className="banner">
-                <div className="bannerItems"> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}</div>
+              <div className="banner" >
+                <div className="bannerItems "> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}</div>
             
                 <div className="bannerItems">
                   <span className={state.online?"internetIcon online":"offline"}></span>
@@ -77,8 +77,8 @@ export function Header(props){
                   
                 </div>
               </div>
-              
-              
+
+
               </div>
 
         )

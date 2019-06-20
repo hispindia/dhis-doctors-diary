@@ -65,12 +65,18 @@ export function Login(props){
     instance.render = function(){
         
     return (
-            <div className="loginArea" >
-            <input className="loginField" type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>
-            <input className="loginField" type="password" placeholder="Password" id = "password" onChange={textInputChangedData.bind(null,'password')} value={state.password} ></input>
-            <div className="buttonDiv">
-            <button className= "button" onClick={login}>Sign In</button>
-            <button className= "button" onClick={clear}>Clear</button>
+            <div className="container container-fluid" >
+                <br/><br/>
+                <div className="col-sm-4"> </div>
+                <div className="col-sm-4"><div className="well">
+                    <br/>
+            <input className="form-control" type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>
+<br/>
+            <input className="form-control" type="password" placeholder="Password" id = "password" onChange={textInputChangedData.bind(null,'password')} value={state.password} ></input>
+<br/>
+                  <center>  <span className="col-sm-3"> <button className= "btn" onClick={login}>Sign In</button></span>
+                      <span className="col-sm-3"><button className= "btn" onClick={clear}>Clear</button></span></center>
+
             <div>{state.statusMsg}</div>
             <div>
             <img 
@@ -79,8 +85,9 @@ export function Login(props){
                        >
                   </img>
                 
-        </div>
+            </div></div>
             </div>
+            <div className="col-sm-4"> </div>
             </div>
     )
     }

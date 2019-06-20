@@ -26,15 +26,14 @@ export function Main(props){
 
         switch(state.curr_view){
         case constants.views.login :
-            return (<div >
+            return (<div>
                     <Header state={state}></Header>
-
                     <Login state={state}/>
                     <Footer state={state}/>
                     </div>
                    );
         case constants.views.calendar :
-            return (<div>
+            return (<div >
                     <Header state={state}></Header>
                     <Calendar state={state}/>
                     <Footer state={state}/>
@@ -79,7 +78,7 @@ export function Main(props){
                     </div>
                    );
         case constants.views.info :
-                return (<div>
+                return (<div >
                         <Header state={state}></Header>
 
                         <Info state={state}/>

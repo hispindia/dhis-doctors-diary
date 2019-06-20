@@ -13,29 +13,28 @@ export function Settings(props){
 
         return(
                 <div>
-                <div className="calendarArea">
-                <input className="settingsButton " type="button" onClick = {back} value="Back"></input>
+                <div className="calendarArea ">
+                <input className="btn btn-block" type="button" onClick = {back} value="Back"></input>
                 </div>
-                <div className="calendarArea">
-                
+                <div className="calendarArea ">
                 <label className="floatLeft">Basic</label>
-                <table className="calendarTable">
+                <table className="calendarTable ">
                 <tbody>
                 <tr>
                 <td>
-                <input className="settingsButton" type="button" onClick = {changePassword} value="Change Password"></input>
+                <input className="btn btn-block" type="button" onClick = {changePassword} value="Change Password"></input>
                 </td>
                 </tr>
-                
+                <br/>
                 <tr>
                 <td>
-                <input className="settingsButton" type="button" onClick = {changeProfile} value="My Profile"></input>
+                <input className="btn btn-block" type="button" onClick = {changeProfile} value="My Profile"></input>
                 </td>
                 </tr>
-                
+                <br/>
                 <tr>
                 <td>
-                <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
+                <input className="btn btn-block" type="button" onClick = {logout} value="Log Out"></input>
                 </td>
                 </tr>
                 </tbody>
@@ -46,7 +45,7 @@ export function Settings(props){
                 
                 <tr>
                 <td >
-                <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
+                <input className="btn btn-block red"  type="button" onClick = {reset} value="Reset"></input>
                 </td>
                 </tr>
                 

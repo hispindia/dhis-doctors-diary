@@ -25,21 +25,20 @@ export function ChangePassword(props){
     instance.render = function(){
 
         return(
-                <div className="entryArea">
-                <div className="entryStageDiv">
+                <div className="container">
+                <div className="row">
                 
                 <h2>Change password </h2>
 
                 <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
-                
-                <div>
-
+                    <br/><br/>
+                <div className="col-sm-6">
                 <div
-            className="entryQuestionDiv"
             key ="previous_Q" >
                 <p>Current Password</p>
-                <div className="entryAnswerDiv">
+                <div>
                 <input
+                    className="form-control"
             key="previous"
             type = {credential.showpassword?"text":"password"}
             value = {credential.oldpassword}
@@ -48,14 +47,13 @@ export function ChangePassword(props){
                 
             </div>
                 </div>
-            
+                        <br/>
                 <div
-            className="entryQuestionDiv"
             key ="new_Q" >
                 <p>New Password</p>
-                <div className="entryAnswerDiv">
+                <div >
             
-                <input
+                <input className="form-control"
             key="new"
             type = {credential.showpassword?"text":"password"}
             value = {credential.newpassword}
@@ -64,14 +62,13 @@ export function ChangePassword(props){
     
             </div>
                 </div>
-            
+            <br/>
                 <div
-            className="entryQuestionDiv"
             key ="confirm_Q" >
                 <p>Confirm Password</p>
-                <div className="entryAnswerDiv">
+                <div >
                 <input
-            key="confirm"
+            key="confirm" className="form-control"
             type = {credential.showpassword?"text":"password"}
             value = {credential.confirmpassword}
             onChange={textInputChangedData.bind(null,'confirmpassword')}
@@ -79,22 +76,19 @@ export function ChangePassword(props){
                 </div>
                 </div>
                 
-            </div>
-                </div>
-            
-            
 
-                <div className="entrySaveDiv">
-                
-                <input className="button" type="button" value="Back" onClick={back}></input>
-                <input className={"button"}
+
+ <div >
+     <br/><br/>
+                    <span className="col-sm-3"> <input className="btn" type="button" value="Back" onClick={back}></input></span>
+                    <span className="col-sm-3"> <input className="btn"
             type="button"
             value="Change"
-            onClick={changePassword}></input>
+                                                       onClick={changePassword}></input></span>
                 
                 </div>
                 </div>
-                
+                </div></div>
             
         )
     }

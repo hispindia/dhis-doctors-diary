@@ -63,12 +63,13 @@ export function DoctorProfile(props){
 
     function createQuestion(tea){
 
-        return (<div
-                className="entryQuestionDiv"
+        return (
+            <div
+                className="col-sm-6"
                 hidden = {checkIfToHide(tea.trackedEntityAttribute.id)}
                 key ={tea.id}>
                 <p>{tea.trackedEntityAttribute.name}</p>
-                <div className="entryAnswerDiv">
+                <div className="">
                 {question(tea)}
                 <label>{dvRequiredMap[tea.id]?dvRequiredMap[tea.id]:""}</label>
 
@@ -87,27 +88,27 @@ export function DoctorProfile(props){
             switch(tea.valueType){
             case "TEXT":
                 if (!tea.trackedEntityAttribute.optionSetValue){
-                    return (<input
+                    return (<input className="form-control"
                             disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                             key={tea.trackedEntityAttribute.id}
                             type = "text"
                             value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
                             onChange={valEntered.bind(null,tea)} ></input>);
                 }else{
-                    return(<select
+                    return(<select className="form-control"
                            disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                            key={tea.trackedEntityAttribute.id}
                            value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
                            onChange={valEntered.bind(null,tea)}>{getOptions(tea.trackedEntityAttribute.optionSet.options)}</select>)
                 }
             case "NUMBER":
-                return (<input disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
+                return (<input className="form-control" disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                         key={tea.trackedEntityAttribute.id}
                         type = "number"
                         value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
                         onChange={numberValEntered.bind(null,tea)}></input>);
             case "LONG_TEXT":
-                return (<textarea
+                return (<textarea className="form-control"
                         disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                         rows="3"
                         cols="20"
@@ -115,7 +116,7 @@ export function DoctorProfile(props){
                         onChange={valEntered.bind(null,tea)}
                         ></textarea>);
             case "DATE":
-                return (<input
+                return (<input className="form-control"
                         disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                         key={tea.trackedEntityAttribute.id}
                         type = "date"
@@ -174,25 +175,26 @@ export function DoctorProfile(props){
     instance.render = function(){
         
         return (
-                <div className="entryArea">
-                <div className="entryStageDiv">
+                <div className="container">
+                <div className="row">
 
                 <h2>Profile</h2>
                 
                 <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) }  </h6>
-                <div>
+                <br/><br/>
+                 <div>
                 {createForm()}
             </div>
-                </div>
-                <div className="entrySaveDiv">
+                </div><br/><br/>
+                <div >
                 
-                <input className="button" type="button" value="Back" onClick={back}></input>
-                <input className={dirtyBit?"button" : "hidden"}
+                <span className="col-sm-3"><input className="btn" type="button" value="Back" onClick={back}></input></span>
+                <span className="col-sm-3"><input className={dirtyBit?"btn" : "hidden"}
             type="button"
             value="Save"
-            onClick={save}></input>
+            onClick={save}></input></span>
                 
-            </div>
+            </div><br/><br/>
                 </div>
         )
     }

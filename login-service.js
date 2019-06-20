@@ -90,8 +90,8 @@ function loginService(){
             return;
         }
 
-        api.getReq(`programs/${constants.program_doc_diary}.json?fields=fields=id,name,attributeValues[value,attribute[id,name]],programTrackedEntityAttributes[attributeValues[value,attribute[id,name]],id,name,sortOrder,valueType,mandatory,displayShortName,displayName,trackedEntityAttribute[id,name,optionSetValue,optionSet[id,options[id,code,name],attributeValues[value,attribute[id,name]]]]],programStages[id,name,programStageDataElements[id,sortOrder,dataElement[id,name,displayName,formName,valueType,optionSetValue,optionSet[id,name,valueType,options[id,name,code]]]],userGroupAccesses]`,function(error,response,body){
-            if (error){
+        api.getReq(`programs/${constants.program_doc_diary}.json?fields=fields=id,name,attributeValues[value,attribute[id,name]],programTrackedEntityAttributes[attributeValues[value,attribute[id,name]],id,name,sortOrder,valueType,mandatory,displayShortName,displayName,trackedEntityAttribute[id,name,optionSetValue,optionSet[id,options[id,code,name],attributeValues[value,attribute[id,name]]]]],programStages[id,name,programStageDataElements[id,sortOrder,dataElement[id,name,displayName,formName,valueType,optionSetValue,optionSet[id,name,valueType,options[id,name,code]],attributeValues[attribute,value]]],userGroupAccesses]`,function(error,response,body){
+        if (error){
                 console.log("Error : programMetadata" + error);
                 return;
             }

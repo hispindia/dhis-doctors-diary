@@ -37,32 +37,35 @@ export function DataEntryForm(props){
             return (<label>{error}</label>)
         }
         return (
-            <div className="entryArea">
-                <div className="entryStageDiv">
+            <div className="container">
+                <div className="row">
+                <div className="col-sm-6 ">
 
-                    <h2>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h2>
+                    <h2 >{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h2>
 
-                    <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
+                    <h6 >{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
+                    <br/><br/><br/>
+                     {createForm()}
+                 </div>
 
-                    <div>
-                        {createForm()}
-                    </div>
                 </div>
-                <div className="entrySaveDiv">
+                <div className="row">
+                <div className="col-sm-6">
 
-                    <input className="button" type="button" value="Back" onClick={back}></input>
-                    <input className={dirtyBit?"button" : "hidden"}
+                    <span className="col-sm-3"><input className="btn" type="button" value="Back" onClick={back}></input></span>
+                <span className="col-sm-3"><input className={dirtyBit?"btn" : "hidden"}
                            type="button"
                            value="Save"
-                           onClick={save}></input>
+                           onClick={save}></input></span>
 
-                    <input
-                        className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button floatRight"}
+                    <span className="col-sm-3"><input
+                        className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"btn floatRight"}
                         type="button"
                         value="Send"
-                        onClick={send}></input>
-                    <label className={state.curr_event && state.curr_event.status == "COMPLETED"?"floatRight":"hidden"}
-                    >COMPLETED</label>
+                        onClick={send}></input></span>
+                <span className="col-sm-3"> <label className={state.curr_event && state.curr_event.status == "COMPLETED"?"floatRight":"hidden"}
+                >COMPLETED</label></span>
+                </div>
                 </div>
             </div>
         )
@@ -106,6 +109,9 @@ export function DataEntryForm(props){
 
         return Object.assign([],ps.programStageDataElements)
             .reduce(function(list,obj){
+
+                $('[data-toggle="tooltip"]').tooltip();
+
                 list.push(createQuestion(obj));
                 return list;
             },[]);
@@ -143,11 +149,10 @@ export function DataEntryForm(props){
     function createQuestion(de){
 
         return (<div
-            className="entryQuestionDiv"
             hidden = {checkIfToHide(de.dataElement.id)}
             key ={de.id}>
             <p>{de.dataElement.formName}</p>
-            <div className="entryAnswerDiv">
+            <div >
                 {question(de.dataElement)}
                 <label>{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>
 
@@ -177,8 +182,8 @@ export function DataEntryForm(props){
                         return true;
                     }
                     break
-                case 'PRK7JaBpaiU':
-                    if (dataValueMap[constants.other_duties_de] != 'other'){
+                case 'mbrP2IkXW4s':
+                    if (dataValueMap[constants.other_duties_de] != 'otherduties'){
                         return true;
                     }
                     break
@@ -200,39 +205,28 @@ export function DataEntryForm(props){
             switch(de.valueType){
                 case "TEXT":
                     if (!de.optionSetValue){
-                        return (<input
+                        return (<input className="form-control"
                             disabled = {checkIfDisabled(de.id)}
                             key={de.id}
                             type = "text"
                             value = {dataValueMap[de.id]?dataValueMap[de.id]:""}></input>);
                     }else{
-                        return(<select
+                        return(<select className="form-control"
                             disabled = {checkIfDisabled(de.id)}
                             key={de.id}
                             value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
                             onChange={valEntered.bind(null,de)}>{getOptions(de.optionSet.options)}</select>)
                     }
                 case "NUMBER":
-                    if (de.id === 'nRvNhAM83A0' || de.id === 'fwtcasCJxE1'){
-                        return (<input disabled = {checkIfDisabled(de.id)}
+                        return (<input className="form-control" disabled = {checkIfDisabled(de.id)}
                                        key={de.id}
                                        type = "text"
-                                       maxlength={3}
+                                       maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
                                        value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
                                        onChange={numberValEntered.bind(null,de)}></input>)
-                    }
-                    else{
-                        return (<input disabled = {checkIfDisabled(de.id)}
-                                       key={de.id}
-                                       type = "text"
-                                       maxlength={2}
-                                       value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                                       onChange={numberValEntered.bind(null,de)}></input>)
-                    }
-
 
                 case "LONG_TEXT":
-                    return (<textarea
+                    return (<textarea className="form-control"
                         disabled = {checkIfDisabled(de.id)}
                         rows="3"
                         cols="20"
@@ -258,13 +252,8 @@ export function DataEntryForm(props){
 
                 if (deuid!="x2uDVEGfY4K"){
                     if (dataValueMap["x2uDVEGfY4K"]!="Working"){
-                        dataValueMap[deuid] = "";
+                        utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
                         return true;
-                    }
-                    else if(dataValueMap["x2uDVEGfY4K"] == "Working" && !dataValueMap[deuid])
-                    {
-                        dataValueMap[deuid] = "0";
-                        return false;
                     }
 
                 }
