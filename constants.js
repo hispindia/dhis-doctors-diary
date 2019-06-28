@@ -59,7 +59,8 @@ exports.required_fields = [
 exports.disabled_fields_attr = [
     'qXQxtcuPO5S',
     'T6eQvMXe3MO',
-    'mE6SY3ro53v'
+    'mE6SY3ro53v',
+    'PjHXwfDU3GE'
 ];
 
 exports.hidden_fields_attr = [
