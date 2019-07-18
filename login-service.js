@@ -46,7 +46,7 @@ function loginService(){
             tei : []
         }
 
-        api.getReq(`trackedEntityInstances.json?ou=${user.organisationUnits[0].id}&ouMode=DESCENDANTS&filter:${constants.attr_user}:eq:${user.userCredentials.username}&program=${constants.program_doc_diary}`,postTEI);
+        api.getReq(`trackedEntityInstances.json?ou=${user.organisationUnits[0].id}&ouMode=DESCENDANTS&filter=${constants.attr_user}:eq:${user.userCredentials.username}&program=${constants.program_doc_diary}`,postTEI);
 
         function postTEI(error,response,body){
             if (error){
