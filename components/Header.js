@@ -11,6 +11,7 @@ export function Header(props){
     function updateOnlineStatus(event){
 
         if (navigator.onLine){
+            synchronize();
             state.online=true;
         }else{
             state.online=false;
@@ -29,62 +30,74 @@ export function Header(props){
         state.changeView(state);
     }
     
-    function getSyncImage(){
 
-        if (state.loading){
-            return (
-                <img hidden={state.curr_view == constants.views.calendar?false:true}
-                     className="headerSyncIcon"
-                     src={state.loader?"./images/loader.gif":"./images/sync.png"}
-                     onClick={state.loader?function(){debugger}:synchronize}>
-                </img>
-                
-            )
+    function synchronize(){
+        console.log("Online : sync started");
+        state.loading = true;
+        state.changeView(state);
+        
+        var ps = state.
+            program_metadata_programStageByIdMap[state.
+                                                 curr_user_program_stage];     
+        
+        importEvent(0,state.curr_user_data.events,ps);
+        
+        function importEvent(index,events,ps){
+            if (index == events.length){
+                refetchEvents()
+                return;
+            }
+
+            var event = events[index];
+            state.curr_event = event;
+            if (event.offline){
+                var dvMap = event.dataValues.reduce(function(map,obj){
+                    map[obj.dataElement] = obj.value;
+                    return map;
+                },[]);
+
+                sync.saveEvent(dvMap,ps,state,callback);
+            }else{
+                callback();
+            }
             
-        }else{
-            return (
+            function callback(){
+                importEvent(index+1,events,ps)
+            }    
+        }
 
-
-                <img hidden={state.curr_view == constants.views.calendar?false:true}
-                     className="headerSyncIcon"
-                     src={state.loader?"./images/loader.gif":"./images/sync.png"}
-                     onClick={state.loader?function(){debugger}:synchronize}>
-                </img>
-                
-            )    
-        }       
-    }
-    
-    function getSyncImageNotification(){
-        if (state.offlineEvents>0){
-            return state.offlineEvents; 
+         function refetchEvents(){
+            
+            sync.fetchEvents(state,function(){
+                state.loading = false;
+                state.changeView(state);
+            })
         }
         
-        return (<img hidden={state.curr_view == constants.views.calendar?false:true}
-                     className="headerTick" src="./images/doublegreentick.png"></img>)
     }
+
     instance.render = function(){
         
         
         return (
-            <div className="headerDiv">
-              <div className="banner">
+                <div className="headerDiv">
+                <div className="banner">
                 <div className="bannerItems"> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}</div>
-            
+                
                 <div className="bannerItems">
-                  <span className={state.online?"internetIcon online":"offline"}></span>
-                  {state.online?"Online":"Offline"}
-                  
+                <span className={state.online?"internetIcon online":"offline"}></span>
+                {state.online?"Online":"Offline"}
+            
+            </div>
                 </div>
-              </div>
-              
-              
-              </div>
+                
+            
+            </div>
 
         )
     }
 
     return instance;
 
-  
+    
 }
