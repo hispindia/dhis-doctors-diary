@@ -12,6 +12,7 @@ import {Footer} from './Footer'
 import {DoctorProfile} from './Profile'
 import {ChangePassword} from './ChangePassword'
 import {Info} from './Info'
+import {Leftbar} from './Leftbar'
 
 export function Main(props){
     
@@ -34,10 +35,18 @@ export function Main(props){
                     </div>
                    );
         case constants.views.calendar :
-            return (<div>
-                    <Header state={state}></Header>
+            return (<div className="wrapper">
+                    <Header state={state} ></Header>
+
+                    <div className="two">
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className="three">
                     <Calendar state={state}/>
+                    </div>
+                    <div className="footer">
                     <Footer state={state}/>
+                    </div>
                     </div>
                    );
         case constants.views.entry :

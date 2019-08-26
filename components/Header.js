@@ -80,7 +80,7 @@ export function Header(props){
         
         
         return (
-                <div className="headerDiv">
+                <div className="headerDiv one">
                 <div className="banner">
                 <div className="bannerItems"> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}</div>
                 

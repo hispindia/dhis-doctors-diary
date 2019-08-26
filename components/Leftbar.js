@@ -1,9 +1,10 @@
 import React,{propTypes} from 'react';
 import constants from '../constants';
 import sync from '../sync-manager';
+import {LeftbarSettings} from './LeftbarSetting'
 
 
-export function Footer(props){
+export function Leftbar(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
 
@@ -73,16 +74,45 @@ export function Footer(props){
     }
     
     instance.render = function(){
-        return (<div className="">
+        return (<div className="leftBar">
+                <h5>#</h5>
+                <table>
+                <tbody>
+                <tr>
+                <td colSpan="2">
+                <img className="headerSettingsIcon"
+                hidden={state.curr_view == constants.views.calendar ||
+                        state.curr_view == constants.views.entry?false:true}
+                src="./images/help.ico" onClick={goToInformationPage}>
+                </img> 
+                </td>
+                </tr>
+
+                
+                <tr>
+                <td>
+                <input className=""  type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Sync"></input>
+                </td>
+                <td>
                 <div>
-                
-                
-                <img hidden={state.curr_view == constants.views.calendar ||
-                             state.curr_view == constants.views.entry?false:true}
-                className="menuButton"
-                src="./images/settings3.png"
-                onClick={goToSettingsPage} title="Setting">
+                <img hidden={state.curr_view == constants.views.calendar?false:true} className="headerSyncIcon"
+                src={state.loading?"./images/loader.gif":"./images/sync.png"} title="Synchronized data">
                 </img>
+                { getSyncImageNotification() }
+                </div>
+                
+                
+                </td>
+                </tr>
+                
+                </tbody>
+                </table>
+
+                <br></br>
+                <div>
+                <LeftbarSettings state={state}/>
+
+          
                 </div>
                 </div>)
         
