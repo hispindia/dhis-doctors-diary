@@ -16,7 +16,8 @@ function loginService(){
             `users?filter=userCredentials.username:eq:${username}&fields=id,name,displayName,organisationUnits[id,code,name,organisationUnitGroups[id,name],ancestors[id,level,name]],userAccesses,userCredentials[id,name,username],userGroups[id,code,name]`,
             function(error,response,body){
                 if(error){
-                    console.log("Error : Login failed"+JSON.stringify(error));
+                    alert(JSON.stringify(error, Object.getOwnPropertyNames(error)))
+                    console.log("Error : Login failed"+(error));
                     callback("Cannot Login");
                     return;
                 }

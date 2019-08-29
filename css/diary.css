@@ -362,9 +362,11 @@ html {
 }
 
 .settingsButton{
-
-    width:40%;
+    width:100%;
+    white-space: normal;
+    word-wrap: break-word;
 }
+
 
 .internetIcon{
     text-align: right;
@@ -444,7 +446,7 @@ html {
 
 .wrapper{
     display:grid;
-    grid-template-rows: 19% 100% 8%;
+    grid-template-rows: 18% 73% 7%;
     grid-template-columns: 30% 70%;
 }
 

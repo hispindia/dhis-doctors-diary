@@ -75,7 +75,7 @@ export function Leftbar(props){
     
     instance.render = function(){
         return (<div className="leftBar">
-                <h5>#</h5>
+                <h5># Settings</h5>
                 <table>
                 <tbody>
                 <tr>
