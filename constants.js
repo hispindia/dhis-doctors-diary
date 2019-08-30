@@ -1,5 +1,7 @@
 exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
 //exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
+//exports.DHIS_URL_BASE = "http://localhost:8090/upupgrade";
+
 exports.username = "admin";
 exports.password = "";
 
@@ -24,6 +26,7 @@ exports.cache_curr_user = "dd_current_user";
 exports.cache_user_prefix = "dd_user_";
 exports.cache_program_metadata = "dd_program_metadata";
 
+exports.user_password_change_attribute = "wxdKnxOPr66";
 exports.approval_status_de = "W3RxC0UOsGY";
 exports.rejection_reason_de= "CCNnr8s3rgE";
 
