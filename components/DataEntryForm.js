@@ -85,7 +85,12 @@ export function DataEntryForm(props){
 
             return;
         }
-        
+
+        if (!sncu_validate(ps.id)){
+            instance.setState(state);
+            scroll(0,0);
+            return           
+        }
         sync.saveEvent(dataValueMap,ps,state);
         state.curr_view = constants.views.calendar;
        // state.changeView(state);
@@ -96,12 +101,19 @@ export function DataEntryForm(props){
             state.changeView(state);
             return;
         }
+
+        
+        if (!sncu_validate(ps.id)){
+            instance.setState(state);
+            scroll(0,0);
+            return           
+        }
         
         sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
         state.curr_view = constants.views.calendar;
 
     }
-    
+
     function createForm(){
         
         return Object.assign([],ps.programStageDataElements)
@@ -135,11 +147,46 @@ export function DataEntryForm(props){
     function valEntered(de,e){
         dirtyBit = true;
         dataValueMap[de.id] = e.target.value;
+      //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
 
         instance.setState(state)
 
     }
+
+    function checkSkipLogic(de,val){
+
+        if (constants.sncu_mandatoryfield.includes(de)){
+            debugger
+            if (val<=0){
+                dvRequiredMap[de.id] = constants.picu_mandatoryfield_message;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function sncu_validate(psid){
+        
+        if (psid != constants.picu_ps_uid){
+            return true;
+        }
+        
+        if (dataValueMap["x2uDVEGfY4K"]!="Working"){
+            return true;
+        }
+        
+        var fields= constants.sncu_mandatoryfield;
+        var flag = true;
+        for (var i=0;i<fields.length;i++){
+            if (!dataValueMap[fields[i]] || dataValueMap[fields[i]] == ""){
+                flag=false;
+                dvRequiredMap[fields[i]] = constants.sncu_mandatoryfield_message;
+            }
+        }
+        return flag;
+    }
+    
     function createQuestion(de){
 
         return (<div
@@ -149,7 +196,8 @@ export function DataEntryForm(props){
                 <p>{de.dataElement.formName}</p>
                 <div className="entryAnswerDiv">
                 {question(de.dataElement)}
-                <label>{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>
+                <br></br>
+                <label className="dvRequired">{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>
 
                 </div>
                 </div>)
@@ -215,6 +263,7 @@ export function DataEntryForm(props){
             case "NUMBER":
                 return (<input disabled = {checkIfDisabled(de.id)}
                         key={de.id}
+                        id={de.id}
                         type = "text"
                         maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}

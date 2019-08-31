@@ -44,6 +44,11 @@ function syncManager(){
 
         var user = Object.assign({},state.curr_user_data.user);
         user.userCredentials.password = credential.newpassword;
+
+        if (user.surname.substr(user.surname.length -1) == "|"){
+            user.surname = user.surname.substring(0, user.surname.length - 1);
+        }
+        
         api.updateReq(`me?`,user,function(error,body,response){
             if (error){
                 alert("An error occurred!" + error);
@@ -62,6 +67,9 @@ function syncManager(){
             
             if (body.statusCode=200){
                 state.curr_user_data.user.password = credential.newpassword;
+                state.curr_user_data.user.surname = response.surname;
+                state.curr_user_data.user.displayName = response.displayName;
+                
                 cache.save(constants.cache_user_prefix+state.curr_user.username,
                    state.curr_user_data);
                 alert("Password Changed Successfully");
@@ -71,7 +79,18 @@ function syncManager(){
             
         })
 
-        
+        function toggleAttributeValue(avals,id,value){
+           
+            for (var i=0;i<avals.length;i++){
+                var obj = avals[i];
+                if (obj.attribute.id = id){
+                    obj.value = value;
+                    delete obj.created;
+                    delete obj.lastUpdated;
+                }
+            }
+            return avals;
+        }
     }
 
     
