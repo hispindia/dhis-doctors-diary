@@ -70,8 +70,21 @@ exports.hidden_fields_attr = [
     'fXG73s6W4ER'
 ];
 
+exports.sncu_mandatoryfield_message = "Please enter the performance indicator value for the day or 0";
 
-
+exports.picu_ps_uid = "TmHvpvR8QFY";
+exports.sncu_mandatoryfield=[
+    'T3BM9fNCeYX',
+    'HYuzoS7GWkI',
+    'KDbmCXHgXrY',
+    'Br4FNohipal',
+    'TzCUvZrq1BC',
+    'E16VonvFOec',
+    'AlgIi3YqK9e',
+    'PEczvElRm6O',
+    'Vudyxga843h',
+    'kpLevJghohX'
+]
 
 
 
