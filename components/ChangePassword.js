@@ -18,10 +18,14 @@ export function ChangePassword(props){
     }
 
     var forcePassword = false;
-    if (state.curr_user_data.user.surname.substr(state.curr_user_data.user.surname.length -1) == "|"){
-        forcePassword = true;
+    
+    if (state.curr_user_data.user.surname){
+        if (state.curr_user_data.user.surname.substr(state.curr_user_data.user.surname.length -1) == "|"){
+            forcePassword = true;
+        }   
     }
     
+  
     function getAttributeValue(avals,id){
         for (var i=0;i<avals.length;i++){
             var obj = avals[i];

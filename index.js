@@ -85,8 +85,12 @@ function init(callback){
 
     function forcePasswordUpdate(){
 
+        if (!state.curr_user_data.user.surname){
+            return false;
+        }
+        
         if (state.curr_user_data.user.surname.substr(state.curr_user_data.user.surname.length -1) == "|"){
-            return true;;
+            return true;
         }
         /*
         var avals = state.curr_user_data.user.attributeValues;
