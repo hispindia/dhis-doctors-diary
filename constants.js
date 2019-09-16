@@ -1,6 +1,7 @@
-exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
+//exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
 //exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
 //exports.DHIS_URL_BASE = "http://localhost:8090/upupgrade";
+exports.DHIS_URL_BASE = "http://apps.hispindia.org/uphmis230";
 
 exports.username = "admin";
 exports.password = "";
