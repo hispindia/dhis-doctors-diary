@@ -44,9 +44,7 @@ export function Main(props){
                     <div className="three">
                     <Calendar state={state}/>
                     </div>
-                    <div className="footer">
                     <Footer state={state}/>
-                    </div>
                     </div>
                    );
         case constants.views.entry :

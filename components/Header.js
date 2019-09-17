@@ -81,15 +81,24 @@ export function Header(props){
         
         return (
                 <div className="headerDiv one">
-                <div className="banner">
-                <div className="bannerItems"> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}</div>
+                <div className="banner2">
+                <div className="banner_one">
+                <img className="banner_logo" src="./images/UPGOVT Logo.jpg"></img>
+            </div>
+                <div className="banner_two">
                 
-                <div className="bannerItems">
+            Welcome <label className="italic bold"> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName} </label>
+            <br></br>
                 <span className={state.online?"internetIcon online":"offline"}></span>
                 {state.online?"Online":"Offline"}
-            
+                <br></br>
+                <h3>Doctor Diary</h3>
             </div>
-                </div>
+                <div className="banner_three">
+                <img className="banner_logo" src="./images/NHM Logo_small.jpg"></img>
+</div>
+               
+            </div>
                 
             
             </div>

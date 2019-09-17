@@ -73,16 +73,32 @@ export function Footer(props){
     }
     
     instance.render = function(){
-        return (<div className="">
-                <div>
-                
-                
+        return (<div className="footer">
+                <div className="footerArea">
+                <div className="banner_one">
                 <img hidden={state.curr_view == constants.views.calendar ||
                              state.curr_view == constants.views.entry?false:true}
                 className="menuButton"
                 src="./images/settings3.png"
                 onClick={goToSettingsPage} title="Setting">
                 </img>
+                </div>
+
+                <div className="banner_two">
+                <img className="menuButton"
+                hidden={state.curr_view == constants.views.calendar ||
+                        state.curr_view == constants.views.entry?false:true}
+                src="./images/help.ico" onClick={goToInformationPage}>
+                </img> 
+                </div>
+
+                <div className="banner_three">
+                <img hidden={state.curr_view == constants.views.calendar?false:true} className="menuButton"
+                src={state.loading?"./images/loader.gif":"./images/sync.png"} title="Synchronized data">
+                </img>
+                { getSyncImageNotification() }
+
+                </div>
                 </div>
                 </div>)
         

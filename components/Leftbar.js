@@ -9,15 +9,7 @@ export function Leftbar(props){
     instance.props = props;
 
     var state = props.state;
-    function getSyncImageNotification(){
-        if (state.offlineEvents>0){
-            return state.offlineEvents; 
-        }
-        
-        return (<img hidden={state.curr_view == constants.views.calendar?false:true}
-                className="headerTick" src="./images/doublegreentick.png"></img>)
-    }
-    
+   
     function synchronize(){
         state.loading = true;
         state.changeView(state);
@@ -75,45 +67,31 @@ export function Leftbar(props){
     
     instance.render = function(){
         return (<div className="leftBar">
-                <h5>#</h5>
-                <table>
-                <tbody>
-                <tr>
-                <td colSpan="2">
-                <img className="headerSettingsIcon"
-                hidden={state.curr_view == constants.views.calendar ||
-                        state.curr_view == constants.views.entry?false:true}
-                src="./images/help.ico" onClick={goToInformationPage}>
-                </img> 
-                </td>
-                </tr>
+
+
+                <div className="leftArea">
+
+                <div className="la_1">
+                Data Entry
+                </div>
 
                 
-                <tr>
-                <td>
-                <input className=""  type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Sync"></input>
-                </td>
-                <td>
-                <div>
-                <img hidden={state.curr_view == constants.views.calendar?false:true} className="headerSyncIcon"
-                src={state.loading?"./images/loader.gif":"./images/sync.png"} title="Synchronized data">
-                </img>
-                { getSyncImageNotification() }
+                <div className="la_2">
+                Report
+                </div>
+
+                
+                <div className="la_3">
+                Settings
+                </div>
+
+                <div className="la_4">
+                Log Out
                 </div>
                 
-                
-                </td>
-                </tr>
-                
-                </tbody>
-                </table>
-
-                <br></br>
-                <div>
-                <LeftbarSettings state={state}/>
-
-          
                 </div>
+
+                
                 </div>)
         
     }

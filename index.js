@@ -76,11 +76,38 @@ function init(callback){
         },[]);
 
         state.offlineEvents = getOfflineEvents();
+        if (forcePasswordUpdate()){
+            state.curr_view=constants.views.changePassword;
+        }
         callback(state);
-
         
     }
 
+    function forcePasswordUpdate(){
+
+        if (!state.curr_user_data.user.surname){
+            return false;
+        }
+        
+        if (state.curr_user_data.user.surname.substr(state.curr_user_data.user.surname.length -1) == "|"){
+            return true;
+        }
+        /*
+        var avals = state.curr_user_data.user.attributeValues;
+        if (avals){
+            for (var i=0;i<avals.length;i++){
+                var obj = avals[i];
+                if (obj.attribute.id == constants.user_password_change_attribute){
+                    if (obj.value == "true"){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        */
+        return false;
+    }
     function backToLogin(){
         state.curr_view = constants.views.login;
         callback(state);

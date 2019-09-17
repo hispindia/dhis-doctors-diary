@@ -21,12 +21,14 @@ html {
 
 }
 
+.root{
+    height:100%;
+}
 .body_class{
-    background-color: #f5f5f5;
     margin: 0;
     position:relative;
     min-height: 100%;
-    padding-bottom: 4rem;
+    height: 100vh;
 }
 
 .hidden{
@@ -133,6 +135,10 @@ html {
   font-style: italic;
 }
 
+
+.bold{
+  font-style: bold;
+}
 .fringeDays{
     font-style: normal;
     color:#70757a;
@@ -270,9 +276,6 @@ html {
     padding:10px;
 }
 
-
-
-
 .banner{
     background-image: url("../images/banner.png");
     background-repeat : round;
@@ -287,7 +290,40 @@ html {
 
 }
 
+.banner2{
+    display:grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 25% 50% 25%;
+    height:100%;
+    border: ridge;
+    justify-items: center;
 
+
+}
+
+.banner_one{
+    grid-column: 1/2;
+    grid-row: 1;
+
+}
+
+.banner_two{
+    grid-column: 2/3;
+    grid-row: 1;
+ 
+
+}
+
+.banner_three{
+    grid-column: 3/3;
+    grid-row: 1;
+   
+}
+
+.banner_logo{
+    height:100%;
+    width:auto;
+}
 .headerDiv{
     display:inline-block;
     top:0;
@@ -338,7 +374,6 @@ html {
 
 .menuButton{
     height: 2.2rem;
-    float: right;
 }
 
 .headerSyncIcon{
@@ -395,6 +430,7 @@ html {
     grid-row: 3;
     background-color: #C3C3C3;
     align-items: center;
+    border: ridge;
 }
 
 .mainArea{
@@ -442,10 +478,20 @@ html {
     box-sizing: border-box;
 }
 
+.footerArea{
+    display:grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 33% 1fr 33%;
+    justify-items: center;
+
+}
+
 .wrapper{
     display:grid;
-    grid-template-rows: 19% 100% 8%;
+    grid-template-rows: 12% 1fr 5%;
     grid-template-columns: 30% 70%;
+    height:100vh;
+    border: ridge;
 }
 
 .one{
@@ -457,12 +503,42 @@ html {
     grid-column: 1/2;
     grid-row: 2;
     background-color: rgb(184, 210, 280);
-    height:100%
+    border: ridge;
+
 }
 .three{
     grid-column: 2/3;
     grid-row: 2;
+    border: ridge;
+
 }
 
-.leftBar{
+.dvRequired{
+  font-style: italic;
+}
+
+.leftArea {
+    display: grid;
+    grid-template-rows: 20% 20% 20% 20% 1fr;
+    grid-template-columns: 100%;
+    grid-template-areas: 
+        "a"
+            "b"
+            "c"
+            "d";
+    height:40vh;
+    justify-items: center;
+
+}
+.la_1 {
+  grid-area: a;
+}
+.la_2 {
+  grid-area: b;
+}
+.la_3 {
+  grid-area: c;
+}
+.la_4 {
+  grid-area: d;
 }

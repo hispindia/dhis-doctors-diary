@@ -2,7 +2,6 @@ import constants from './constants';
 import cache from './localstorage';
 import _api from './dhis2API';
 
-
 function loginService(){
     var api = new _api(constants.DHIS_URL_BASE);
     
@@ -13,7 +12,7 @@ function loginService(){
         //fields=id,name,userCredentials[username,displayName]
         api.setCredentials(username,password);
         api.getReq(
-            `users?filter=userCredentials.username:eq:${username}&fields=id,name,displayName,organisationUnits[id,code,name,organisationUnitGroups[id,name],ancestors[id,level,name]],userAccesses,userCredentials[id,name,username],userGroups[id,code,name]`,
+            `users?filter=userCredentials.username:eq:${username}&fields=id,name,displayName,firstname,surname,organisationUnits[id,code,name,organisationUnitGroups[id,name],ancestors[id,level,name]],userAccesses,userCredentials[id,name,username],userGroups[id,code,name],attributeValues[*,attribute[id,name]]`,
             function(error,response,body){
                 if(error){
                     console.log("Error : Login failed"+JSON.stringify(error));
@@ -23,8 +22,7 @@ function loginService(){
                 
                 if (JSON.parse(body).httpStatusCode == "401"){
                     callback(JSON.parse(body).httpStatus)
-                    return;
-                    
+                    return;                    
                 }
 
                 var user = JSON.parse(body).users[0];

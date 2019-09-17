@@ -17,6 +17,25 @@ export function ChangePassword(props){
         showpassword : true
     }
 
+    var forcePassword = false;
+    
+    if (state.curr_user_data.user.surname){
+        if (state.curr_user_data.user.surname.substr(state.curr_user_data.user.surname.length -1) == "|"){
+            forcePassword = true;
+        }   
+    }
+    
+  
+    function getAttributeValue(avals,id){
+        for (var i=0;i<avals.length;i++){
+            var obj = avals[i];
+            if (obj.attribute.id = id){
+                return obj.value;
+            }
+        }
+        return false;
+    }
+    
     function textInputChangedData(name,e,qas,ads) {
         credential[name] = e.target.value
         instance.setState(credential)
@@ -34,7 +53,7 @@ export function ChangePassword(props){
                 
                 <div>
 
-                <div
+                <div hidden
             className="entryQuestionDiv"
             key ="previous_Q" >
                 <p>Current Password</p>
@@ -82,11 +101,9 @@ export function ChangePassword(props){
             </div>
                 </div>
             
-            
-
                 <div className="entrySaveDiv">
                 
-                <input className="button" type="button" value="Back" onClick={back}></input>
+                <input disabled={forcePassword?true:false} className="button" type="button" value="Back" onClick={back}></input>
                 <input className={"button"}
             type="button"
             value="Change"
@@ -106,7 +123,6 @@ export function ChangePassword(props){
     }
     
     function changePassword(){
-        
 
         if (!validator()){
             return;

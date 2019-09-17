@@ -35,6 +35,7 @@ export function LeftbarSettings(props){
                 <input className="" type="button" onClick = {logout} value="Log Out"></input>
                 </td>
                 </tr>
+                
                 </tbody>
                 </table>
                 <br></br>
