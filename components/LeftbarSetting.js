@@ -20,36 +20,37 @@ export function LeftbarSettings(props){
                 <tbody>
                 <tr>
                 <td>
-                <input className="" type="button" onClick = {changePassword} value="Change Password"></input>
+                <input className="settingsButton" type="button" onClick = {changePassword} value="Change Password"></input>
                 </td>
                 </tr>
                 
                 <tr>
                 <td>
-                <input className="" type="button" onClick = {changeProfile} value="My Profile"></input>
+                <input className="settingsButton" type="button" onClick = {changeProfile} value="My Profile"></input>
                 </td>
                 </tr>
                 
                 <tr>
                 <td>
-                <input className="" type="button" onClick = {logout} value="Log Out"></input>
+                <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
+                </td>
+                </tr>
+<br></br>
+
+             <tr>
+                <td >
+                <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
                 </td>
                 </tr>
                 
                 </tbody>
                 </table>
-                <br></br>
-                <br></br>
-
+                
                 <label className=""></label>
                 <table className="">
                 <tbody>
                 
-                <tr>
-                <td >
-                <input className=" red"  type="button" onClick = {reset} value="Reset"></input>
-                </td>
-                </tr>
+               
                 
             </tbody>
                 </table>

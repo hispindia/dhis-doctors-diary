@@ -68,7 +68,6 @@ export function Leftbar(props){
     instance.render = function(){
         return (<div className="leftBar">
 
-
                 <div className="leftArea">
 
                 <div className="la_1">
