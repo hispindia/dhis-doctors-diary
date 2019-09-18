@@ -166,7 +166,7 @@ export function Calendar(props){
     instance.render = function(){
          return (
                  <div className="calendarArea">
-                 <div className="big">{utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2)}</div>
+                 <div className="big calendarFacility">{utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2)}</div>
                  <div className="calendarButton">
                  <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
                 

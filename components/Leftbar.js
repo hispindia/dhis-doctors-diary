@@ -59,33 +59,101 @@ export function Leftbar(props){
         state.curr_view=constants.views.settings;
         state.changeView(state);
     }
+    
+    function goToCalendarPage(){    
+        state.curr_view=constants.views.calendar;
+        state.changeView(state);
+    }
     function goToInformationPage(){
 
         state.curr_view=constants.views.info;
         state.changeView(state);
     }
+    function goToReportsPage(){
+
+        state.curr_view=constants.views.info;
+        state.changeView(state);
+    }
+
+    function logout(){
+        state.curr_view=constants.views.login;
+        cache.save(constants.cache_curr_user,null);
+        state.changeView(state);
+        
+    }
+
+    function getClassNameSelectedItem(item){
+        var highlight = "inset";
+        var result = "";
+        
+        switch(item){
+        case constants.views.calendar:
+            if (state.curr_view == constants.views.calendar){
+                result = highlight;
+            }
+            break;
+           
+        case constants.views.settings:
+            if (state.curr_view == constants.views.settings){
+                result = highlight;
+            }
+            break;
+        case constants.views.reports:
+            if (state.curr_view == constants.views.reports){
+                result = highlight;
+            }
+            break;
+            
+        default: result =  "";
+            
+        }
+        
+        return result;
+
+    }
     
     instance.render = function(){
-        return (<div className="leftBar">
+        
+        return (<div className="leftBar " >
 
                 <div className="leftArea">
 
-                <div className="la_1">
-                Data Entry
+                <div className="la_blank">
+                <label className="leftbarItem"></label>
+                </div>
+                
+                <div className="la_blank">
+                <label className="leftbarItem"></label>
+                </div>
+
+                <div className={"la_1 "+getClassNameSelectedItem(constants.views.calendar)} onClick={goToCalendarPage}>
+                <label className="leftbarItem">Data Entry</label>
                 </div>
 
                 
-                <div className="la_2">
-                Report
+                <div className="la_2" onClick={goToCalendarPage}>
+                <label className="leftbarItem">Report</label>
                 </div>
 
                 
-                <div className="la_3">
-                Settings
+                <div className={"la_3 "+getClassNameSelectedItem(constants.views.settings)} onClick={goToSettingsPage}>
+                <label className="leftbarItem">Settings</label>
+                </div>
+                
+                <div className="la_blank">
+                <label className="leftbarItem"></label>
                 </div>
 
+                <div className="la_blank">
+                <label className="leftbarItem"></label>
+                </div>
+                
+                <div className="la_blank">
+                <label className="leftbarItem"></label>
+                </div>
+                
                 <div className="la_4">
-                Log Out
+                <label className="leftbarItem">  <input className="" type="button" onClick = {logout} value="Log Out"></input></label>
                 </div>
                 
                 </div>

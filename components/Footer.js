@@ -61,9 +61,9 @@ export function Footer(props){
         
     }
 
-    function goToSettingsPage(){
+    function toggleLeftBar(){
         
-        state.curr_view=constants.views.settings;
+        state.showLeftBar=!state.showLeftBar;
         state.changeView(state);
     }
     function goToInformationPage(){
@@ -80,7 +80,7 @@ export function Footer(props){
                              state.curr_view == constants.views.entry?false:true}
                 className="menuButton"
                 src="./images/settings3.png"
-                onClick={goToSettingsPage} title="Setting">
+                onClick={toggleLeftBar} title="Setting">
                 </img>
                 </div>
 

@@ -23,6 +23,23 @@ export function Main(props){
     state.changeView = function(state){
         instance.setState(state);
     }
+
+    function getLeftBarClass(){
+        if (state.showLeftBar){
+            return "two"
+        }else{
+            return "hide";
+        }
+    }
+    
+    function getRightBarClass(){
+        if (state.showLeftBar){
+            return "three"
+        }else{
+            return "threePlusTwo";
+        }
+    }
+    
     instance.render = function(){
 
         switch(state.curr_view){
@@ -38,10 +55,10 @@ export function Main(props){
             return (<div className="wrapper">
                     <Header state={state} ></Header>
 
-                    <div className="two">
+                    <div className={getLeftBarClass()}>
                     <Leftbar state={state}></Leftbar>
                     </div>
-                    <div className="three">
+                    <div className={getRightBarClass()}>
                     <Calendar state={state}/>
                     </div>
                     <Footer state={state}/>
@@ -60,12 +77,20 @@ export function Main(props){
                     </div>
                    );
         case constants.views.settings :
-            return (<div>
-                    <Header state={state}></Header>
-
+            return (
+                    <div className="wrapper">
+                    <Header state={state} ></Header>
+                    
+                    <div className="two">
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className="three">
                     <Settings state={state}/>
+                    </div>
+                    
                     <Footer state={state}/>
                     </div>
+                    
                    );
             
         case constants.views.profile :
