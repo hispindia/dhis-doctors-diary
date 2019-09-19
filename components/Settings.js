@@ -16,11 +16,8 @@ export function Settings(props){
         return(
                 <div>
                 <div className="calendarArea">
-                <input className="settingsButton " type="button" onClick = {back} value="Back"></input>
-                </div>
-                <div className="calendarArea">
                 
-                <label className="floatLeft">Basic</label>
+                <label className="floatLeft"><h4>Basic</h4></label>
                 <table className="calendarTable">
                 <tbody>
                 <tr>
@@ -38,19 +35,18 @@ export function Settings(props){
                 <tr>
                 <td>
                 
-                <input className=""  type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Sync"></input>
+                <input className="settingsButton"  type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
                 
             </td>
                 </tr>
 
-                <tr>
-                <td>
-                <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
-                </td>
-                </tr>
                 </tbody>
                 </table>
-                <label className="floatLeft">Advanced</label>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <label className="floatLeft"><h4>Advanced</h4></label>
                 <table className="calendarTable">
                 <tbody>
                 

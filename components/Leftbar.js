@@ -1,6 +1,8 @@
 import React,{propTypes} from 'react';
 import constants from '../constants';
 import sync from '../sync-manager';
+import cache from '../localstorage';
+
 import {LeftbarSettings} from './LeftbarSetting'
 
 
@@ -70,8 +72,7 @@ export function Leftbar(props){
         state.changeView(state);
     }
     function goToReportsPage(){
-
-        state.curr_view=constants.views.info;
+        state.curr_view=constants.views.reports;
         state.changeView(state);
     }
 
@@ -131,7 +132,7 @@ export function Leftbar(props){
                 </div>
 
                 
-                <div className="la_2" onClick={goToCalendarPage}>
+                <div className="la_2" onClick={goToReportsPage}>
                 <label className="leftbarItem">Report</label>
                 </div>
 
@@ -153,7 +154,7 @@ export function Leftbar(props){
                 </div>
                 
                 <div className="la_4">
-                <label className="leftbarItem">  <input className="" type="button" onClick = {logout} value="Log Out"></input></label>
+                <label className="leftbarItem">  <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input></label>
                 </div>
                 
                 </div>

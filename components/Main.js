@@ -13,6 +13,7 @@ import {DoctorProfile} from './Profile'
 import {ChangePassword} from './ChangePassword'
 import {Info} from './Info'
 import {Leftbar} from './Leftbar'
+import {Reports} from './Reports'
 
 export function Main(props){
     
@@ -51,7 +52,9 @@ export function Main(props){
                     <Footer state={state}/>
                     </div>
                    );
-        case constants.views.calendar :
+        case constants.views.calendar :        
+        case undefined:
+        default:
             return (<div className="wrapper">
                     <Header state={state} ></Header>
 
@@ -117,13 +120,16 @@ export function Main(props){
                         <Info state={state}/>
                         <Footer state={state}/>
                     </div>
-                );
-        default :
+                       );
+        case constants.views.reports:
             return (<div>
-                    <Loader props={state}/>
+                    <Header state={state}></Header>
                     
+                    <Reports state={state}/>
+                    <Footer state={state}/>
                     </div>
                    );
+      
             
 
         }

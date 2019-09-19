@@ -40,7 +40,8 @@ html {
 
     margin: 0 auto;
     text-align: center;
-
+    height:70vh;
+ 
     margin-top: 10%;
 }
 
@@ -252,7 +253,7 @@ html {
 
 .entryStageDiv{
 
-    border-left: 2px solid grey;
+    border:inset;
 
     margin-left:1%;
     margin-top: 2%;
@@ -270,7 +271,7 @@ html {
 
 }
 .entryArea{
-
+    min-height:80vh;
 
 }
 
@@ -488,6 +489,7 @@ html {
     grid-template-rows: 100%;
     grid-template-columns: 33% 1fr 33%;
     justify-items: center;
+    min-height:25px;
 
 }
 

@@ -19,7 +19,8 @@ exports.views = {
     settings: "settings",
     profile: "profile",
     changePassword : "changePassword",
-    info:"info"
+    info:"info",
+    reports:"reports"
 };
 
 
