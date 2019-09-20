@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "9e5afb4162e8289431b3d67106447ada"
+    "revision": "4891d28d34dc4d6465dd7343b0f0660b"
   },
   {
     "url": "css/dhis2.css",
@@ -35,7 +35,7 @@ self.__precacheManifest = [
   },
   {
     "url": "css/diary.css",
-    "revision": "03419585631cdf05eb5b9f670f6fb294"
+    "revision": "680c4255291e2795cf0cd8345b6aa0cb"
   },
   {
     "url": "css/main.css",
@@ -98,6 +98,18 @@ self.__precacheManifest = [
     "revision": "9f159b88c214ee12190c83c0ea023452"
   },
   {
+    "url": "images/menu.png",
+    "revision": "79b18a5d205cdebc264fc06817b73584"
+  },
+  {
+    "url": "images/NHM Logo_small.jpg",
+    "revision": "5784cce2284d2ba7da3bb517e3d40daa"
+  },
+  {
+    "url": "images/NHM Logo.jpg",
+    "revision": "ac2281ae756a835816f27e6efb98a6fc"
+  },
+  {
     "url": "images/paper_small.jpg",
     "revision": "4e36767fa1536f8c3998a56f520997f6"
   },
@@ -126,6 +138,14 @@ self.__precacheManifest = [
     "revision": "da4e1661d23979470333eb0a86d6a805"
   },
   {
+    "url": "images/UPGOVT Logo.jpg",
+    "revision": "547155db8f3c3995c0592a6c626824a7"
+  },
+  {
+    "url": "images/UPGOVT Logo.png",
+    "revision": "d1772850eaff100ab777ab760d13e02e"
+  },
+  {
     "url": "images/uplogo.png",
     "revision": "a9b90fbc8f89fef327e849f2a9d62c76"
   },
@@ -139,7 +159,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "5d92bd86ec71abc0d125b74e686d2602"
+    "revision": "7ea4481c8126182148de829e0dd7c4de"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

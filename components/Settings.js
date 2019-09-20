@@ -1,5 +1,7 @@
 import React,{propTypes} from 'react';
 import cache from '../localstorage';
+import sync from '../sync-manager';
+
 import constants from '../constants';
 
 export function Settings(props){
@@ -14,11 +16,8 @@ export function Settings(props){
         return(
                 <div>
                 <div className="calendarArea">
-                <input className="settingsButton " type="button" onClick = {back} value="Back"></input>
-                </div>
-                <div className="calendarArea">
                 
-                <label className="floatLeft">Basic</label>
+                <label className="floatLeft"><h4>Basic</h4></label>
                 <table className="calendarTable">
                 <tbody>
                 <tr>
@@ -32,15 +31,22 @@ export function Settings(props){
                 <input className="settingsButton" type="button" onClick = {changeProfile} value="My Profile"></input>
                 </td>
                 </tr>
-                
+
                 <tr>
                 <td>
-                <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input>
-                </td>
+                
+                <input className="settingsButton"  type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
+                
+            </td>
                 </tr>
+
                 </tbody>
                 </table>
-                <label className="floatLeft">Advanced</label>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <label className="floatLeft"><h4>Advanced</h4></label>
                 <table className="calendarTable">
                 <tbody>
                 
@@ -86,6 +92,51 @@ export function Settings(props){
     function changePassword(){
         state.curr_view=constants.views.changePassword;
         state.changeView(state);
+        
+    }
+
+       
+    function synchronize(){
+        state.loading = true;
+        state.changeView(state);
+        
+        var ps = state.
+            program_metadata_programStageByIdMap[state.
+                                                 curr_user_program_stage];     
+        
+        importEvent(0,state.curr_user_data.events,ps);
+        
+        function importEvent(index,events,ps){
+            if (index == events.length){
+                refetchEvents();
+                return;
+            }
+
+            var event = events[index];
+            state.curr_event = event;
+            if (event.offline){
+                var dvMap = event.dataValues.reduce(function(map,obj){
+                    map[obj.dataElement] = obj.value;
+                    return map;
+                },[]);
+
+                sync.saveEvent(dvMap,ps,state,callback);
+            }else{
+                callback();
+            }
+            
+            function callback(){
+                importEvent(index+1,events,ps)
+            }    
+        }
+
+        function refetchEvents(){
+            
+            sync.fetchEvents(state,function(){
+                state.loading = false;
+                state.changeView(state);
+            })
+        }
         
     }
     return instance;

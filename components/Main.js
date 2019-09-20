@@ -12,6 +12,8 @@ import {Footer} from './Footer'
 import {DoctorProfile} from './Profile'
 import {ChangePassword} from './ChangePassword'
 import {Info} from './Info'
+import {Leftbar} from './Leftbar'
+import {Reports} from './Reports'
 
 export function Main(props){
     
@@ -22,6 +24,23 @@ export function Main(props){
     state.changeView = function(state){
         instance.setState(state);
     }
+
+    function getLeftBarClass(){
+        if (state.showLeftBar){
+            return "two"
+        }else{
+            return "hide";
+        }
+    }
+    
+    function getRightBarClass(){
+        if (state.showLeftBar){
+            return "three"
+        }else{
+            return "threePlusTwo";
+        }
+    }
+    
     instance.render = function(){
 
         switch(state.curr_view){
@@ -33,10 +52,18 @@ export function Main(props){
                     <Footer state={state}/>
                     </div>
                    );
-        case constants.views.calendar :
-            return (<div>
-                    <Header state={state}></Header>
+        case constants.views.calendar :        
+        case undefined:
+        default:
+            return (<div className="wrapper">
+                    <Header state={state} ></Header>
+
+                    <div className={getLeftBarClass()}>
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className={getRightBarClass()}>
                     <Calendar state={state}/>
+                    </div>
                     <Footer state={state}/>
                     </div>
                    );
@@ -53,12 +80,20 @@ export function Main(props){
                     </div>
                    );
         case constants.views.settings :
-            return (<div>
-                    <Header state={state}></Header>
-
+            return (
+                    <div className="wrapper">
+                    <Header state={state} ></Header>
+                    
+                    <div className="two">
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className="three">
                     <Settings state={state}/>
+                    </div>
+                    
                     <Footer state={state}/>
                     </div>
+                    
                    );
             
         case constants.views.profile :
@@ -85,13 +120,16 @@ export function Main(props){
                         <Info state={state}/>
                         <Footer state={state}/>
                     </div>
-                );
-        default :
+                       );
+        case constants.views.reports:
             return (<div>
-                    <Loader props={state}/>
+                    <Header state={state}></Header>
                     
+                    <Reports state={state}/>
+                    <Footer state={state}/>
                     </div>
                    );
+      
             
 
         }

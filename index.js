@@ -28,6 +28,7 @@ function init(callback){
         selMoment : moment(),
         currRange : null,
         loading : false,
+        showLeftBar:true
 
     }
     
