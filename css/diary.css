@@ -594,3 +594,13 @@ html {
 .hide{
     display:none;
 }
+
+.lsas{
+    display: block;
+}
+
+.lsas table tbody{
+    display:block;
+    margin-top:5%;
+    border:inset;
+}

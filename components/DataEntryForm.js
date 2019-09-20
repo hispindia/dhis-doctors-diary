@@ -4,6 +4,7 @@ import moment from 'moment';
 import constants from '../constants';
 import sync from '../sync-manager';
 import utility from '../utility';
+import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
 
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
@@ -244,6 +245,10 @@ export function DataEntryForm(props){
         }
         
         function question(de){
+
+            if (de.id == constants.lsas_emoc_data_de){
+                return (<LSAS_EMOC_Form />)
+            }
             
             switch(de.valueType){
             case "TEXT":
