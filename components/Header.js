@@ -79,30 +79,20 @@ export function Header(props){
     instance.render = function(){
         
         
-        return (
-                <div className="headerDiv one">
-                <div className="banner2">
-                <div className="banner_one">
-                <img className="banner_logo" src="./images/UPGOVT Logo.jpg"></img>
-            </div>
-                <div className="banner_two widthFillAvailable">
-                <div className="">
-            Welcome <label className="italic bold"> {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName} </label>
-            <br></br>
-                <span className={state.online?"internetIcon online":"offline"}></span>
-                {state.online?"Online":"Offline"}
-            </div>
-                <h3>Doctor Diary</h3>
-            </div>
-                <div className="banner_three">
-                <img className="banner_logo" src="./images/NHM Logo_small.jpg"></img>
-</div>
-               
-            </div>
-                
-            
-            </div>
+        return (<div>
+            <div className="headerDiv ">
+                <div className="banner" >
+                    <div className="bannerItems "> </div>
 
+                </div>
+
+
+            </div>
+            <div className="onlineStatus">
+            <span className={state.online?"internetIcon online":"offline"}></span>
+            {state.online?"Online":"Offline"}<br/>
+            {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}
+            </div></div>
         )
     }
 

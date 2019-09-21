@@ -68,10 +68,13 @@ export function Login(props){
             <div className="loginArea" >
             <input className="loginField" type="text" placeholder="Username" id = "username" onChange={textInputChangedData.bind(null,'username')} value={state.username} ></input>
             <input className="loginField" type="password" placeholder="Password" id = "password" onChange={textInputChangedData.bind(null,'password')} value={state.password} ></input>
+
             <div className="buttonDiv">
-            <button className= "button" onClick={login}>Sign In</button>
-            <button className= "button" onClick={clear}>Clear</button>
+            <button className= "button1 button2" onClick={login}>Sign In</button>
+            <button className= "button1 button2" onClick={clear}>Clear</button>
             <div>{state.statusMsg}</div>
+            <div><a href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action"> Forget Password?</a></div>
+
             <div>
             <img 
         className="headerSyncIcon"

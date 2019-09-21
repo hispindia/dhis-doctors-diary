@@ -55,22 +55,28 @@ export function Main(props){
         case constants.views.calendar :        
         case undefined:
         default:
-            return (<div className="wrapper">
-                    <Header state={state} ></Header>
-
+            return (<div >
+                    <Header state={state} />
+                    <div className="wrapper">
                     <div className={getLeftBarClass()}>
                     <Leftbar state={state}></Leftbar>
                     </div>
                     <div className={getRightBarClass()}>
                     <Calendar state={state}/>
-                    </div>
+                    </div></div>
                     <Footer state={state}/>
                     </div>
                    );
         case constants.views.entry :
             return (<div>
                     <Header state={state}></Header>
+                    <div className="wrapper">
+                    <div className={getLeftBarClass()}>
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className={getRightBarClass()}>
                     <DataEntryForm state={state}/>
+                    </div></div>
                     <Footer state={state}/>
                     </div>
                    );
@@ -81,16 +87,15 @@ export function Main(props){
                    );
         case constants.views.settings :
             return (
-                    <div className="wrapper">
+                    <div >
                     <Header state={state} ></Header>
-                    
-                    <div className="two">
+                    <div className="wrapper">
+                    <div className={getLeftBarClass()}>
                     <Leftbar state={state}></Leftbar>
                     </div>
-                    <div className="three">
+                    <div className={getRightBarClass()}>
                     <Settings state={state}/>
-                    </div>
-                    
+                    </div></div>
                     <Footer state={state}/>
                     </div>
                     
@@ -99,8 +104,13 @@ export function Main(props){
         case constants.views.profile :
             return (<div>
                     <Header state={state}></Header>
-                    
+                    <div className="wrapper">
+                    <div className={getLeftBarClass()}>
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className={getRightBarClass()}>
                     <DoctorProfile state={state}/>
+                    </div></div>
                     <Footer state={state}/>
                     </div>
                    );
@@ -108,24 +118,39 @@ export function Main(props){
         case constants.views.changePassword :
             return (<div>
                     <Header state={state}></Header>
-                    
+                    <div className="wrapper">
+                    <div className={getLeftBarClass()}>
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className={getRightBarClass()}>
                     <ChangePassword state={state}/>
+                    </div></div>
                     <Footer state={state}/>
                     </div>
                    );
         case constants.views.info :
                 return (<div>
                         <Header state={state}></Header>
-
+                        <div className="wrapper">
+                        <div className={getLeftBarClass()}>
+                        <Leftbar state={state}></Leftbar>
+                        </div>
+                        <div className={getRightBarClass()}>
                         <Info state={state}/>
+                        </div></div>
                         <Footer state={state}/>
                     </div>
                        );
         case constants.views.reports:
             return (<div>
                     <Header state={state}></Header>
-                    
+                    <div className="wrapper">
+                    <div className={getLeftBarClass()}>
+                    <Leftbar state={state}></Leftbar>
+                    </div>
+                    <div className={getRightBarClass()}>
                     <Reports state={state}/>
+                    </div></div>
                     <Footer state={state}/>
                     </div>
                    );

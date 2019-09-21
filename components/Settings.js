@@ -15,47 +15,40 @@ export function Settings(props){
 
         return(
                 <div>
-                <div className="calendarArea">
+                <div className="settingArea">
                 
-                <label className="floatLeft"><h4>Basic</h4></label>
-                <table className="calendarTable">
+                <label className="lbArea"><h4>Basic</h4></label>
+                <table className="settingTable">
                 <tbody>
                 <tr>
-                <td>
-                <input className="settingsButton" type="button" onClick = {changePassword} value="Change Password"></input>
-                </td>
+                    <td>
+                        <input className="settingBt" type="button" onClick = {changePassword} value="Change Password"></input>
+                    </td>
                 </tr>
-                
                 <tr>
-                <td>
-                <input className="settingsButton" type="button" onClick = {changeProfile} value="My Profile"></input>
-                </td>
+                    <td>
+                        <input className="settingBt" type="button" onClick = {changeProfile} value="My Profile"></input>
+                    </td>
                 </tr>
 
-                <tr>
-                <td>
-                
-                <input className="settingsButton"  type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
-                
-            </td>
-                </tr>
+
 
                 </tbody>
                 </table>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <label className="floatLeft"><h4>Advanced</h4></label>
-                <table className="calendarTable">
+
+                <label className="lbArea"><h4>Advanced</h4></label>
+                <table className="settingTable">
                 <tbody>
-                
                 <tr>
-                <td >
-                <input className="settingsButton red"  type="button" onClick = {reset} value="Reset"></input>
-                </td>
+                    <td >
+                        <input className="settingBt" type="button" onClick = {reset} value="Reset"></input>
+                    </td>
                 </tr>
-                
+                <tr>
+                    <td>
+                        <input className="settingBt" type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
+                    </td>
+                </tr>
             </tbody>
                 </table>
                 </div>

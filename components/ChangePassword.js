@@ -59,10 +59,11 @@ export function ChangePassword(props){
                 <p>Current Password</p>
                 <div className="entryAnswerDiv">
                 <input
-            key="previous"
-            type = {credential.showpassword?"text":"password"}
-            value = {credential.oldpassword}
-            onChange={textInputChangedData.bind(null,'oldpassword')}
+                    className="form-control"
+                    key="previous"
+                    type = {credential.showpassword?"text":"password"}
+                    value = {credential.oldpassword}
+                    onChange={textInputChangedData.bind(null,'oldpassword')}
                 ></input>
                 
             </div>
@@ -75,10 +76,11 @@ export function ChangePassword(props){
                 <div className="entryAnswerDiv">
             
                 <input
-            key="new"
-            type = {credential.showpassword?"text":"password"}
-            value = {credential.newpassword}
-            onChange={textInputChangedData.bind(null,'newpassword')}
+                    className="form-control"
+                    key="new"
+                    type = {credential.showpassword?"text":"password"}
+                    value = {credential.newpassword}
+                    onChange={textInputChangedData.bind(null,'newpassword')}
                 ></input>
     
             </div>
@@ -90,10 +92,11 @@ export function ChangePassword(props){
                 <p>Confirm Password</p>
                 <div className="entryAnswerDiv">
                 <input
-            key="confirm"
-            type = {credential.showpassword?"text":"password"}
-            value = {credential.confirmpassword}
-            onChange={textInputChangedData.bind(null,'confirmpassword')}
+                    className="form-control"
+                    key="confirm"
+                    type = {credential.showpassword?"text":"password"}
+                    value = {credential.confirmpassword}
+                    onChange={textInputChangedData.bind(null,'confirmpassword')}
                 ></input>
                 </div>
                 </div>
@@ -103,8 +106,8 @@ export function ChangePassword(props){
             
                 <div className="entrySaveDiv">
                 
-                <input disabled={forcePassword?true:false} className="button" type="button" value="Back" onClick={back}></input>
-                <input className={"button"}
+                <input disabled={forcePassword?true:false} className="button1 button2" type="button" value="Back" onClick={back}></input>
+                <input className={"button1 button2"}
             type="button"
             value="Change"
             onClick={changePassword}></input>
@@ -117,7 +120,7 @@ export function ChangePassword(props){
     }
 
     function back(){
-        state.curr_view=constants.views.calendar;
+        state.curr_view=constants.views.settings;
         state.changeView(state);
         
     }

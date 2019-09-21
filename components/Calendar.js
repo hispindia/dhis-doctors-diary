@@ -164,9 +164,11 @@ export function Calendar(props){
     }
 
     instance.render = function(){
-         return (
-                 <div className="calendarArea">
+         return (<div>
                  <div className="big calendarFacility">{utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2)}</div>
+
+                 <div className="calendarArea">
+
                  <div className="calendarButton">
                  <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
                 
@@ -191,7 +193,7 @@ export function Calendar(props){
                  {getDates()}
                  </tbody>
                  </table>
-             </div>
+             </div></div>
          )
     }
     return instance;

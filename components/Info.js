@@ -14,16 +14,12 @@ export function Info(props){
 
         return(
                 <div>
-
-                <div className="calendarArea">
+                    <button className="button1 button2" onClick={back}>Back</button>
+                <div className="infoArea">
 
                 <table className="tableDiv">
                 <tbody>
-                <tr>
-                    <td>
-                        <button className="settingsButton" onClick={back}>Back</button>
-                    </td>
-                </tr>
+
                 <tr>
                     <td >
                         <img className="imgDiv" src="./images/manual.jpg"></img>

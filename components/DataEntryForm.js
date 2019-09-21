@@ -39,25 +39,22 @@ export function DataEntryForm(props){
         return (
                 <div className="entryArea">
                 <div className="entryStageDiv">
-             
-                <h2>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h2>
-
-                <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
-               
+                    <h4>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h4>
+                    <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
                 <div>
                 {createForm()}
             </div>
-                </div>
+                </div><br/>
                 <div className="entrySaveDiv">
                 
-                <input className="button" type="button" value="Back" onClick={back}></input>
-  <input className={dirtyBit?"button" : "hidden"}
+                <input className="button1 button2" type="button" value="Back" onClick={back}></input>
+  <input className={dirtyBit?"button1 button2" : "hidden"}
             type="button"
             value="Save"
             onClick={save}></input>
               
                 <input
-            className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button floatRight"}
+            className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
             type="button"
             value="Send"
             onClick={send}></input>
@@ -249,12 +246,14 @@ export function DataEntryForm(props){
             case "TEXT":
                 if (!de.optionSetValue){
                     return (<input
+                            className="form-control"
                             disabled = {checkIfDisabled(de.id)}
                             key={de.id}
                             type = "text"
-                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""}></input>);
+                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""} required></input>);
                 }else{
                     return(<select
+                           className="form-control"
                            disabled = {checkIfDisabled(de.id)}
                            key={de.id}
                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
@@ -262,14 +261,16 @@ export function DataEntryForm(props){
                 }
             case "NUMBER":
                 return (<input disabled = {checkIfDisabled(de.id)}
+                        className="form-control"
                         key={de.id}
                         id={de.id}
                         type = "text"
                         maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                        onChange={numberValEntered.bind(null,de)}></input>);
+                        onChange={numberValEntered.bind(null,de)} required></input>);
             case "LONG_TEXT":
                 return (<textarea
+                        className="form-control"
                         disabled = {checkIfDisabled(de.id)}
                         key={de.id}
                         rows="3"

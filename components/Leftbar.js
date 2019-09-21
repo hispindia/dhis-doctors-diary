@@ -89,13 +89,16 @@ export function Leftbar(props){
         
         switch(item){
         case constants.views.calendar:
-            if (state.curr_view == constants.views.calendar){
+            if (state.curr_view == constants.views.calendar || state.curr_view == constants.views.entry){
                 result = highlight;
             }
             break;
            
         case constants.views.settings:
-            if (state.curr_view == constants.views.settings){
+            if (state.curr_view == constants.views.settings
+                || state.curr_view == constants.views.profile
+                || state.curr_view == constants.views.changePassword
+                || state.curr_view == constants.views.info){
                 result = highlight;
             }
             break;
@@ -115,24 +118,16 @@ export function Leftbar(props){
     
     instance.render = function(){
         
-        return (<div className="leftBar " >
+        return (<div className="leftBar" >
 
                 <div className="leftArea">
-
-                <div className="la_blank">
-                <label className="leftbarItem"></label>
-                </div>
-                
-                <div className="la_blank">
-                <label className="leftbarItem"></label>
-                </div>
 
                 <div className={"la_1 "+getClassNameSelectedItem(constants.views.calendar)} onClick={goToCalendarPage}>
                 <label className="leftbarItem">Data Entry</label>
                 </div>
 
                 
-                <div className="la_2" onClick={goToReportsPage}>
+                <div className={"la_2 "+getClassNameSelectedItem(constants.views.reports)} onClick={goToReportsPage}>
                 <label className="leftbarItem">Report</label>
                 </div>
 
@@ -156,6 +151,9 @@ export function Leftbar(props){
                 <div className="la_4">
                 <label className="leftbarItem">  <input className="settingsButton" type="button" onClick = {logout} value="Log Out"></input></label>
                 </div>
+                 <div>
+
+                 </div>
                 
                 </div>
 
