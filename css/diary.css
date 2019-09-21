@@ -599,6 +599,9 @@ html {
     display: block;
 }
 
+.lsas input{
+    width:70%;
+}
 .lsas table tbody{
     display:block;
     margin-top:5%;
