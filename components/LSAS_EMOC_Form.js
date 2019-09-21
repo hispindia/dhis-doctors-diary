@@ -92,7 +92,7 @@ export function LSAS_EMOC_Form(props){
         
         return state.data.reduce(function(list,obj,index){
             
-            list.push(<tbody key={obj.id + index}>
+            list.push(<tbody key={obj.id + index} className="lsasTableTbody">
                       <tr key={"DocId"+obj.id + index}>
                      <td>
                       Doctor Id : </td>
@@ -129,9 +129,9 @@ export function LSAS_EMOC_Form(props){
         
         return (
                 <div className="lsas">
-                <table>
+                <table >
                 {getDetails()}
-                <tbody>
+                <tbody >
                 <tr><td><input type="button" onClick={addDoctor} value="Add Doctor"></input></td></tr>
                 </tbody>
             </table>
