@@ -88,7 +88,7 @@ exports.sncu_mandatoryfield=[
     'kpLevJghohX'
 ]
 
-
+exports.lsas_emoc_data_de = "ZnzjYCK4r9w";
 
 
 

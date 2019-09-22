@@ -4,6 +4,7 @@ import moment from 'moment';
 import constants from '../constants';
 import sync from '../sync-manager';
 import utility from '../utility';
+import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
 
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
@@ -154,6 +155,14 @@ export function DataEntryForm(props){
 
     }
 
+    function onLSAS_EMOC_Change(de,data,csections){
+        dirtyBit = true;
+        dataValueMap[de.id] = data;
+        dataValueMap["wTdcUXWeqhN"] = csections;        
+        dvRequiredMap[de.id] = "";
+        instance.setState(state)
+    }
+    
     function checkSkipLogic(de,val){
 
         if (constants.sncu_mandatoryfield.includes(de)){
@@ -244,6 +253,14 @@ export function DataEntryForm(props){
         }
         
         function question(de){
+
+            if (de.id == constants.lsas_emoc_data_de){
+                return (<LSAS_EMOC_Form
+                        de={de}
+                        workingStatus={dataValueMap["x2uDVEGfY4K"]}
+                        currentVal={dataValueMap[de.id]}
+                        onChangeHandler={onLSAS_EMOC_Change}/>)
+            }
             
             switch(de.valueType){
             case "TEXT":
