@@ -586,6 +586,20 @@ html {
     background-color: #C3C3C3;
 }
 
+
+.lsas{
+    display: block;
+}
+
+.lsas input{
+    width:100%;
+}
+.lsasTableTbody{
+    display:block;
+    margin-top:5%;
+    border:inset;
+}
+
 .widthFillAvailable{
     width: -webkit-fill-available;
 
