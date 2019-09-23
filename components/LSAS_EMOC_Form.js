@@ -68,7 +68,7 @@ export function LSAS_EMOC_Form(props){
             var addButton = (<tr key={Math.random(2)}><td>
                              <input type="text" defaultValue="" ></input>
                           
-                             <input type="button" onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
+                             <input type="button"  onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
                              </td></tr>);
             
             if (staff.length == 0){
@@ -76,7 +76,7 @@ export function LSAS_EMOC_Form(props){
             }
             
             var ids = staff.reduce(function(list,obj,index,staff){
-                list.push(<tr key={obj + index}>
+                list.push(<tr key={Math.random(1)}>
                           <td>Staff{index+1}   <input type="button"
                           onClick={deleteStaff.bind(null,index,staff)}
                           value="Delete"></input></td>
@@ -92,14 +92,14 @@ export function LSAS_EMOC_Form(props){
         
         return state.data.reduce(function(list,obj,index){
             
-            list.push(<tbody key={obj.id + index} className="lsasTableTbody">
-                      <tr key={"DocId"+obj.id + index}>
+            list.push(<tbody key={"tbody"+index} className="lsasTableTbody">
+                      <tr key={"DocId"+ index}>
                      <td>
                       Doctor Id : </td>
                       <td><input type="text" value={obj.id} onChange={idChange.bind(null,obj)}></input>
                      </td>
                      </tr>
-                     <tr key={"onCall"+obj.id + index}>
+                     <tr key={"onCall"+ index}>
                      <td>On Call?</td>
                       <td> <select value={obj.onCall} onChange={onCallChange.bind(null,obj)}>
                      <option value="true">yes</option>
@@ -109,7 +109,7 @@ export function LSAS_EMOC_Form(props){
                      </tr>
                      
                       {getSupportingStaff(obj.supportingStaff)}
-                      <tr key={"DeleteButton"+obj.id}><td></td><td>
+                      <tr key={"DeleteButton"+index}><td></td><td>
                       <input type="button"
                       onClick={deleteDoc.bind(null,index)}
                       value="Delete Entry"></input>
