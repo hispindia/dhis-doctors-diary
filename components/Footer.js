@@ -77,7 +77,7 @@ export function Footer(props){
                 <div className="banner_one">
                 <img
                 className="menuButton"
-                src="./images/left2.png"
+                src={!state.showLeftBar?"./images/right1.png":"./images/left2.png"}
                 onClick={toggleLeftBar} title="Hide Menu">
                 </img>
                 </div>
