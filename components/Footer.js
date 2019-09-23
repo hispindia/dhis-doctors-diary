@@ -74,21 +74,21 @@ export function Footer(props){
     instance.render = function(){
         return (<div className="footer">
                 <div className="footerArea">
-                <div className="banner_one">
+                <div className="banner_one" hidden={state.curr_view != constants.views.login ?false:true}>
                 <img
                 className="menuButton"
                 src={!state.showLeftBar?"./images/right1.png":"./images/left2.png"}
-                onClick={toggleLeftBar} title="Hide Menu">
+                onClick={toggleLeftBar} title=" Menu">
                 </img>
                 </div>
 
-                <div className="banner_two">
+                <div className="banner_two" hidden={state.curr_view != constants.views.login ?false:true}>
                 <img className="menuButton"
                 src="./images/help.ico" onClick={goToInformationPage}>
                 </img> 
                 </div>
 
-                <div className="banner_three">
+                <div className="banner_three"  hidden={state.curr_view != constants.views.login ?false:true}>
                 <img  className="menuButton"
                 src={state.loading?"./images/loader.gif":"./images/sync.png"} title="Synchronized data">
                 </img>
