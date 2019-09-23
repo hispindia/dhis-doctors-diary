@@ -1,7 +1,11 @@
 //exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
-//exports.DHIS_URL_BASE = "https://http://139.162.61.147/uphmis230";
-exports.DHIS_URL_BASE = "http://localhost:8080/dhis";
+
+exports.DHIS_URL_BASE = "http://139.162.61.147/uphmis230";
+//exports.DHIS_URL_BASE = "http://localhost:8080/dhis";
 //exports.DHIS_URL_BASE = "http://192.168.0.246:8090/upupgrade";
+
+//exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
+//exports.DHIS_URL_BASE = "http://localhost:8090/upupgrade";
 
 exports.username = "admin";
 exports.password = "";
@@ -88,7 +92,7 @@ exports.sncu_mandatoryfield=[
     'kpLevJghohX'
 ]
 
-
+exports.lsas_emoc_data_de = "ZnzjYCK4r9w";
 
 
 
