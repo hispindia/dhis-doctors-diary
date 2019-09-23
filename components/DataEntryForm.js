@@ -72,6 +72,7 @@ export function DataEntryForm(props){
     }
     
     function save(){
+
         if(!dirtyBit){
             back();
             return;
@@ -95,7 +96,8 @@ export function DataEntryForm(props){
 
     function send(){
         if(!validate()){
-            state.changeView(state);
+            instance.setState(state);
+            scroll(0,0);
             return;
         }
 
@@ -123,9 +125,10 @@ export function DataEntryForm(props){
     function validate(){
 
         return constants.required_fields.reduce(function(valid,id){
+            console.log(dataValueMap[id]);
             if (!dataValueMap[id]){
                 valid = false;
-                dvRequiredMap[id] = "Mandatory Field!";
+                dvRequiredMap[id] = constants.sncu_mandatoryfield_message;
             }
 
             return valid;
@@ -137,7 +140,9 @@ export function DataEntryForm(props){
         if (!e.target.value.match("^[0-9]+$") && e.target.value !=""){
             return;
         }
-
+        constants.required_fields.includes(de.id);
+        dvRequiredMap[de.id]  = e.target.value
+        dvRequiredMap[de];
         valEntered(de,e);
     }
     
@@ -146,6 +151,7 @@ export function DataEntryForm(props){
         dataValueMap[de.id] = e.target.value;
       //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
+        validate();
 
         instance.setState(state)
 
@@ -183,6 +189,7 @@ export function DataEntryForm(props){
         }
         return flag;
     }
+
     
     function createQuestion(de){
 
@@ -194,7 +201,7 @@ export function DataEntryForm(props){
                 <div className="entryAnswerDiv">
                 {question(de.dataElement)}
                 <br></br>
-                <label className="dvRequired">{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>
+                <label className="dvRequired">{dvRequiredMap[de.dataElement.id]}</label>
 
                 </div>
                 </div>)
@@ -241,7 +248,7 @@ export function DataEntryForm(props){
         }
         
         function question(de){
-            
+
             switch(de.valueType){
             case "TEXT":
                 if (!de.optionSetValue){
@@ -267,7 +274,7 @@ export function DataEntryForm(props){
                         type = "text"
                         maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                        onChange={numberValEntered.bind(null,de)} required></input>);
+                        onChange={numberValEntered.bind(de.id,de)} ></input>);
             case "LONG_TEXT":
                 return (<textarea
                         className="form-control"

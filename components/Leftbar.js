@@ -11,7 +11,8 @@ export function Leftbar(props){
     instance.props = props;
 
     var state = props.state;
-   
+
+
     function synchronize(){
         state.loading = true;
         state.changeView(state);
@@ -21,7 +22,7 @@ export function Leftbar(props){
                                                  curr_user_program_stage];     
         
         importEvent(0,state.curr_user_data.events,ps);
-        
+
         function importEvent(index,events,ps){
             if (index == events.length){
                 refetchEvents();

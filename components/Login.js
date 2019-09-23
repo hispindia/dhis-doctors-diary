@@ -72,7 +72,7 @@ export function Login(props){
             <div className="buttonDiv">
             <button className= "button1 button2" onClick={login}>Sign In</button>
             <button className= "button1 button2" onClick={clear}>Clear</button>
-            <div>{state.statusMsg}</div>
+            <div className="redColor">{state.statusMsg}</div>
             <div><a href="https://uphmis.in/uphmis/dhis-web-commons/security/recovery.action"> Forget Password?</a></div>
 
             <div>

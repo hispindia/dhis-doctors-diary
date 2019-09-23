@@ -693,3 +693,14 @@ html {
     text-align: right;
     padding-right: 2%;
 }
+.redColor{
+    font-size: 14px;
+    font-style: italic;
+    color: darkred;
+}
+.reportSection{
+    max-width: 97%;
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: auto;
+}

@@ -15,14 +15,14 @@ function loginService(){
             `users?filter=userCredentials.username:eq:${username}&fields=id,name,displayName,firstname,surname,organisationUnits[id,code,name,organisationUnitGroups[id,name],ancestors[id,level,name]],userAccesses,userCredentials[id,name,username],userGroups[id,code,name],attributeValues[*,attribute[id,name]]`,
             function(error,response,body){
                 if(error){
-                    alert(JSON.stringify(error, Object.getOwnPropertyNames(error)))
                     console.log("Error : Login failed"+(error));
-                    callback("Cannot Login");
+                    callback("Please Check Username and Password");
                     return;
                 }
                 
                 if (JSON.parse(body).httpStatusCode == "401"){
-                    callback(JSON.parse(body).httpStatus)
+                    callback("Username/ Password Incorrect");
+                    //callback(JSON.parse(body).httpStatus)
                     return;                    
                 }
 

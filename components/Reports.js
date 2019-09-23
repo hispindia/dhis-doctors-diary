@@ -1,70 +1,57 @@
 import React,{propTypes} from 'react';
-import moment from 'moment';
-import api from '../dhis2API';
 import constants from '../constants';
+import cache from '../localstorage';
 
 export function Reports(props){
     var instance = Object.create(React.Component.prototype)
+
+    var dirtyBit = true;
+
     instance.props = props;
     var state = props.state;
-
-    function componentDidMount(){
-        var url = "https://uphmis.in/uphmis/api/29/analytics/events/query/Bv3DaiOd5Ai.json?dimension=pe:LAST_3_MONTHS&dimension=ou:USER_ORGUNIT&dimension=U0jQjrOkFjR&dimension=T6eQvMXe3MO:EQ:218491&dimension=zfMOVN2lc1S&dimension=W3RxC0UOsGY&stage=Bm7Bc9Bnqoh&displayProperty=NAME&tableLayout=true&columns=pe;ou;U0jQjrOkFjR;T6eQvMXe3MO;zfMOVN2lc1S;W3RxC0UOsGY&rows=pe;ou;U0jQjrOkFjR;T6eQvMXe3MO;zfMOVN2lc1S;W3RxC0UOsGY&user=oo3KPGux5RH";
-
-        var apiWrapper = new api.wrapper();
-        apiWrapper.getObj(url,function(error,body,response){
-            if (error){
-                alert("An unexpected error occurred." + error);
-                return;
-            }
-
-            var reportuids = response.rows.reduce(function(str,obj){
-                str = str + obj[0] + ";"
-                return str;
-            },"")
-
-            callback(reportuids)
-
-        })
-        this.serverRequest =
-            axios
-                .get()
-                .then(function(result) {
-                    _this.setState({
-                        data: result.data.headers
-                    });
-                })
+    state = {
+        reports: "",
     }
 
-    function componentWillUnmount(){
-        this.serverRequest.abort();
+
+    function componentDidMount() {
+        var username = parseInt(cache.get("dd_current_user").username);
+        var url = "https://uphmis.in/uphmis/api/29/analytics/events/query/Bv3DaiOd5Ai.html+css?dimension=pe:THIS_MONTH&dimension=ou:USER_ORGUNIT&dimension=T6eQvMXe3MO:EQ:"+username+"&dimension=W3RxC0UOsGY&tableLayout=true&columns=pe;ou;T6eQvMXe3MO;zfMOVN2lc1S&rows=pe;ou;T6eQvMXe3MO;zfMOVN2lc1S&user=oo3KPGux5RH";
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Basic '+btoa('admin:H!SPindia2017'),
+                'Content-Type': 'text/html',
+                'X-Custom-Header': 'ProcessThisImmediately',
+            },
+        })
+            .then(res => res.text())
+            .then((data) => {
+                state.reports = data;
+            })
+            .catch(console.log)
+        return {__html: state.reports};
+    }
+    function currentView(){
+        dirtyBit = false;
+        state.curr_view=constants.views.reports;
+        state.changeView(state);
     }
     function back(){
         state.curr_view=constants.views.calendar;
         state.changeView(state);
     }
-    
+
     var state = props.state;
     instance.render = function(){
         return (
-              <div>
-
-                <div className="">
-
-                <table className="tableDiv">
-                <tbody>
-                <tr>
-                    <td>
-                        <button className="settingsButton" onClick={back}>Back</button>
-                    </td>
-                </tr>
-              
-           
-                </tbody>
-                </table>
-
-
-            </div>
+                <div>
+                  <button className="button1 button2" onClick={back}>Back</button>
+                    <button className={dirtyBit?"button1 button2":"hidden"} onClick={currentView}>Show</button>
+                    <div className={dirtyBit?"hidden":"reportSection"} >
+                        <div dangerouslySetInnerHTML={componentDidMount()} />
+                 </div>
                 </div>
         )
     }
