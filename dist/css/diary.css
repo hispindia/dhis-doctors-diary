@@ -25,10 +25,13 @@ html {
     height:100%;
 }
 .body_class{
-    margin: 0;
+    top:0px;
+    margin-top: 1px;
+    margin-bottom: 1px;
     position:relative;
-    min-height: 100%;
-    height: 100vh;
+    height: 100%;
+    border-style: groove;
+    bottom: 0%;
 }
 
 .hidden{
@@ -36,12 +39,10 @@ html {
 }
 
 .loginArea {
-    width: 70%;
-
+    width: 60%;
     margin: 0 auto;
     text-align: center;
-    height:70vh;
- 
+    height:62vh;
     margin-top: 10%;
 }
 
@@ -72,6 +73,24 @@ html {
     opacity: 0.9;
 
 }
+.button1{
+    width: 25%;
+    background-color: #0B2558;
+    border: none;
+    color: white;
+    padding: 10px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+.button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
 .buttonClass{
     background-color: #53637C; /* Green */
     border: none;
@@ -97,13 +116,13 @@ html {
 
 .calendarFacility{
     padding:5%;
+    text-align: center;
 }
 
 .calendarArea{
     display: block;
-    width: 90%;
+    width: 100%;
     margin-top:3%;
-    margin-left:4%;
     text-align: center;
     background-color:white;
     padding: 2%;
@@ -234,15 +253,22 @@ html {
 
 @media only screen and (min-width:768px){
     .loginArea{width:50%;}
-    .calendarArea{width:50%;margin-left:30%;}
-    .entryArea{width:50%;margin-left:5%;}
+    .calendarArea{width:80%;height:80%;margin-left:8%;}
+    .entryArea{width:80%;margin-left:5%;height:80%;}
+    .bannerItems{margin-right:15rem;}
+
+}
+@media only screen and (min-width:350px){
+    .loginArea{width:50%;}
+    .calendarArea{width:80%;height:80%;margin-left:8%;}
+    .entryArea{width:80%;height:80%;margin-left:5%;}
     .bannerItems{margin-right:15rem;}
 
 }
 
 
 
-@media screen and (min-width:475px) {
+@media screen and (min-width:350px) {
     .banner{background-size: cover !important;
             background-repeat : round !important;
            }
@@ -252,18 +278,16 @@ html {
 
 
 .entryStageDiv{
-
-    border:inset;
-
     margin-left:1%;
     margin-top: 2%;
-
+    max-height: 60vh;
+    overflow-y: auto;
 }
 
 .entryQuestionDiv{
     border-left: 1px solid white;
     margin-left:2%;
-        border-left: 1px solid grey;
+    border-left: 1px solid grey;
 
 }
 .entryAnswerDiv{
@@ -271,29 +295,72 @@ html {
 
 }
 .entryArea{
-    min-height:80vh;
 
+    max-height: 60vh;
+
+}
+.settingArea{
+    display: block;
+    width: 90%;
+    margin-top:3%;
+    text-align: center;
+    background-color:white;
+    padding: 2%;
+    border:outset;
+    height: 55vh;
+    border: thin;
+    margin-bottom: 15%;
+
+}
+.settingTable {
+    padding:10px;
+    margin-left: 30%;
+}
+.lbArea{
+    background-color: #53637C;
+    font-size: 14px;
+}
+.settingBt{
+    width:25vh;
+    background-color: #0B2558;
+    border: none;
+    color: white;
+    padding: 10px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }
 
 .entrySaveDiv{
     padding:10px;
 }
+.form-control{
+    width: 50%;
+}
 
 .banner{
-    background-image: url("../images/banner.png");
-    background-repeat : round;
+    background-image: url("../images/banner2.png");
     background-repeat-x: no-repeat;
+    background-repeat-y: no-repeat;
     background-size: contain;
-    background-position: top;
+    overflow: hidden;
+    padding: 20px 10px;
     height:-webkit-fill-available;
     display:flex;
     flex-direction: column;
     align-items: flex-end;
     color:white;
+    top:0%;
 
 }
 
 .banner2{
+    bottom: 0%;
     display:grid;
     grid-template-rows: 100%;
     grid-template-columns: 25% 50% 25%;
@@ -321,7 +388,7 @@ html {
 .banner_three{
     grid-column: 3/3;
     grid-row: 1;
-   
+
 }
 
 .banner_logo{
@@ -330,7 +397,7 @@ html {
 }
 .headerDiv{
     display:inline-block;
-    top:0;
+    top:0%;
     margin-left: 0%;
     width: 100%;
     margin-right: 0%;
@@ -340,10 +407,11 @@ html {
 
 
 .bannerItems{
+    top:0%;
     float:right;
     font-size: 15px;
     color:white;
-    margin-top:3px;
+    margin-top:1px;
     margin-right:5px;
 }
 
@@ -401,9 +469,22 @@ html {
 }
 
 .settingsButton{
-    width:100%;
-    white-space: normal;
-    word-wrap: break-word;
+    position: absolute;
+    bottom: 5%;
+    left: 0%;
+    width:29%;
+    background-color: #0B2558;
+    border: none;
+    color: white;
+    padding: 10px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }
 
 
@@ -449,7 +530,10 @@ html {
     box-sizing: border-box;
     align-items:center;
     padding: 20px 16px;
-
+}
+.infoArea{
+    max-height: 65vh;
+    overflow-y: auto;
 }
 
 .tableDiv th, td {
@@ -489,17 +573,16 @@ html {
     grid-template-rows: 100%;
     grid-template-columns: 33% 1fr 33%;
     justify-items: center;
-    min-height:25px;
-
+    min-height:30px;
+    bottom: 0%;
 }
 
 .wrapper{
     display:grid;
-    grid-template-rows: 12% 1fr 5%;
-
+    grid-template-rows: 0% 1fr 0%;
     grid-template-columns: 30% 70%;
-    height:100vh;
-    border: ridge;
+    height:73vh;
+    border: none;
 }
 
 .one{
@@ -541,12 +624,9 @@ html {
             "blank"
             "blank"
             "blank"
+            "blank"
             "d";
     height:50vh;
-    margin-top:65%;
-
-
-
 }
 .la_blank{
     grid-area:blank;
@@ -575,7 +655,20 @@ html {
     height: -webkit-fill-available;
     width: -webkit-fill-available;
 }
+.leftBar{
+    margin-top: 0%;
+    background-color: #C3C3C3;
+    height: 70vh;
+    margin-bottom: 0%;
+
+}
+.leftArea{
+    background-color: #C3C3C3;
+
+}
 .leftbarItem{
+    margin-top: 0%;
+
     display: block;
     margin-left:10%;
     padding:5%;
@@ -583,7 +676,7 @@ html {
 
 .inset{
     border:inset;
-    background-color: #C3C3C3;
+    background-color: white;
 }
 
 
@@ -607,4 +700,21 @@ html {
 
 .hide{
     display:none;
+}
+.onlineStatus{
+    background-color: #C3C3C3;
+    height: 2.3rem;
+    text-align: right;
+    padding-right: 2%;
+}
+.redColor{
+    font-size: 14px;
+    font-style: italic;
+    color: darkred;
+}
+.reportSection{
+    max-width: 97%;
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: auto;
 }

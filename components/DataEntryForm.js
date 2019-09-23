@@ -40,25 +40,22 @@ export function DataEntryForm(props){
         return (
                 <div className="entryArea">
                 <div className="entryStageDiv">
-             
-                <h2>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h2>
-
-                <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
-               
+                    <h4>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h4>
+                    <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
                 <div>
                 {createForm()}
             </div>
-                </div>
+                </div><br/>
                 <div className="entrySaveDiv">
                 
-                <input className="button" type="button" value="Back" onClick={back}></input>
-  <input className={dirtyBit?"button" : "hidden"}
+                <input className="button1 button2" type="button" value="Back" onClick={back}></input>
+  <input className={dirtyBit?"button1 button2" : "hidden"}
             type="button"
             value="Save"
             onClick={save}></input>
               
                 <input
-            className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button floatRight"}
+            className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
             type="button"
             value="Send"
             onClick={send}></input>
@@ -76,6 +73,7 @@ export function DataEntryForm(props){
     }
     
     function save(){
+
         if(!dirtyBit){
             back();
             return;
@@ -99,7 +97,8 @@ export function DataEntryForm(props){
 
     function send(){
         if(!validate()){
-            state.changeView(state);
+            instance.setState(state);
+            scroll(0,0);
             return;
         }
 
@@ -127,9 +126,10 @@ export function DataEntryForm(props){
     function validate(){
 
         return constants.required_fields.reduce(function(valid,id){
+            console.log(dataValueMap[id]);
             if (!dataValueMap[id]){
                 valid = false;
-                dvRequiredMap[id] = "Mandatory Field!";
+                dvRequiredMap[id] = constants.sncu_mandatoryfield_message;
             }
 
             return valid;
@@ -141,7 +141,9 @@ export function DataEntryForm(props){
         if (!e.target.value.match("^[0-9]+$") && e.target.value !=""){
             return;
         }
-
+        constants.required_fields.includes(de.id);
+        dvRequiredMap[de.id]  = e.target.value
+        dvRequiredMap[de];
         valEntered(de,e);
     }
     
@@ -150,6 +152,7 @@ export function DataEntryForm(props){
         dataValueMap[de.id] = e.target.value;
       //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
+        validate();
 
         instance.setState(state)
 
@@ -195,6 +198,7 @@ export function DataEntryForm(props){
         }
         return flag;
     }
+
     
     function createQuestion(de){
 
@@ -206,7 +210,7 @@ export function DataEntryForm(props){
                 <div className="entryAnswerDiv">
                 {question(de.dataElement)}
                 <br></br>
-                <label className="dvRequired">{dvRequiredMap[de.dataElement.id]?dvRequiredMap[de.dataElement.id]:""}</label>
+                <label className="dvRequired">{dvRequiredMap[de.dataElement.id]}</label>
 
                 </div>
                 </div>)
@@ -261,17 +265,18 @@ export function DataEntryForm(props){
                         currentVal={dataValueMap[de.id]}
                         onChangeHandler={onLSAS_EMOC_Change}/>)
             }
-            
             switch(de.valueType){
             case "TEXT":
                 if (!de.optionSetValue){
                     return (<input
+                            className="form-control"
                             disabled = {checkIfDisabled(de.id)}
                             key={de.id}
                             type = "text"
-                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""}></input>);
+                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""} required></input>);
                 }else{
                     return(<select
+                           className="form-control"
                            disabled = {checkIfDisabled(de.id)}
                            key={de.id}
                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
@@ -279,14 +284,16 @@ export function DataEntryForm(props){
                 }
             case "NUMBER":
                 return (<input disabled = {checkIfDisabled(de.id)}
+                        className="form-control"
                         key={de.id}
                         id={de.id}
                         type = "text"
                         maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                        onChange={numberValEntered.bind(null,de)}></input>);
+                        onChange={numberValEntered.bind(de.id,de)} ></input>);
             case "LONG_TEXT":
                 return (<textarea
+                        className="form-control"
                         disabled = {checkIfDisabled(de.id)}
                         key={de.id}
                         rows="3"

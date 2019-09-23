@@ -90,11 +90,13 @@ export function DoctorProfile(props){
                     return (<input
                             disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                             key={tea.trackedEntityAttribute.id}
+                            className="form-control"
                             type = "text"
                             value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
                             onChange={valEntered.bind(null,tea)} ></input>);
                 }else{
                     return(<select
+                           className="form-control"
                            disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                            key={tea.trackedEntityAttribute.id}
                            value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
@@ -102,6 +104,7 @@ export function DoctorProfile(props){
                 }
             case "NUMBER":
                 return (<input disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
+                        className="form-control"
                         key={tea.trackedEntityAttribute.id}
                         type = "number"
                         value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
@@ -109,6 +112,7 @@ export function DoctorProfile(props){
             case "LONG_TEXT":
                 return (<textarea
                         disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
+                        className="form-control"
                         rows="3"
                         cols="20"
                         value = {dataValueMap[tea.trackedEntityAttribute.id]?dataValueMap[tea.trackedEntityAttribute.id]:""}
@@ -116,6 +120,7 @@ export function DoctorProfile(props){
                         ></textarea>);
             case "DATE":
                 return (<input
+                        className="form-control"
                         disabled = {checkIfDisabled(tea.trackedEntityAttribute.id)}
                         key={tea.trackedEntityAttribute.id}
                         type = "date"
@@ -147,7 +152,7 @@ export function DoctorProfile(props){
 
 
     function back(){
-        state.curr_view = constants.views.calendar;
+        state.curr_view = constants.views.settings;
         state.changeView(state);    
     }
     
@@ -182,12 +187,12 @@ export function DoctorProfile(props){
                 <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) }  </h6>
                 <div>
                 {createForm()}
-            </div>
+                </div>
                 </div>
                 <div className="entrySaveDiv">
                 
-                <input className="button" type="button" value="Back" onClick={back}></input>
-                <input className={dirtyBit?"button" : "hidden"}
+                <input className="button1 button2" type="button" value="Back" onClick={back}></input>
+                <input className={dirtyBit?"button1 button2" : "hidden"}
             type="button"
             value="Save"
             onClick={save}></input>

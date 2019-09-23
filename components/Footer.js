@@ -75,23 +75,20 @@ export function Footer(props){
         return (<div className="footer">
                 <div className="footerArea">
                 <div className="banner_one">
-                <img hidden={state.curr_view == constants.views.calendar?false:true}
+                <img
                 className="menuButton"
-                src="./images/settings3.png"
-                onClick={toggleLeftBar} title="Setting">
+                src="./images/left2.png"
+                onClick={toggleLeftBar} title="Hide Menu">
                 </img>
                 </div>
 
                 <div className="banner_two">
                 <img className="menuButton"
-                hidden={state.curr_view == constants.views.calendar?false:true}
                 src="./images/help.ico" onClick={goToInformationPage}>
                 </img> 
                 </div>
 
-                <div hidden={state.curr_view == constants.views.calendar ||
-                             state.curr_view == constants.views.entry ||
-                             state.curr_view == constants.views.settings?false:true} className="banner_three">
+                <div className="banner_three">
                 <img  className="menuButton"
                 src={state.loading?"./images/loader.gif":"./images/sync.png"} title="Synchronized data">
                 </img>

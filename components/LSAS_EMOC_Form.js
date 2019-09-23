@@ -1,9 +1,4 @@
 import React,{propTypes} from 'react';
-import cache from '../localstorage';
-import moment from 'moment';
-import constants from '../constants';
-import sync from '../sync-manager';
-import utility from '../utility';
 
 export function LSAS_EMOC_Form(props){
     var instance = Object.create(React.Component.prototype)
@@ -66,9 +61,9 @@ export function LSAS_EMOC_Form(props){
         function getSupportingStaff(staff){
             
             var addButton = (<tr key={Math.random(2)}><td>
-                             <input type="text" defaultValue="" ></input>
+                             <input type="text" defaultValue="" className="form-control"></input>
                           
-                             <input type="button" onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
+                             <input type="button" className="button1 button2"  onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
                              </td></tr>);
             
             if (staff.length == 0){
@@ -76,8 +71,8 @@ export function LSAS_EMOC_Form(props){
             }
             
             var ids = staff.reduce(function(list,obj,index,staff){
-                list.push(<tr key={obj + index}>
-                          <td>Staff{index+1}   <input type="button"
+                list.push(<tr key={Math.random(1)}>
+                          <td>Staff{index+1}   <input type="button" className="button1 button2"
                           onClick={deleteStaff.bind(null,index,staff)}
                           value="Delete"></input></td>
                           <td>{obj}</td>
@@ -92,16 +87,16 @@ export function LSAS_EMOC_Form(props){
         
         return state.data.reduce(function(list,obj,index){
             
-            list.push(<tbody key={obj.id + index} className="lsasTableTbody">
-                      <tr key={"DocId"+obj.id + index}>
+            list.push(<tbody key={"tbody"+index} className="lsasTableTbody">
+                      <tr key={"DocId"+ index}>
                      <td>
                       Doctor Id : </td>
-                      <td><input type="text" value={obj.id} onChange={idChange.bind(null,obj)}></input>
+                      <td><input type="text" className="form-control" value={obj.id} onChange={idChange.bind(null,obj)}></input>
                      </td>
                      </tr>
-                     <tr key={"onCall"+obj.id + index}>
+                     <tr key={"onCall"+ index}>
                      <td>On Call?</td>
-                      <td> <select value={obj.onCall} onChange={onCallChange.bind(null,obj)}>
+                      <td> <select className="form-control" value={obj.onCall} onChange={onCallChange.bind(null,obj)}>
                      <option value="true">yes</option>
                      <option value="false">No</option>
                      </select>
@@ -109,8 +104,8 @@ export function LSAS_EMOC_Form(props){
                      </tr>
                      
                       {getSupportingStaff(obj.supportingStaff)}
-                      <tr key={"DeleteButton"+obj.id}><td></td><td>
-                      <input type="button"
+                      <tr key={"DeleteButton"+index}><td></td><td>
+                      <input type="button" className="button1 button2"
                       onClick={deleteDoc.bind(null,index)}
                       value="Delete Entry"></input>
                       </td></tr>
@@ -132,7 +127,7 @@ export function LSAS_EMOC_Form(props){
                 <table >
                 {getDetails()}
                 <tbody >
-                <tr><td><input type="button" onClick={addDoctor} value="Add Doctor"></input></td></tr>
+                <tr><td><input type="button" className="button1 button2" onClick={addDoctor} value="Add Doctor"></input></td></tr>
                 </tbody>
             </table>
             </div>
