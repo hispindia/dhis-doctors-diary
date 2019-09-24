@@ -256,16 +256,16 @@ html {
     .calendarArea{width:90%;height:80%;}
     .entryArea{width:80%;margin-left:5%;height:80%;}
     .settingArea{width:80%;}
-    .reportSection{width:80%;font-size: 12px;}
+    .reportSection{width:98%;font-size: 12px;}
     .bannerItems{margin-right:15rem;}
 
 }
-@media only screen and (min-width:50px){
+@media only screen and (min-width:100px){
     .loginArea{width:80%;}
     .calendarArea{width:90%;height:80%;}
     .entryArea{width:80%;height:80%;margin-left:5%;}
     .settingArea{width:60%;}
-    .reportSection{width:80%;font-size: 12px;}
+    .reportSection{width:90%;font-size: 12px;}
     .bannerItems{margin-right:15rem;}
 
 }
@@ -717,8 +717,14 @@ html {
     color: darkred;
 }
 .reportSection{
-    max-width: 97%;
-    max-height: 65vh;
+    min-width: 98%;
+    max-height: 60vh;
     overflow-y: auto;
     overflow-x: auto;
+}
+.p1{
+  width: 80%;
+}
+.p2{
+    width: 40%;
 }

@@ -1,4 +1,5 @@
 import React,{propTypes} from 'react';
+import utility from '../utility';
 
 export function LSAS_EMOC_Form(props){
     var instance = Object.create(React.Component.prototype)
@@ -26,7 +27,16 @@ export function LSAS_EMOC_Form(props){
         doc.id = e.target.value;
         build_object();
     }
+    function numberValEntered(de,e){
 
+        if ((!e.target.value.match("^[0-9]+$"))){
+            e.target.value = e.target.value.slice(0,e.target.value.length - 1);
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
     function onCallChange(doc,e){
         doc.onCall = e.target.value;
         build_object();
@@ -56,12 +66,17 @@ export function LSAS_EMOC_Form(props){
         staff.push(val);
         build_object();        
     }
+
     function getDetails(){
 
         function getSupportingStaff(staff){
             
             var addButton = (<tr key={Math.random(2)}><td>
-                             <input type="text" defaultValue="" className="form-control"></input>
+                             <input
+                                 type="text"
+                                 maxLength={6}
+                                 onChange={numberValEntered.bind(null,staff)}
+                                 className="form-control"></input>
                           
                              <input type="button" className="button1 button2"  onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
                              </td></tr>);
@@ -84,14 +99,19 @@ export function LSAS_EMOC_Form(props){
             
             return ids;
         }
-        
+
+
         return state.data.reduce(function(list,obj,index){
             
             list.push(<tbody key={"tbody"+index} className="lsasTableTbody">
                       <tr key={"DocId"+ index}>
                      <td>
                       Doctor Id : </td>
-                      <td><input type="text" className="form-control" value={obj.id} onChange={idChange.bind(null,obj)}></input>
+                      <td><input
+                                 type="text"
+                                 maxLength={6}
+                                 onChange={numberValEntered.bind(null,obj)}
+                                 className="form-control"></input>
                      </td>
                      </tr>
                      <tr key={"onCall"+ index}>

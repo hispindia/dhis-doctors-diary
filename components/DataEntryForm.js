@@ -10,6 +10,7 @@ export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
     var deList = [];
+     var lsas_emoc = false;
 
     var state = props.state;
     var dirtyBit = false;
@@ -146,11 +147,22 @@ export function DataEntryForm(props){
     }
 
     function onLSAS_EMOC_Change(de,data,csections){
-        dirtyBit = true;
-        dataValueMap[de.id] = data;
-        dataValueMap["wTdcUXWeqhN"] = csections;        
-        dvRequiredMap[de.id] = "";
-        instance.setState(state)
+        if(de.id == constants.lsas_emoc_data_de){
+            dirtyBit = true;
+            dataValueMap[de.id] = data;
+            dataValueMap["wTdcUXWeqhN"] = csections;
+            dvRequiredMap[de.id] = "";
+            instance.setState(state)
+        }
+        else if(de.id == constants.lsas_pstage){
+            dirtyBit = true;
+            dataValueMap[de.id] = data;
+            dataValueMap["zfMOVN2lc1S"] = csections;
+            dvRequiredMap[de.id] = "";
+            instance.setState(state)
+
+        }
+
     }
     
     function checkSkipLogic(de,val){
@@ -245,7 +257,8 @@ export function DataEntryForm(props){
         
         function question(de){
 
-            if (de.id == constants.lsas_emoc_data_de){
+            if (de.id == constants.lsas_emoc_data_de || de.id == constants.lsas_emoc_data_de){
+                lsas_emoc = true;
                 return (<LSAS_EMOC_Form
                         de={de}
                         workingStatus={dataValueMap["x2uDVEGfY4K"]}
@@ -310,6 +323,12 @@ export function DataEntryForm(props){
                         utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
                         return true;
                     }
+                }
+                if(deuid == "wTdcUXWeqhN" && lsas_emoc){
+                        return true;
+                }
+                if(deuid == "zfMOVN2lc1S" && lsas_emoc){
+                    return true;
                 }
                 
                 return false;
