@@ -9,6 +9,7 @@ import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
+    var deList = [];
 
     var state = props.state;
     var dirtyBit = false;
@@ -74,22 +75,12 @@ export function DataEntryForm(props){
     
     function save(){
 
-        if(!dirtyBit){
-            back();
-            return;
-        }
-
+        console.log(validate())
         if(!validate()){
             state.changeView(state);
-
             return;
         }
 
-        if (!sncu_validate(ps.id)){
-            instance.setState(state);
-            scroll(0,0);
-            return           
-        }
         sync.saveEvent(dataValueMap,ps,state);
         state.curr_view = constants.views.calendar;
        // state.changeView(state);
@@ -97,43 +88,41 @@ export function DataEntryForm(props){
 
     function send(){
         if(!validate()){
-            instance.setState(state);
-            scroll(0,0);
+            state.changeView(state);
             return;
         }
 
-        
-        if (!sncu_validate(ps.id)){
-            instance.setState(state);
-            scroll(0,0);
-            return           
-        }
-        
         sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
         state.curr_view = constants.views.calendar;
 
     }
 
     function createForm(){
-        
+
         return Object.assign([],ps.programStageDataElements)
             .reduce(function(list,obj){
                 list.push(createQuestion(obj));
+                if(obj.dataElement.valueType === "NUMBER"){
+                     deList.push(obj.dataElement.id)
+                }
                 return list;
-            },[]);        
+            },[]);
     }
 
     function validate(){
 
-        return constants.required_fields.reduce(function(valid,id){
-            console.log(dataValueMap[id]);
-            if (!dataValueMap[id]){
-                valid = false;
-                dvRequiredMap[id] = constants.sncu_mandatoryfield_message;
+        var flag1 = true;
+        for (var i=0;i<deList.length;i++){
+            if (!dataValueMap[deList[i]] || dataValueMap[deList[i]] == ""){
+                flag1=false;
+                dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
             }
+            else{
+                flag1=true;
+            }
+        }
+        return flag1;
 
-            return valid;
-        },true);
     }
 
     function numberValEntered(de,e){
@@ -141,18 +130,16 @@ export function DataEntryForm(props){
         if (!e.target.value.match("^[0-9]+$") && e.target.value !=""){
             return;
         }
-        constants.required_fields.includes(de.id);
-        dvRequiredMap[de.id]  = e.target.value
-        dvRequiredMap[de];
+        deList.push(de);
+
         valEntered(de,e);
     }
-    
+
     function valEntered(de,e){
         dirtyBit = true;
         dataValueMap[de.id] = e.target.value;
-      //  checkSkipLogic(de.id,e.target.value)
+        //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
-        validate();
 
         instance.setState(state)
 
@@ -210,7 +197,7 @@ export function DataEntryForm(props){
                 <div className="entryAnswerDiv">
                 {question(de.dataElement)}
                 <br></br>
-                <label className="dvRequired">{dvRequiredMap[de.dataElement.id]}</label>
+                <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
 
                 </div>
                 </div>)
