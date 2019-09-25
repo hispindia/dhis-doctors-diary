@@ -58,17 +58,13 @@ export function LSAS_EMOC_Form(props){
                     return false;
                 }
             }
-                if(!uniqueIds[e])
-                {
-                    allIds.push(e) ;
-                    uniqueIds[e] = e.target.value;
-                }
-
+                    allIds.push(e.target.id) ;
+                    uniqueIds[e.target.id] = e.target.value;
 
         }
         else{
-            allIds.push(e) ;
-            uniqueIds[e] = e.target.value;
+            allIds.push(e.target.id) ;
+            uniqueIds[e.target.id] = e.target.value;
         }
 
         return flag;
@@ -112,6 +108,7 @@ export function LSAS_EMOC_Form(props){
                              <input
                                  type="text"
                                  maxLength={6}
+                                 id = {"StaffId"+ Math.random(2)}
                                  onChange={numberValEntered.bind(null,staff)}
                                  className="form-control" onBlur={checkUnique.bind(null,staff)}></input>
                              <input type="button" className="button1 button2"  onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
@@ -146,6 +143,7 @@ export function LSAS_EMOC_Form(props){
                       <td><input
                                  type="text"
                                  maxLength={6}
+                                 id = {"DocId"+ index}
                                  onChange={numberValEntered.bind(null,obj)}
                                  onBlur={checkUnique.bind(null,obj)}
                                  className="form-control" ></input>
