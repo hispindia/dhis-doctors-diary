@@ -280,7 +280,7 @@ export function DataEntryForm(props){
         
         function question(de){
 
-            if (de.id == constants.lsas_emoc_data_de || de.id == constants.lsas_emoc_data_de){
+            if (de.id == constants.lsas_emoc_data_de || de.id == constants.emoc_data_de){
                 lsas_emoc = true;
                 return (<LSAS_EMOC_Form
                         de={de}
