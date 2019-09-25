@@ -201,19 +201,42 @@ export function DataEntryForm(props){
     
     function createQuestion(de){
 
-        return (<div
+        if(de.dataElement.id == 'x2uDVEGfY4K')
+            return( <div
+            className="entryQuestionDiv"
+            hidden = {checkIfToHide(de.dataElement.id)}
+            key ={de.id}>
+            <table className="tableDiv">
+                <tr>
+                    <td>
+                        <p>{de.dataElement.formName}</p>
+                    </td>
+                    <td>
+                        <div className="entryAnswerDiv">
+                            {question(de.dataElement)}
+                            <br></br>
+                            <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    )
+        else return(
+            <div
                 className="entryQuestionDiv"
                 hidden = {checkIfToHide(de.dataElement.id)}
                 key ={de.id}>
                 <p>{de.dataElement.formName}</p>
                 <div className="entryAnswerDiv">
-                {question(de.dataElement)}
-                <br></br>
-                <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
+                    {question(de.dataElement)}
+                    <br></br>
+                    <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
 
                 </div>
-                </div>)
-        
+            </div>
+        )
+
         function checkIfToHide(deuid){
             if (deuid == constants.rejection_reason_de){
                 if (dataValueMap[constants.approval_status_de] != constants.approval_status.rejected){

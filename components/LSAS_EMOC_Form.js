@@ -4,6 +4,12 @@ import utility from '../utility';
 export function LSAS_EMOC_Form(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
+
+    var allIds = [];
+
+    var uniqueIds = [];
+
+    var num = 0;
     
     var state = {
         data : []        
@@ -37,6 +43,36 @@ export function LSAS_EMOC_Form(props){
             return true;
         }
     }
+    function checkUnique(doc,e)
+    {
+        var flag = true;
+
+        if(allIds.length > 0) {
+            for (var i =0;i< allIds.length;i++)
+            {
+                if (e.target.value === uniqueIds[allIds[i]]) {
+                    console.log("c: " + e.target.value);
+                    console.log("p: " + uniqueIds[allIds[i]]);
+                    e.target.value = "";
+                    alert("Please Enter Unique Value");
+                    return false;
+                }
+            }
+                if(!uniqueIds[e])
+                {
+                    allIds.push(e) ;
+                    uniqueIds[e] = e.target.value;
+                }
+
+
+        }
+        else{
+            allIds.push(e) ;
+            uniqueIds[e] = e.target.value;
+        }
+
+        return flag;
+    }
     function onCallChange(doc,e){
         doc.onCall = e.target.value;
         build_object();
@@ -64,6 +100,7 @@ export function LSAS_EMOC_Form(props){
         var val = e.target.parentElement.children[0].value;
         if (!val || val==""){return}
         staff.push(val);
+
         build_object();        
     }
 
@@ -76,8 +113,7 @@ export function LSAS_EMOC_Form(props){
                                  type="text"
                                  maxLength={6}
                                  onChange={numberValEntered.bind(null,staff)}
-                                 className="form-control"></input>
-                          
+                                 className="form-control" onBlur={checkUnique.bind(null,staff)}></input>
                              <input type="button" className="button1 button2"  onClick={addSupportStaff.bind(null,staff)} value="Add Staff"></input>
                              </td></tr>);
             
@@ -111,7 +147,9 @@ export function LSAS_EMOC_Form(props){
                                  type="text"
                                  maxLength={6}
                                  onChange={numberValEntered.bind(null,obj)}
-                                 className="form-control"></input>
+                                 onBlur={checkUnique.bind(null,obj)}
+                                 className="form-control" ></input>
+
                      </td>
                      </tr>
                      <tr key={"onCall"+ index}>
@@ -122,7 +160,7 @@ export function LSAS_EMOC_Form(props){
                      </select>
                      </td>
                      </tr>
-                     
+                      Support Staff:
                       {getSupportingStaff(obj.supportingStaff)}
                       <tr key={"DeleteButton"+index}><td></td><td>
                       <input type="button" className="button1 button2"

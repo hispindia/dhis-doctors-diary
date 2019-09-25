@@ -290,10 +290,12 @@ html {
     border-left: 1px solid white;
     margin-left:2%;
     border-left: 1px solid grey;
+    width: 100%;
 
 }
 .entryAnswerDiv{
     margin-left:3%;
+    width: 100%;
 
 }
 .entryArea{
@@ -528,7 +530,7 @@ html {
 }
 .tableDiv {
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
     box-sizing: border-box;
     align-items:center;
     padding: 20px 16px;
