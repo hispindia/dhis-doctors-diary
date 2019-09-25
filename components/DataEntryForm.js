@@ -154,7 +154,7 @@ export function DataEntryForm(props){
             dvRequiredMap[de.id] = "";
             instance.setState(state)
         }
-        else if(de.id == constants.lsas_pstage){
+        else if(de.id == constants.emoc_data_de){
             dirtyBit = true;
             dataValueMap[de.id] = data;
             dataValueMap["zfMOVN2lc1S"] = csections;

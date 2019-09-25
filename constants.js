@@ -93,6 +93,7 @@ exports.sncu_mandatoryfield=[
 ]
 
 exports.lsas_emoc_data_de = "ZnzjYCK4r9w";
+exports.emoc_data_de = "qgzoi2gteWu";
 exports.emoc_pstage = "Kd8DRRvZDro";
 exports.lsas_pstage = "Bm7Bc9Bnqoh";
 
