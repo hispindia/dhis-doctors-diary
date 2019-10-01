@@ -10,6 +10,7 @@ export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
     var deList = [];
+     var lsas_emoc = false;
 
     var state = props.state;
     var dirtyBit = false;
@@ -146,11 +147,22 @@ export function DataEntryForm(props){
     }
 
     function onLSAS_EMOC_Change(de,data,csections){
-        dirtyBit = true;
-        dataValueMap[de.id] = data;
-        dataValueMap["wTdcUXWeqhN"] = csections;        
-        dvRequiredMap[de.id] = "";
-        instance.setState(state)
+        if(de.id == constants.lsas_emoc_data_de){
+            dirtyBit = true;
+            dataValueMap[de.id] = data;
+            dataValueMap["wTdcUXWeqhN"] = csections;
+            dvRequiredMap[de.id] = "";
+            instance.setState(state)
+        }
+        else if(de.id == constants.emoc_data_de){
+            dirtyBit = true;
+            dataValueMap[de.id] = data;
+            dataValueMap["zfMOVN2lc1S"] = csections;
+            dvRequiredMap[de.id] = "";
+            instance.setState(state)
+
+        }
+
     }
     
     function checkSkipLogic(de,val){
@@ -189,19 +201,42 @@ export function DataEntryForm(props){
     
     function createQuestion(de){
 
-        return (<div
+        if(de.dataElement.id == 'x2uDVEGfY4K')
+            return( <div
+            className="entryQuestionDiv"
+            hidden = {checkIfToHide(de.dataElement.id)}
+            key ={de.id}>
+            <table className="tableDiv">
+                <tr>
+                    <td>
+                        <p>{de.dataElement.formName}</p>
+                    </td>
+                    <td>
+                        <div className="entryAnswerDiv">
+                            {question(de.dataElement)}
+                            <br></br>
+                            <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    )
+        else return(
+            <div
                 className="entryQuestionDiv"
                 hidden = {checkIfToHide(de.dataElement.id)}
                 key ={de.id}>
                 <p>{de.dataElement.formName}</p>
                 <div className="entryAnswerDiv">
-                {question(de.dataElement)}
-                <br></br>
-                <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
+                    {question(de.dataElement)}
+                    <br></br>
+                    <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
 
                 </div>
-                </div>)
-        
+            </div>
+        )
+
         function checkIfToHide(deuid){
             if (deuid == constants.rejection_reason_de){
                 if (dataValueMap[constants.approval_status_de] != constants.approval_status.rejected){
@@ -245,7 +280,8 @@ export function DataEntryForm(props){
         
         function question(de){
 
-            if (de.id == constants.lsas_emoc_data_de){
+            if (de.id == constants.lsas_emoc_data_de || de.id == constants.emoc_data_de){
+                lsas_emoc = true;
                 return (<LSAS_EMOC_Form
                         de={de}
                         workingStatus={dataValueMap["x2uDVEGfY4K"]}
@@ -310,6 +346,12 @@ export function DataEntryForm(props){
                         utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
                         return true;
                     }
+                }
+                if(deuid == "wTdcUXWeqhN" && lsas_emoc){
+                        return true;
+                }
+                if(deuid == "zfMOVN2lc1S" && lsas_emoc){
+                    return true;
                 }
                 
                 return false;

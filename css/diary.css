@@ -256,16 +256,16 @@ html {
     .calendarArea{width:90%;height:80%;}
     .entryArea{width:80%;margin-left:5%;height:80%;}
     .settingArea{width:80%;}
-    .reportSection{width:80%;font-size: 12px;}
+    .reportSection{width:98%;font-size: 12px;}
     .bannerItems{margin-right:15rem;}
 
 }
-@media only screen and (min-width:50px){
+@media only screen and (min-width:100px){
     .loginArea{width:80%;}
     .calendarArea{width:90%;height:80%;}
     .entryArea{width:80%;height:80%;margin-left:5%;}
     .settingArea{width:60%;}
-    .reportSection{width:80%;font-size: 12px;}
+    .reportSection{width:90%;font-size: 12px;}
     .bannerItems{margin-right:15rem;}
 
 }
@@ -290,10 +290,12 @@ html {
     border-left: 1px solid white;
     margin-left:2%;
     border-left: 1px solid grey;
+    width: 100%;
 
 }
 .entryAnswerDiv{
     margin-left:3%;
+    width: 100%;
 
 }
 .entryArea{
@@ -342,7 +344,7 @@ html {
     padding:10px;
 }
 .form-control{
-    width: 80%;
+    width: 60%;
 }
 
 .banner{
@@ -528,7 +530,7 @@ html {
 }
 .tableDiv {
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
     box-sizing: border-box;
     align-items:center;
     padding: 20px 16px;
@@ -595,7 +597,6 @@ html {
 .two{
     grid-column: 1/2;
     grid-row: 2;
-
     border: ridge;
 
 }
@@ -685,7 +686,16 @@ html {
 
 
 .lsas{
-    display: block;
+    width:100%;
+}
+.td_name{
+    width:40%;
+}
+.td_field{
+    width:50%;
+}
+.td_button{
+    width:10%;
 }
 
 .lsas input{
@@ -717,8 +727,18 @@ html {
     color: darkred;
 }
 .reportSection{
-    max-width: 97%;
-    max-height: 65vh;
+    min-width: 98%;
+    max-height: 60vh;
     overflow-y: auto;
     overflow-x: auto;
 }
+.p1{
+  width: 80%;
+}
+.p2{
+    width: 40%;
+}
+.plusBtn{
+    width: 10%;
+}
+input[type="checkbox"]:not(:disabled)+span:hover:before { text-shadow: 0 1px 2px #77F; }
