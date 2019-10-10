@@ -4,65 +4,68 @@ import moment from 'moment';
 import constants from '../constants';
 import sync from '../sync-manager';
 import utility from '../utility';
+import lsas from './LSAS_EMOC_Form';
 import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
 
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
     instance.props = props;
     var deList = [];
-     var lsas_emoc = false;
+    var lsas_emoc = false;
+
+    var sendOrSave = false;
 
     var state = props.state;
     var dirtyBit = false;
     var ps = state.
         program_metadata_programStageByIdMap[state.
-                                             curr_user_program_stage];
+        curr_user_program_stage];
     var error;
     if (!ps){
         //alert("Stage not assigned to user");
         error = "User does not have access to any form.";
     }
-    
+
     var dvRequiredMap = [];
     var dataValueMap = [];
     if (state.curr_event){
         dataValueMap = state.
-            curr_event.
-            dataValues.
-            reduce(function(map,obj){
-                map[obj.dataElement] = obj.value;
-                return map;
-            },[]);
+        curr_event.
+        dataValues.
+        reduce(function(map,obj){
+            map[obj.dataElement] = obj.value;
+            return map;
+        },[]);
     }
-    
+
     instance.render = function(){
         if (error){
             return (<label>{error}</label>)
         }
         return (
-                <div className="entryArea">
+            <div className="entryArea">
                 <div className="entryStageDiv">
                     <h4>{ps.name}  [{moment(state.curr_event_date).format("DD MMM YYYY")}] </h4>
                     <h6>{ utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2) } </h6>
-                <div>
-                {createForm()}
-            </div>
+                    <div>
+                        {createForm()}
+                    </div>
                 </div><br/>
                 <div className="entrySaveDiv">
-                
-                <input className="button1 button2" type="button" value="Back" onClick={back}></input>
-  <input className={dirtyBit?"button1 button2" : "hidden"}
-            type="button"
-            value="Save"
-            onClick={save}></input>
-              
-                <input
-            className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
-            type="button"
-            value="Send"
-            onClick={send}></input>
-                <label className={state.curr_event && state.curr_event.status == "COMPLETED"?"floatRight":"hidden"}
->COMPLETED</label>
+
+                    <input className="button1 button2" type="button" value="Back" onClick={back}></input>
+                    <input className={dirtyBit?"button1 button2" : "hidden"}
+                           type="button"
+                           value="Save"
+                           onClick={save}></input>
+
+                    <input
+                        className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
+                        type="button"
+                        value="Send"
+                        onClick={send}></input>
+                    <label className={state.curr_event && state.curr_event.status == "COMPLETED"?"floatRight":"hidden"}
+                    >COMPLETED</label>
                 </div>
             </div>
         )
@@ -71,9 +74,9 @@ export function DataEntryForm(props){
 
     function back(){
         state.curr_view = constants.views.calendar;
-        state.changeView(state);    
+        state.changeView(state);
     }
-    
+
     function save(){
 
         console.log(validate())
@@ -81,20 +84,58 @@ export function DataEntryForm(props){
             state.changeView(state);
             return;
         }
+        if(window.confirm("Are You Sure You want to save data"))
+        {
+            sendOrSave = true;
+            console.log(Object.entries(dataValueMap));
+            sync.saveEvent(dataValueMap,ps,state);
+            state.curr_view = constants.views.calendar;
+        }
+        else{
+            return false;
+        }
 
-        sync.saveEvent(dataValueMap,ps,state);
-        state.curr_view = constants.views.calendar;
-       // state.changeView(state);
+        // state.changeView(state);
     }
 
     function send(){
+
         if(!validate()){
             state.changeView(state);
             return;
         }
+        if(window.confirm("Are You Sure You want to send data"))
+        {
+            console.log(Object.entries(dataValueMap));
+            for(var i =0;i<=dataValueMap.length; i++)
+            {
 
-        sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-        state.curr_view = constants.views.calendar;
+                if(dataValueMap[i] == constants.lsas_emoc_data_de){
+
+                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+                    state.curr_view = constants.views.calendar;
+                    instance.setState(state);
+                }
+                else if(dataValueMap[i] == constants.emoc_data_de){
+                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+                    state.curr_view = constants.views.calendar;
+                    instance.setState(state)
+                }
+                else{
+                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+                    state.curr_view = constants.views.calendar;
+                }
+            }
+
+        }
+        else{
+            sendOrSave = true;
+            state.changeView(state);
+            instance.setState(state);
+            return false;
+        }
+
+
 
     }
 
@@ -104,7 +145,7 @@ export function DataEntryForm(props){
             .reduce(function(list,obj){
                 list.push(createQuestion(obj));
                 if(obj.dataElement.valueType === "NUMBER"){
-                     deList.push(obj.dataElement.id)
+                    deList.push(obj.dataElement.id)
                 }
                 return list;
             },[]);
@@ -141,15 +182,16 @@ export function DataEntryForm(props){
         dataValueMap[de.id] = e.target.value;
         //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
-
         instance.setState(state)
 
     }
 
-    function onLSAS_EMOC_Change(de,data,csections){
+    function onLSAS_EMOC_Change(de,data,csections,send){
         if(de.id == constants.lsas_emoc_data_de){
             dirtyBit = true;
             dataValueMap[de.id] = data;
+            console.log("data.length: "+data);
+            console.log("csections: "+csections);
             dataValueMap["wTdcUXWeqhN"] = csections;
             dvRequiredMap[de.id] = "";
             instance.setState(state)
@@ -157,6 +199,13 @@ export function DataEntryForm(props){
         else if(de.id == constants.emoc_data_de){
             dirtyBit = true;
             dataValueMap[de.id] = data;
+            console.log("sendOrSave: "+send);
+            if(send && csections >= 2 )
+            {
+                csections = csections - 1;
+            }
+
+            console.log("csections: "+csections);
             dataValueMap["zfMOVN2lc1S"] = csections;
             dvRequiredMap[de.id] = "";
             instance.setState(state)
@@ -164,7 +213,7 @@ export function DataEntryForm(props){
         }
 
     }
-    
+
     function checkSkipLogic(de,val){
 
         if (constants.sncu_mandatoryfield.includes(de)){
@@ -178,15 +227,15 @@ export function DataEntryForm(props){
     }
 
     function sncu_validate(psid){
-        
+
         if (psid != constants.picu_ps_uid){
             return true;
         }
-        
+
         if (dataValueMap["x2uDVEGfY4K"]!="Working"){
             return true;
         }
-        
+
         var fields= constants.sncu_mandatoryfield;
         var flag = true;
         for (var i=0;i<fields.length;i++){
@@ -198,30 +247,30 @@ export function DataEntryForm(props){
         return flag;
     }
 
-    
+
     function createQuestion(de){
 
         if(de.dataElement.id == 'x2uDVEGfY4K')
             return( <div
-            className="entryQuestionDiv"
-            hidden = {checkIfToHide(de.dataElement.id)}
-            key ={de.id}>
-            <table className="tableDiv">
-                <tr>
-                    <td>
-                        <p>{de.dataElement.formName}</p>
-                    </td>
-                    <td>
-                        <div className="entryAnswerDiv">
-                            {question(de.dataElement)}
-                            <br></br>
-                            <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    )
+                    className="entryQuestionDiv"
+                    hidden = {checkIfToHide(de.dataElement.id)}
+                    key ={de.id}>
+                    <table className="tableDiv">
+                        <tr>
+                            <td>
+                                <p>{de.dataElement.formName}</p>
+                            </td>
+                            <td>
+                                <div className="entryAnswerDiv">
+                                    {question(de.dataElement)}
+                                    <br></br>
+                                    <label className="redColor">{dvRequiredMap[de.dataElement.id]}</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            )
         else return(
             <div
                 className="entryQuestionDiv"
@@ -245,77 +294,80 @@ export function DataEntryForm(props){
             }
 
             switch(deuid){
-            case 'Ed0bvGMTYSS' :
-                if (dataValueMap[constants.other_duties_de] != 'vipduties'){
-                    return true;
-                }
-                break
-            case 'uNVcN37zGxj':
-                if (dataValueMap[constants.other_duties_de] != 'medico legal'){
-                    return true;
-                }
-                break
-            case 'lMlGVCVgR8C':
-                if (dataValueMap[constants.other_duties_de] != 'jailduties'){
-                    return true;
-                }
-                break
-            case 'mbrP2IkXW4s':
-                if (dataValueMap[constants.other_duties_de] != 'otherduties'){
-                    return true;
-                }
-                break
-                
+                case 'Ed0bvGMTYSS' :
+                    if (dataValueMap[constants.other_duties_de] != 'vipduties'){
+                        return true;
+                    }
+                    break
+                case 'uNVcN37zGxj':
+                    if (dataValueMap[constants.other_duties_de] != 'medico legal'){
+                        return true;
+                    }
+                    break
+                case 'lMlGVCVgR8C':
+                    if (dataValueMap[constants.other_duties_de] != 'jailduties'){
+                        return true;
+                    }
+                    break
+                case 'mbrP2IkXW4s':
+                    if (dataValueMap[constants.other_duties_de] != 'otherduties'){
+                        return true;
+                    }
+                    break
+
             }
-            
+
             return false;
         }
-        
-        function checkIfMandatory(deuid){            
+
+        function checkIfMandatory(deuid){
             if (constants.required_fields.includes(deuid)){
                 return true
             }
             return false;
         }
-        
+
         function question(de){
 
             if (de.id == constants.lsas_emoc_data_de || de.id == constants.emoc_data_de){
                 lsas_emoc = true;
                 return (<LSAS_EMOC_Form
-                        de={de}
-                        workingStatus={dataValueMap["x2uDVEGfY4K"]}
-                        currentVal={dataValueMap[de.id]}
-                        onChangeHandler={onLSAS_EMOC_Change}/>)
+                    de={de}
+                    workingStatus={dataValueMap["x2uDVEGfY4K"]}
+                    currentVal = {dataValueMap[de.id]}
+                    currentStatus={checkIfDisabled(de.id)}
+                    sendOrSave = {sendOrSave}
+                    onChangeHandler={onLSAS_EMOC_Change}
+                />)
             }
             switch(de.valueType){
-            case "TEXT":
-                if (!de.optionSetValue){
-                    return (<input
+                case "TEXT":
+                    if (!de.optionSetValue){
+                        return (<input
                             className="form-control"
                             disabled = {checkIfDisabled(de.id)}
                             key={de.id}
                             type = "text"
                             value = {dataValueMap[de.id]?dataValueMap[de.id]:""} required></input>);
-                }else{
-                    return(<select
-                           className="form-control"
-                           disabled = {checkIfDisabled(de.id)}
-                           key={de.id}
-                           value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                           onChange={valEntered.bind(null,de)}>{getOptions(de.optionSet.options)}</select>)
-                }
-            case "NUMBER":
-                return (<input disabled = {checkIfDisabled(de.id)}
-                        className="form-control"
-                        key={de.id}
-                        id={de.id}
-                        type = "text"
-                        maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
-                        value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
-                        onChange={numberValEntered.bind(de.id,de)} ></input>);
-            case "LONG_TEXT":
-                return (<textarea
+                    }else{
+                        return(<select
+                            className="form-control"
+                            disabled = {checkIfDisabled(de.id)}
+                            key={de.id}
+                            value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
+                            onChange={valEntered.bind(null,de)}>{getOptions(de.optionSet.options)}</select>)
+                    }
+                case "NUMBER":
+                    return (<input disabled = {checkIfDisabled(de.id)}
+                                   className="form-control"
+                                   key={de.id}
+                                   id={de.id}
+                                   type = "text"
+                                   maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
+                                   value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
+                                   onChange={numberValEntered.bind(de.id,de)} ></input>);
+                case "LONG_TEXT":
+                    return (<textarea
                         className="form-control"
                         disabled = {checkIfDisabled(de.id)}
                         key={de.id}
@@ -323,11 +375,18 @@ export function DataEntryForm(props){
                         cols="20"
                         value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
                         onChange={valEntered.bind(null,de)}
-                        ></textarea>);
+                    ></textarea>);
             }
 
 
             function checkIfDisabled(deuid){
+
+                if(deuid == "wTdcUXWeqhN" && deuid == constants.lsas_emoc_data_de){
+                    return true;
+                }
+                if(deuid == "zfMOVN2lc1S" && deuid == constants.lsas_emoc_data_de){
+                    return true;
+                }
 
                 if (!state.curr_event_calendar_classname.includes("entryDate")){
                     return true;
@@ -336,7 +395,7 @@ export function DataEntryForm(props){
                 if (state.curr_event && state.curr_event.status=="COMPLETED"){
                     return true;
                 }
-                    
+
                 if (constants.disabled_fields.includes(deuid)){
                     return true
                 }
@@ -347,25 +406,18 @@ export function DataEntryForm(props){
                         return true;
                     }
                 }
-                if(deuid == "wTdcUXWeqhN" && lsas_emoc){
-                        return true;
-                }
-                if(deuid == "zfMOVN2lc1S" && lsas_emoc){
-                    return true;
-                }
-                
                 return false;
             }
-         
-            
+
+
             function getOptions(options){
                 return options.reduce(function(list,obj){
                     list.push(<option key={obj.id} value={obj.code}>{obj.name}</option>)
                     return list;
                 },[<option key = {options[0].id+"__"} disabled value={""} > --Select-- </option>]);
-            
+
             }
         }
-        
+
     }
 }

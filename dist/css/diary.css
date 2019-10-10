@@ -158,12 +158,12 @@ html {
 
 }
 .italic{
-  font-style: italic;
+    font-style: italic;
 }
 
 
 .bold{
-  font-style: bold;
+    font-style: bold;
 }
 .fringeDays{
     font-style: normal;
@@ -184,9 +184,9 @@ html {
 
 
 .entryDate{
-  font-size : 11pt !important;
-  font-style: italic;
-  font-weight : bold;
+    font-size : 11pt !important;
+    font-style: italic;
+    font-weight : bold;
 }
 
 .futureDate {
@@ -272,10 +272,10 @@ html {
 
 @media screen and (min-width:250px) {
     .banner{background-size: cover !important;
-            background-repeat : round !important;
+        background-repeat : round !important;
         width: auto;
         height: auto;
-           }
+    }
 
 }
 
@@ -344,7 +344,7 @@ html {
     padding:10px;
 }
 .form-control{
-    width: 80%;
+    width: 60%;
 }
 
 .banner{
@@ -546,7 +546,7 @@ html {
     height:30px;
 }
 
-.tableDiv tr:nth-child(even) {background-color: #C3C3C3;}
+
 
 .imgDiv{
     width:100%;
@@ -597,7 +597,6 @@ html {
 .two{
     grid-column: 1/2;
     grid-row: 2;
-
     border: ridge;
 
 }
@@ -616,7 +615,7 @@ html {
 }
 
 .dvRequired{
-  font-style: italic;
+    font-style: italic;
 }
 
 .leftArea {
@@ -648,7 +647,7 @@ html {
     border-bottom: groove;
     height: -webkit-fill-available;
     width: -webkit-fill-available;
-     
+
 }
 .la_3 {
     grid-area: c;
@@ -687,7 +686,24 @@ html {
 
 
 .lsas{
-    display: block;
+    width:100%;
+    text-align: center;
+}
+
+.td_name{
+    width:40%;
+    padding: 6px;
+    text-align: left;
+}
+.td_field{
+    width:50%;
+    padding: 6px;
+    text-align: left;
+}
+.td_button{
+    width:10%;
+    padding: 6px;
+    text-align: left;
 }
 
 .lsas input{
@@ -725,8 +741,12 @@ html {
     overflow-x: auto;
 }
 .p1{
-  width: 80%;
+    width: 80%;
 }
 .p2{
     width: 40%;
 }
+.plusBtn{
+    width: 10%;
+}
+input[type="checkbox"]:not(:disabled)+span:hover:before { text-shadow: 0 1px 2px #77F; }
