@@ -73,7 +73,7 @@ export function LSAS_EMOC_Form(props) {
 
     if (props.currentVal) {
         try {
-            console.log("props.sendOrSave: " + props.sendOrSave);
+            //console.log("props.sendOrSave: " + props.sendOrSave);
             state = JSON.parse(props.currentVal);
         } catch (ex) {
             console.log("An error occurred while parsing object" + ex);
@@ -82,7 +82,7 @@ export function LSAS_EMOC_Form(props) {
 
     function build_object() {
 
-        console.log("props.sendOrSave: " + props.sendOrSave);
+        //console.log("props.sendOrSave: " + props.sendOrSave);
         instance.props.onChangeHandler(instance.props.de,
             JSON.stringify(state),
             state.data.length,props.sendOrSave);
@@ -126,7 +126,6 @@ export function LSAS_EMOC_Form(props) {
                 doc_ehrmsid = val1.value + "";
                 doc["doc_id"] = "";
                 doc["id"] = (doc_ehrmsid);
-                console.log("Doc id:" + doc["id"]);
                 docMap["doc_id" + (index_id)].push(val1.id);
                 docMap["doc_uniqueIds" + (index_id)][val1.id] = val1.value;
                 build_object();
@@ -137,7 +136,6 @@ export function LSAS_EMOC_Form(props) {
                 call_doc_ehrmsid = val2.value + "";
                 doc["doc_id"] = call_doc_ehrmsid;
                 doc["id"] = "";
-                console.log("Partner Doc id:" + e.target.id);
                 docMap["doc_id" + (index_id)].push(val2.id);
                 docMap["doc_uniqueIds" + (index_id)][val2.id] = val2.value;
                 build_object();
@@ -149,7 +147,6 @@ export function LSAS_EMOC_Form(props) {
                     var allIds = docMap["doc_id" + (index_id)][i];
                     console.log("allIds: "+allIds);
                     if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" && docMap["doc_uniqueIds" + (index_id)][e.target.id] !== e.target.value) {
-                        console.log("id: " + e.target.id);
                         e.target.value = "";
                         alert("Please enter unique erhms id");
                         flag = false;
@@ -159,37 +156,40 @@ export function LSAS_EMOC_Form(props) {
                     if (e.target.value != "" &&
                         (e.target.id === "mbBSId_1" + "doc" + (index_id)
                             || e.target.id === "mbBSId_2" + "doc" + (index_id))) {
-
-                        if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
-                        {
-                            var index = doc.indexOf(docMap["doc_uniqueIds" + (index_id)][e.target.id]);
-                            if (index > -1) {
-                                doc.splice(index, 1);
-                            }
-                        }
-                        console.log("Previous: "+docMap["doc_uniqueIds" + (index_id)][e.target.id]);
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        console.log("Data value save: " + doc.length);
                         build_object();
                     } else if (e.target.value != "" &&
                         (e.target.id === "staffId_1" + "doc" + (index_id)
                             || e.target.id === "staffId_2" + "doc" + (index_id))) {
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        console.log("Data value save: " + doc.length);
+
                         build_object();
                     } else if (e.target.value != "" &&
                         (e.target.id === "otTechId_1" + "doc" + (index_id)
                             || e.target.id === "otTechId_2" + "doc" + (index_id))) {
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        console.log("Data value save: " + doc.length);
+
                         build_object();
                     }
 
-                        docMap["doc_id" + (index_id)].push(e.target.id);
-                        docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
+                    if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
+                    {
+                        var d1 = docMap["doc_uniqueIds" + (index_id)][e.target.id];
+
+                        for( var i = 0; i < doc.length; i++){
+                            if ( doc[i] === d1) {
+                                doc.splice(i, 1);
+                            }
+                        }
+                        console.log("---------");
+                        console.log("Data length: " + doc.length);
+                    }
+
+                    docMap["doc_id" + (index_id)].push(e.target.id);
+                    docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
 
                 }
             } else {
@@ -248,7 +248,7 @@ export function LSAS_EMOC_Form(props) {
         var val = document.getElementById("DocId_"+(index_id));
         var val2 = document.getElementById("Partner_DocId_"+(index_id));
         var checked = document.getElementById("checked_btn"+(index_id));
-        console.log("checked.value:"+checked.value)
+        //console.log("checked.value:"+checked.value)
         if(checked.value === "false" && (!val.value || val.value === ""))
         {
             alert("Please enter previous doctor ehrms id");
@@ -291,7 +291,7 @@ export function LSAS_EMOC_Form(props) {
             }
         }
         var val = document.getElementById("mbBSId_1"+"doc"+index_id);
-        console.log("mbbs value: "+val.value);
+        //console.log("mbbs value: "+val.value);
 
         if (!val.value || val.value == ""){
             alert("Please enter ehrms id in this field than add other");
@@ -321,7 +321,7 @@ export function LSAS_EMOC_Form(props) {
             }
         }
         var val = document.getElementById("otTechId_1" +"doc"+index_id);
-        console.log("ot staff value: "+val.value);
+        //console.log("ot staff value: "+val.value);
 
         if (!val.value || val.value == ""){
             alert("Please enter ehrms id in this field than add other");
@@ -344,7 +344,7 @@ export function LSAS_EMOC_Form(props) {
         if((docid === 1 && state.data.length >= 2) || state.data.length >= 2)
         {
             for(var i = 1;i<=state.data.length;i++){
-                console.log(e.target.id);
+                //console.log(e.target.id);
                 if(e.target.id.endsWith(""+i))
                 {
                     index_id = i;
@@ -374,7 +374,7 @@ export function LSAS_EMOC_Form(props) {
     function getDetails(){
 
         function getMbbsDoctor(mBbsDoc,index){
-            console.log("index: "+index);
+            //console.log("index: "+index);
 
             var inputField = (<input
                 type="text"
@@ -402,9 +402,22 @@ export function LSAS_EMOC_Form(props) {
 
             var firstInput = (<tr><td className="td_name">MBBS Doctor 1</td><td className="td_field">{inputField}</td><td className="td_button">{addButton}</td></tr>);
             if (mbbs_num_map["doc"+ (index+1)] === 1 &&  mBbsDoc.length < 2 ){
+                if(mBbsDoc[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("mbBSId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["mbBSId_1"+"doc"+(index+1)] = mBbsDoc[0];
+                }
                 return firstInput;
             }
             else{
+                if(mBbsDoc[0] != "") {
+                    docMap["doc_id" + (index+1)].push("mbBSId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["mbBSId_1"+"doc"+(index+1)] = mBbsDoc[0];
+                }
+                if(mBbsDoc[1] != "") {
+                    docMap["doc_id" + (index+1)].push("mbBSId_2"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["mbBSId_2"+"doc"+(index+1)] = mBbsDoc[1];
+                }
                 var ids = [];
                 ids.push(firstInput);
                 ids.push(<tr>
@@ -439,10 +452,25 @@ export function LSAS_EMOC_Form(props) {
 
             var firstInput = (<tr><td className="td_name">OT Technician 1</td><td className="td_field">{inputField}</td><td className="td_button">  {addButton}</td></tr>);
             if (ot_num_map["doc"+ (index+1)] == 1 && otStaff.length < 2){
+                if(otStaff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("otTechId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["otTechId_1"+"doc"+(index+1)] = otStaff[0];
+                }
                 return firstInput;
             }
 
             else{
+                if(otStaff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("otTechId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["otTechId_1"+"doc"+(index+1)] = otStaff[0];
+                }
+                if(otStaff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("otTechId_2"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["otTechId_2"+"doc"+(index+1)] = otStaff[0];
+                }
                 var ids = [];
                 ids.push(firstInput);
                 ids.push(<tr>
@@ -477,10 +505,25 @@ export function LSAS_EMOC_Form(props) {
 
             var firstInput = (<tr><td className="td_name">Staff Nurse 1</td><td className="td_field">{inputField}</td><td className="td_button">  {addButton}</td></tr>);
             if (staff_num_map["doc"+ (index+1)] == 1 &&  staff.length < 2){
+                if(staff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("staffId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["staffId_1"+"doc"+(index+1)] = staff[0];
+                }
                 return firstInput;
             }
 
             else{
+                if(staff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("staffId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["staffId_1"+"doc"+(index+1)] = staff[0];
+                }
+                if(staff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("staffId_2"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["staffId_2"+"doc"+(index+1)] = staff[0];
+                }
                 var ids = [];
                 ids.push(firstInput);
                 ids.push(<tr>
