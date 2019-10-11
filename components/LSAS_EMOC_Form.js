@@ -538,7 +538,7 @@ export function LSAS_EMOC_Form(props) {
             list.push(<tbody key={"tbody"+index} className="lsasTableTbody">
                 <tr key={"DocId"+ index}>
                     <td className="td_name">
-                        {constants.lsas_emoc_data_de?"Emoc Ehmrs Id":"Lsas Ehmrs Id" }
+                        {constants.lsas_emoc_data_de === instance.props.de.id?"Lsas Ehmrs Id":"Emoc Ehmrs Id" }
                     </td>
                     <td className="td_field">
                         <input
