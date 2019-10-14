@@ -104,7 +104,7 @@ export function LSAS_EMOC_Form(props) {
         }
     }
 
-    function checkUnique(doc, e) {
+    function checkUnique(doc, e, index) {
         var flag = true;
 
         var index_id = docid;
@@ -145,7 +145,7 @@ export function LSAS_EMOC_Form(props) {
             if (docMap["doc_id" + (index_id)].length > 0) {
                 for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
                     var allIds = docMap["doc_id" + (index_id)][i];
-                    console.log("allIds: "+allIds);
+                    //console.log("allIds: "+allIds);
                     if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" && docMap["doc_uniqueIds" + (index_id)][e.target.id] !== e.target.value) {
                         e.target.value = "";
                         alert("Please enter unique erhms id");
@@ -178,13 +178,15 @@ export function LSAS_EMOC_Form(props) {
                     if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
                     {
                         var d1 = docMap["doc_uniqueIds" + (index_id)][e.target.id];
-
+                        console.log("Previous value---------"+doc[i]);
                         for( var i = 0; i < doc.length; i++){
                             if ( doc[i] === d1) {
-                                doc.splice(i, 1);
+                                console.log("doc[i]---------"+doc[i]);
+                                console.log("doc[i]---------"+d1);
+                                doc.splice(index, 1);
+                                build_object();
                             }
                         }
-                        console.log("---------");
                         console.log("Data length: " + doc.length);
                     }
 
@@ -370,6 +372,13 @@ export function LSAS_EMOC_Form(props) {
         }
 
     }
+    function deleteDoc(index){
+        if(window.confirm("Are You Sure You want to delete this case")){
+            state.data.splice(index,1);
+            build_object();
+        }
+
+    }
 
     function getDetails(){
 
@@ -400,7 +409,7 @@ export function LSAS_EMOC_Form(props) {
 
             </input>);
 
-            var firstInput = (<tr><td className="td_name">MBBS Doctor 1</td><td className="td_field">{inputField}</td><td className="td_button">{addButton}</td></tr>);
+            var firstInput = (<div><tr><td colSpan="2"><label>MBBS Doctor 1</label>{inputField}</td><td className="td_button">{addButton}</td></tr></div>);
             if (mbbs_num_map["doc"+ (index+1)] === 1 &&  mBbsDoc.length < 2 ){
                 if(mBbsDoc[0] != "")
                 {
@@ -420,9 +429,9 @@ export function LSAS_EMOC_Form(props) {
                 }
                 var ids = [];
                 ids.push(firstInput);
-                ids.push(<tr>
-                    <td className="td_name">MBBS Doctor 2</td><td className="td_field">{inputField2}</td><td></td>
-                </tr>);
+                ids.push(<div><tr>
+                    <td colSpan="2"><label>MBBS Doctor 2</label>{inputField2}</td><td className="td_button"></td>
+                </tr></div>);
                 return ids;
             }
         }
@@ -450,7 +459,7 @@ export function LSAS_EMOC_Form(props) {
 
             </input>);
 
-            var firstInput = (<tr><td className="td_name">OT Technician 1</td><td className="td_field">{inputField}</td><td className="td_button">  {addButton}</td></tr>);
+            var firstInput = (<div><tr><td colSpan="2"><label>OT Technician 1</label>{inputField}</td><td className="td_button">  {addButton}</td></tr></div>);
             if (ot_num_map["doc"+ (index+1)] == 1 && otStaff.length < 2){
                 if(otStaff[0] != "")
                 {
@@ -473,9 +482,9 @@ export function LSAS_EMOC_Form(props) {
                 }
                 var ids = [];
                 ids.push(firstInput);
-                ids.push(<tr>
-                    <td className="td_name">OT Technician 2</td><td className="td_field">{inputField2}</td><td></td>
-                </tr>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>OT Technician 2</label>{inputField2}</td><td className="td_button"></td>
+                </tr></div>);
                 return ids;
             }
         }
@@ -503,7 +512,7 @@ export function LSAS_EMOC_Form(props) {
 
             </input>);
 
-            var firstInput = (<tr><td className="td_name">Staff Nurse 1</td><td className="td_field">{inputField}</td><td className="td_button">  {addButton}</td></tr>);
+            var firstInput = (<div><tr><td colSpan="2"><label>Staff Nurse 1 </label>{inputField}</td><td className="td_button">{addButton}</td></tr></div>);
             if (staff_num_map["doc"+ (index+1)] == 1 &&  staff.length < 2){
                 if(staff[0] != "")
                 {
@@ -526,56 +535,62 @@ export function LSAS_EMOC_Form(props) {
                 }
                 var ids = [];
                 ids.push(firstInput);
-                ids.push(<tr>
-                    <td className="td_name">Staff Nurse 2</td><td className="td_field">{inputField2}</td><td></td>
-                </tr>);
+                ids.push(<div><tr>
+                    <td colSpan="2"><label>Staff Nurse 2 </label>{inputField2}</td><td className="td_button"></td>
+                </tr></div>);
                 return ids;
             }
         }
 
         var data =state.data.reduce(function(list,obj,index){
 
-            list.push(<tbody key={"tbody"+index} className="lsasTableTbody">
-                <tr key={"DocId"+ index}>
-                    <td className="td_name">
-                        {constants.lsas_emoc_data_de === instance.props.de.id?"Lsas Ehmrs Id":"Emoc Ehmrs Id" }
-                    </td>
-                    <td className="td_field">
-                        <input
-                            type="text"
-                            maxLength={6}
-                            id = {"DocId_"+ (index+1)}
-                            defaultValue={!obj.id?"":obj.id}
-                            onChange={numberValEntered.bind(null,obj.id)}
-                            onBlur={checkUnique.bind(null,obj)}
-                            disabled = {instance.props.currentStatus || obj.onCall}
-                            className="form-control"></input>
-
-                    </td>
-                    <td className="td_button">
-                        Doctor on call
-                        <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
-                    </td>
-                </tr>
-                <tr className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>
-                    <td colSpan="3">Details of Doctor on call</td>
-                </tr>
-                <tr >
-                    <td colSpan="3"><input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/></td>
-                </tr>
-                <tr>
-                    <td colSpan="3">
-                        {getMbbsDoctor(obj.mbBsDoctor,index)}</td>
-                </tr>
-                <tr>
-                    <td colSpan="3">
-                        {getSupportingStaff(obj.supportingStaff,index)}</td>
-                </tr>
-                <tr>
-                    <td colSpan="3">
-                        {getOtTechnician(obj.otTechnician,index)}</td>
-                </tr>
-                </tbody>
+            list.push(<div>
+                <table>
+                    <tbody key={"tbody"+index} className="lsasTableTbody">
+                            <tr key={"DocId"+ index}>
+                                <td colSpan="2">
+                                    <label>
+                                        {constants.lsas_emoc_data_de === instance.props.de.id?"LSAS Ehmrs Id":"EMOC Ehmrs Id" }
+                                    </label>
+                                    <input
+                                        type="text"
+                                        maxLength={6}
+                                        id = {"DocId_"+ (index+1)}
+                                        defaultValue={!obj.id?"":obj.id}
+                                        onChange={numberValEntered.bind(null,obj.id)}
+                                        onBlur={checkUnique.bind(null,obj)}
+                                        disabled = {instance.props.currentStatus || obj.onCall}
+                                        className="form-control"></input>
+                                </td>
+                                <td className="td_button">
+                                    <label>Doctor on call</label>
+                                    <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
+                                </td>
+                                <label>
+                                    <input type="button" className={(index+1) > 1 ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
+                                </label>
+                            </tr>
+                            <tr >
+                                <td colSpan="3">
+                                    <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor on call</label>
+                                    <input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3">
+                                    {getMbbsDoctor(obj.mbBsDoctor,index)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3">
+                                    {getSupportingStaff(obj.supportingStaff,index)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3">
+                                    {getOtTechnician(obj.otTechnician,index)}</td>
+                            </tr>
+                            </tbody>
+                       </table>
+                </div>
             );
             return list;
         },[]);
@@ -592,12 +607,14 @@ export function LSAS_EMOC_Form(props) {
 
         return (
             <div className="lsas" id="lsas_form">
+
                 <table className="tableDiv">
                     <tbody >
                     <tr>
                         <td colSpan="3">
                             {getDetails()}
                         </td>
+
                     </tr>
                     <tr>
                         <td colSpan="3">

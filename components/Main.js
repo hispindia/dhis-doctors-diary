@@ -26,11 +26,13 @@ export function Main(props){
     }
 
     function getLeftBarClass(){
-        if (state.showLeftBar){
-            return "two"
-        }else{
-            return "hide";
-        }
+
+            if (state.showLeftBar){
+                return "two"
+            }else{
+                return "hide";
+            }
+
     }
     
     function getRightBarClass(){

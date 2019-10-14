@@ -39,6 +39,10 @@ export function DataEntryForm(props){
             return map;
         },[]);
     }
+    if(ps.name.includes("LSAS") || ps.name.includes("EmOC") )
+    {
+        lsas_emoc = true;
+    }
 
     instance.render = function(){
         if (error){
@@ -79,6 +83,7 @@ export function DataEntryForm(props){
         state.changeView(state);
     }
 
+
     function save(){
 
         if(!validate()){
@@ -94,7 +99,7 @@ export function DataEntryForm(props){
                 var data = dataValueMap[constants.emoc_data_de];
                 var newStr = data.replace(str,'');
                 dataValueMap[constants.emoc_data_de] = newStr;
-                console.log(dataValueMap[constants.emoc_data_de]);
+                //console.log(dataValueMap[constants.emoc_data_de]);
             }
             else if(sendOrSave && (dataValueMap[constants.lsas_emoc_data_de]))
             {
@@ -103,9 +108,9 @@ export function DataEntryForm(props){
                 var data = dataValueMap[constants.lsas_emoc_data_de];
                 var newStr = data.replace(str,'');
                 dataValueMap[constants.lsas_emoc_data_de] = newStr;
-                console.log(dataValueMap[constants.lsas_emoc_data_de]);
+                //console.log(dataValueMap[constants.lsas_emoc_data_de]);
             }
-            console.log(Object.entries(dataValueMap));
+            //console.log(Object.entries(dataValueMap));
             sync.saveEvent(dataValueMap,ps,state);
             state.curr_view = constants.views.calendar;
         }
@@ -124,7 +129,7 @@ export function DataEntryForm(props){
         }
         if(window.confirm("Are You Sure You want to send data"))
         {
-            console.log(Object.entries(dataValueMap));
+            //console.log(Object.entries(dataValueMap));
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
             {
                 var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
@@ -132,7 +137,7 @@ export function DataEntryForm(props){
                 var data = dataValueMap[constants.emoc_data_de];
                 var newStr = data.replace(str,'');
                 dataValueMap[constants.emoc_data_de] = newStr;
-                console.log(dataValueMap[constants.emoc_data_de]);
+                //console.log(dataValueMap[constants.emoc_data_de]);
             }
             else if(sendOrSave && (dataValueMap[constants.lsas_emoc_data_de]))
             {
@@ -141,7 +146,7 @@ export function DataEntryForm(props){
                 var data = dataValueMap[constants.lsas_emoc_data_de];
                 var newStr = data.replace(str,'');
                 dataValueMap[constants.lsas_emoc_data_de] = newStr;
-                console.log(dataValueMap[constants.lsas_emoc_data_de]);
+                //console.log(dataValueMap[constants.lsas_emoc_data_de]);
             }
             for(var i =0;i<=dataValueMap.length; i++)
             {
@@ -179,10 +184,11 @@ export function DataEntryForm(props){
 
         return Object.assign([],ps.programStageDataElements)
             .reduce(function(list,obj){
-                list.push(createQuestion(obj));
                 if(obj.dataElement.valueType === "NUMBER"){
+
                     deList.push(obj.dataElement.id)
                 }
+                list.push(createQuestion(obj));
                 return list;
             },[]);
     }
@@ -232,8 +238,6 @@ export function DataEntryForm(props){
             {
                 csections = csections - 1;
             }
-            console.log("data.length: "+data);
-            console.log("csections: "+csections);
             dataValueMap["wTdcUXWeqhN"] = csections;
             dvRequiredMap[de.id] = "";
             instance.setState(state)
@@ -242,13 +246,12 @@ export function DataEntryForm(props){
             lsas_emoc = true;
             dirtyBit = true;
             dataValueMap[de.id] = data;
-            console.log("sendOrSave: "+send);
+            //console.log("sendOrSave: "+send);
             if(send && csections >= 2 )
             {
                 csections = csections - 1;
             }
             sendOrSave = send;
-            console.log("csections: "+csections);
             dataValueMap["zfMOVN2lc1S"] = csections;
             dvRequiredMap[de.id] = "";
             instance.setState(state)
@@ -374,7 +377,7 @@ export function DataEntryForm(props){
 
             if (de.id == constants.lsas_emoc_data_de || de.id == constants.emoc_data_de){
                 lsas_emoc = true;
-                console.log("lsas_emoc: "+lsas_emoc);
+
                 return (<LSAS_EMOC_Form
                     de={de}
                     workingStatus={dataValueMap["x2uDVEGfY4K"]}
@@ -402,7 +405,7 @@ export function DataEntryForm(props){
                             onChange={valEntered.bind(null,de)}>{getOptions(de.optionSet.options)}</select>)
                     }
                 case "NUMBER":
-                    return (<input disabled = {checkIfDisabled(de.id) || lsas_emoc}
+                    return (<input disabled = {checkIfDisabled(de.id)}
                                    className="form-control"
                                    key={de.id}
                                    id={de.id}
@@ -425,13 +428,10 @@ export function DataEntryForm(props){
 
             function checkIfDisabled(deuid){
 
-                console.log(lsas_emoc + " :"+deuid);
-
                 if(deuid === "wTdcUXWeqhN" && lsas_emoc){
                     return true;
                 }
                 if(deuid === "zfMOVN2lc1S" && lsas_emoc){
-                    console.log("deuid");
                     return true;
                 }
                 if (!state.curr_event_calendar_classname.includes("entryDate")){
