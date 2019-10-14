@@ -29,6 +29,7 @@ export function Reports(props){
             .then(res => res.text())
             .then((data) => {
                 state.reports = data;
+                dirtyBit = true;
             })
             .catch(console.log)
         return {__html: state.reports};

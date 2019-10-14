@@ -158,12 +158,12 @@ html {
 
 }
 .italic{
-  font-style: italic;
+    font-style: italic;
 }
 
 
 .bold{
-  font-style: bold;
+    font-style: bold;
 }
 .fringeDays{
     font-style: normal;
@@ -184,9 +184,9 @@ html {
 
 
 .entryDate{
-  font-size : 11pt !important;
-  font-style: italic;
-  font-weight : bold;
+    font-size : 11pt !important;
+    font-style: italic;
+    font-weight : bold;
 }
 
 .futureDate {
@@ -272,10 +272,10 @@ html {
 
 @media screen and (min-width:250px) {
     .banner{background-size: cover !important;
-            background-repeat : round !important;
+        background-repeat : round !important;
         width: auto;
         height: auto;
-           }
+    }
 
 }
 
@@ -344,7 +344,7 @@ html {
     padding:10px;
 }
 .form-control{
-    width: 60%;
+    width: 180px;
 }
 
 .banner{
@@ -530,7 +530,7 @@ html {
 }
 .tableDiv {
     border-collapse: collapse;
-    width: 80%;
+    width: 90%;
     box-sizing: border-box;
     align-items:center;
     padding: 20px 16px;
@@ -546,7 +546,7 @@ html {
     height:30px;
 }
 
-.tableDiv tr:nth-child(even) {background-color: #C3C3C3;}
+
 
 .imgDiv{
     width:100%;
@@ -615,7 +615,7 @@ html {
 }
 
 .dvRequired{
-  font-style: italic;
+    font-style: italic;
 }
 
 .leftArea {
@@ -647,7 +647,7 @@ html {
     border-bottom: groove;
     height: -webkit-fill-available;
     width: -webkit-fill-available;
-     
+
 }
 .la_3 {
     grid-area: c;
@@ -687,15 +687,24 @@ html {
 
 .lsas{
     width:100%;
+    text-align: center;
 }
+
 .td_name{
     width:40%;
+    padding: 6px;
+    text-align: left;
 }
 .td_field{
     width:50%;
+    padding: 6px;
+    text-align: left;
 }
 .td_button{
     width:10%;
+    padding: 6px;
+    text-align: left;
+    vertical-align: bottom;
 }
 
 .lsas input{
@@ -705,6 +714,7 @@ html {
     display:block;
     margin-top:5%;
     border:inset;
+    width: 100%;
 }
 
 .widthFillAvailable{
@@ -733,7 +743,7 @@ html {
     overflow-x: auto;
 }
 .p1{
-  width: 80%;
+    width: 80%;
 }
 .p2{
     width: 40%;
@@ -741,4 +751,39 @@ html {
 .plusBtn{
     width: 10%;
 }
+.redButton{
+    width: 20%;
+    background-color: darkred;
+    border: thin;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border-radius: 60%;
+    position: relative;
+    float: right;
+    top: -10px;
+    right: -10px;
+}
 input[type="checkbox"]:not(:disabled)+span:hover:before { text-shadow: 0 1px 2px #77F; }
+
+.tdButton{
+    width: 100%;
+    vertical-align: top;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.lsasTableTbody input[type=text], select {
+    width: 100%;
+    padding: 6px 12px;
+    margin: 0px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
