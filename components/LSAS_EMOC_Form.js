@@ -47,14 +47,14 @@ export function LSAS_EMOC_Form(props) {
     var docid = 1;
 
     var docMap = {
-        "doc_id1": allIds,
-        "doc_uniqueIds1": uniqueIds,
-        "doc_id2": allIds,
-        "doc_uniqueIds2": uniqueIds,
-        "doc_id3": allIds,
-        "doc_uniqueIds3": uniqueIds,
-        "doc_id4": allIds,
-        "doc_uniqueIds4": uniqueIds,
+        "doc_id1": [],
+        "doc_uniqueIds1": [],
+        "doc_id2": [],
+        "doc_uniqueIds2": [],
+        "doc_id3": [],
+        "doc_uniqueIds3": [],
+        "doc_id4": [],
+        "doc_uniqueIds4": [],
     }
 
     var state = props.state;
@@ -108,7 +108,7 @@ export function LSAS_EMOC_Form(props) {
         var flag = true;
 
         var index_id = docid;
-        if((docid === 1 && state.data.length >= 2) || state.data.length >= 2)
+        if((docid === 1 && state.data.length >= 2))
         {
             for(var i = 1;i<=state.data.length;i++){
                 if(e.target.id.endsWith(""+i))
@@ -117,9 +117,10 @@ export function LSAS_EMOC_Form(props) {
                 }
             }
         }
+        console.log("index id: "+index_id);
             var val1 = document.getElementById("DocId_" + (index_id));
             var val2 = document.getElementById("Partner_DocId_" + (index_id));
-            //console.log("index id: "+Object.entries(index.target._valueTracker));
+
             if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
                 props.sendOrSave = false;
                 doc_ehrmsid = "";
@@ -141,12 +142,10 @@ export function LSAS_EMOC_Form(props) {
                 build_object();
                 return true;
             }
-
             if (docMap["doc_id" + (index_id)].length > 0) {
                 for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
                     var allIds = docMap["doc_id" + (index_id)][i];
-                    //console.log("allIds: "+allIds);
-                    if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" && docMap["doc_uniqueIds" + (index_id)][e.target.id] !== e.target.value) {
+                    if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
                         e.target.value = "";
                         alert("Please enter unique erhms id");
                         flag = false;
@@ -189,7 +188,6 @@ export function LSAS_EMOC_Form(props) {
                         }
                         console.log("Data length: " + doc.length);
                     }
-
                     docMap["doc_id" + (index_id)].push(e.target.id);
                     docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
 
@@ -376,6 +374,7 @@ export function LSAS_EMOC_Form(props) {
         if(window.confirm("Are You Sure You want to delete this case")){
             state.data.splice(index,1);
             build_object();
+            docid = state.data.length;
         }
 
     }
@@ -618,7 +617,7 @@ export function LSAS_EMOC_Form(props) {
                     </tr>
                     <tr>
                         <td colSpan="3">
-                            <input type="button" className={docid > 3 || instance.props.currentStatus ?"hide":"button1 button2"} onClick={addDoctor} value="Add Case"></input>
+                            <input type="button" className={docid > 3 || state.data.length > 3 || instance.props.currentStatus ?"hide":"button1 button2"} onClick={addDoctor} value="Add Case"></input>
                         </td>
                     </tr>
                     </tbody>

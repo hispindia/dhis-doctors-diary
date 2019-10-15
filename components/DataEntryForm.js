@@ -196,15 +196,18 @@ export function DataEntryForm(props){
     function validate(){
 
         var flag1 = true;
-        for (var i=0;i<deList.length;i++){
-            if (!dataValueMap[deList[i]] || dataValueMap[deList[i]] == ""){
-                flag1=false;
-                dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
-            }
-            else{
-                flag1=true;
+        if(dataValueMap["x2uDVEGfY4K"] === "Working"){
+            for (var i=0;i<deList.length;i++){
+                if (!dataValueMap[deList[i]] || dataValueMap[deList[i]] == ""){
+                    flag1=false;
+                    dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                }
+                else{
+                    flag1=true;
+                }
             }
         }
+
         return flag1;
 
     }
@@ -222,8 +225,8 @@ export function DataEntryForm(props){
     function valEntered(de,e){
         dirtyBit = true;
         dataValueMap[de.id] = e.target.value;
-        //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
+        //  checkSkipLogic(de.id,e.target.value)
         instance.setState(state)
 
     }
@@ -377,7 +380,6 @@ export function DataEntryForm(props){
 
             if (de.id == constants.lsas_emoc_data_de || de.id == constants.emoc_data_de){
                 lsas_emoc = true;
-
                 return (<LSAS_EMOC_Form
                     de={de}
                     workingStatus={dataValueMap["x2uDVEGfY4K"]}
@@ -411,7 +413,7 @@ export function DataEntryForm(props){
                                    id={de.id}
                                    type = "text"
                                    maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
-                                   value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
+                                   value = {dataValueMap[de.id] && dataValueMap["x2uDVEGfY4K"] === "Working"?dataValueMap[de.id]:""}
                                    onChange={numberValEntered.bind(de.id,de)} ></input>);
                 case "LONG_TEXT":
                     return (<textarea
@@ -448,7 +450,12 @@ export function DataEntryForm(props){
 
                 if (deuid!="x2uDVEGfY4K"){
                     if (dataValueMap["x2uDVEGfY4K"]!="Working"){
-                        utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
+                        if(lsas_emoc){
+                            utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K','wTdcUXWeqhN','zfMOVN2lc1S'])
+                        }else{
+                            utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
+                        }
+
                         return true;
                     }
                 }
