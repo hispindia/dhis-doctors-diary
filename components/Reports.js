@@ -2,38 +2,27 @@ import React,{propTypes} from 'react';
 import constants from '../constants';
 import cache from '../localstorage';
 
+
+import moment from 'moment';
+
+let currentDate = new Date();
 export function Reports(props){
     var instance = Object.create(React.Component.prototype)
+    instance.props = props;
 
     var dirtyBit = true;
-
-    instance.props = props;
     var state = props.state;
-    state = {
-        reports: "",
-    }
 
 
-    function componentDidMount() {
-        var username = parseInt(cache.get("dd_current_user").username);
-        var url = "https://uphmis.in/uphmis/api/29/analytics/events/query/Bv3DaiOd5Ai.html+css?dimension=pe:THIS_MONTH&dimension=ou:USER_ORGUNIT&dimension=T6eQvMXe3MO:EQ:"+username+"&dimension=W3RxC0UOsGY&tableLayout=true&columns=pe;ou;T6eQvMXe3MO;zfMOVN2lc1S&rows=pe;ou;T6eQvMXe3MO;zfMOVN2lc1S&user=oo3KPGux5RH";
+    var ps = state.
+        program_metadata_programStageByIdMap[state.
+        curr_user_program_stage];
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Basic '+btoa('admin:H!SPindia2017'),
-                'Content-Type': 'text/html',
-                'X-Custom-Header': 'ProcessThisImmediately',
-            },
-        })
-            .then(res => res.text())
-            .then((data) => {
-                state.reports = data;
-                dirtyBit = true;
-            })
-            .catch(console.log)
-        return {__html: state.reports};
-    }
+
+    var dataElementList = [];
+    var dataMap = [];
+    var dateList =[];
+
     function currentView(){
         dirtyBit = false;
         state.curr_view=constants.views.reports;
@@ -43,17 +32,97 @@ export function Reports(props){
         state.curr_view=constants.views.calendar;
         state.changeView(state);
     }
+    function getUserDataElement() {
+        console.log(ps.programStageDataElements);
+        dataElementList = [];
+        return Object.assign([],ps.programStageDataElements)
+            .reduce(function(list,obj){
+                if (obj.dataElement.id === constants.lsas_emoc_data_de || obj.dataElement.id === constants.emoc_data_de) {
+                    console.log(obj.dataElement.id);
+                }
+                else{
+                    list.push(<th>{obj.dataElement.formName}</th>);
+                    dataElementList.push(obj.dataElement.id);
+                }
+                return list;
+            },[]);
+
+
+    }
+function  createTable() {
+        var table = [];
+    var count = 0;
+    dataMap = [];
+    dateList =[];
+    state.curr_user_data = cache.get(constants.cache_user_prefix+state.curr_user.username);
+
+    state.curr_user_data.events.reduce(function(list,obj) {
+            var edate = new Date(obj.eventDate);
+            if (edate.getMonth() == currentDate.getMonth()) {
+                count++;
+                list[moment(obj.eventDate).format("YYYY-MM-DD")]= obj;
+
+                //getTabularData(obj);
+                //console.log(list[moment(obj.eventDate).format("YYYY-MM-DD")]);
+                dataMap[edate] = obj;
+                dateList.push(edate);
+                console.log(edate.toLocaleDateString("en-US"));
+            }
+
+            return list;
+        },[]);
+
+    if(dataMap != null && dateList != null)
+    {
+        dateList.sort((a,b)=>a.getTime()-b.getTime());
+        for (var i = 0; i < dateList.length; i++) {
+            var children = [];
+            var evdate = dateList[i].toLocaleDateString("en-GB") ;
+            children.push(<td>{evdate}</td>);
+            children.push(<td>{dataMap[dateList[i]].status}</td>);
+            if(dataMap[dateList[i]].dataValues.length > 0) {
+                var d1 = dataMap[dateList[i]].dataValues;
+                if(dataElementList.length != 0){
+                    for (var j = 0; j < dataElementList.length; j++) {
+                        var dE = "";
+                           for(var k = 0; k < d1.length; k++){
+                            if(d1[k].dataElement === dataElementList[j])
+                            {
+                                dE = d1[k].value;
+                            }
+                           }
+                       if(dE != "" )
+                       {
+                           children.push(<td>{dE}</td>);
+                       }
+                       else{
+                           children.push(<td> </td>);
+                       }
+                    }
+                }
+
+            }
+            table.push(<tr>{children}</tr>)
+        }
+    }
+    return table;
+}
+
 
     var state = props.state;
     instance.render = function(){
-        return (
-                <div>
-                  <button className="button1 button2" onClick={back}>Back</button>
-                    <button className={dirtyBit?"button1 button2":"hidden"} onClick={currentView}>Show</button>
-                    <div className={dirtyBit?"hidden":"reportSection"} >
-                        <div dangerouslySetInnerHTML={componentDidMount()} />
-                 </div>
-                </div>
+        return (<div className="reportArea">
+                <table className="reportTable">
+                <thead><tr>
+                    <th>Event Date</th>
+                    <th>Data Status</th>
+                    {getUserDataElement()}
+                </tr>
+                </thead>
+                <tbody>
+                    {createTable()}
+                </tbody>
+            </table></div>
         )
     }
     return instance;

@@ -786,4 +786,34 @@ input[type="checkbox"]:not(:disabled)+span:hover:before { text-shadow: 0 1px 2px
     border-radius: 4px;
     box-sizing: border-box;
 }
+.reportTable {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.reportTable td, .reportTable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.reportTable tr:nth-child(even){background-color: #f2f2f2;}
+
+.reportTable tr:hover {background-color: #ddd;}
+
+.reportTable th {
+
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    background-color: #0B2558;
+    color: white;
+    opacity: 0.8;
+}
+.reportArea{
+    max-width: 54vw;
+    max-height: 68vh;
+    overflow-x: auto;
+    overflow-y: auto;
+}
 

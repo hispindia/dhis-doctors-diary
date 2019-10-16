@@ -185,8 +185,7 @@ export function DataEntryForm(props){
         return Object.assign([],ps.programStageDataElements)
             .reduce(function(list,obj){
                 if(obj.dataElement.valueType === "NUMBER"){
-
-                    deList.push(obj.dataElement.id)
+                   deList.push(obj.dataElement.id)
                 }
                 list.push(createQuestion(obj));
                 return list;
@@ -199,8 +198,10 @@ export function DataEntryForm(props){
         if(dataValueMap["x2uDVEGfY4K"] === "Working"){
             for (var i=0;i<deList.length;i++){
                 if (!dataValueMap[deList[i]] || dataValueMap[deList[i]] == ""){
-                    flag1=false;
-                    dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                    if(deList[i] !== constants.other_duties_de ) {
+                        flag1 = false;
+                        dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                    }
                 }
                 else{
                     flag1=true;
