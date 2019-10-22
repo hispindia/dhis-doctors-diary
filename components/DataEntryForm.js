@@ -60,13 +60,13 @@ export function DataEntryForm(props){
                 <div className="entrySaveDiv">
 
                     <input className="button1 button2" type="button" value="Back" onClick={back}></input>
-                    <input className={dirtyBit?"button1 button2" : "hidden"}
+                    <input className={dirtyBit ?"button1 button2" : "hidden"}
                            type="button"
                            value="Save"
                            onClick={save}></input>
 
                     <input
-                        className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
+                        className={state.offlineEvents > 0 || state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
                         type="button"
                         value="Send"
                         onClick={send}></input>
@@ -129,7 +129,6 @@ export function DataEntryForm(props){
         }
         if(window.confirm("Are You Sure You want to send data"))
         {
-            //console.log(Object.entries(dataValueMap));
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
             {
                 var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
@@ -148,26 +147,20 @@ export function DataEntryForm(props){
                 dataValueMap[constants.lsas_emoc_data_de] = newStr;
                 //console.log(dataValueMap[constants.lsas_emoc_data_de]);
             }
-            for(var i =0;i<=dataValueMap.length; i++)
-            {
-
-                if(dataValueMap[i] == constants.lsas_emoc_data_de){
-
-                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                    state.curr_view = constants.views.calendar;
-                    instance.setState(state);
-                }
-                else if(dataValueMap[i] == constants.emoc_data_de){
-                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                    state.curr_view = constants.views.calendar;
-                    instance.setState(state)
-                }
-                else{
-                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                    state.curr_view = constants.views.calendar;
-                }
+            sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+            state.curr_view = constants.views.calendar;
+            //instance.setState(state);
+           /* }
+            else if(dataValueMap[i] == constants.emoc_data_de){
+                sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+                state.curr_view = constants.views.calendar;
+                instance.setState(state)
             }
-
+            else{
+                sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+                state.curr_view = constants.views.calendar;
+            }
+        */
         }
         else{
             sendOrSave = true;

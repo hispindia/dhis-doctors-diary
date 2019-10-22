@@ -117,7 +117,7 @@ export function LSAS_EMOC_Form(props) {
                 }
             }
         }
-        console.log("index id: "+index_id);
+        //console.log("index id: "+index_id);
             var val1 = document.getElementById("DocId_" + (index_id));
             var val2 = document.getElementById("Partner_DocId_" + (index_id));
 
@@ -177,16 +177,16 @@ export function LSAS_EMOC_Form(props) {
                     if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
                     {
                         var d1 = docMap["doc_uniqueIds" + (index_id)][e.target.id];
-                        console.log("Previous value---------"+doc[i]);
+                        //console.log("Previous value---------"+doc[i]);
                         for( var i = 0; i < doc.length; i++){
                             if ( doc[i] === d1) {
-                                console.log("doc[i]---------"+doc[i]);
-                                console.log("doc[i]---------"+d1);
+                                //console.log("doc[i]---------"+doc[i]);
+                                //console.log("doc[i]---------"+d1);
                                 doc.splice(index, 1);
                                 build_object();
                             }
                         }
-                        console.log("Data length: " + doc.length);
+                        //console.log("Data length: " + doc.length);
                     }
                     docMap["doc_id" + (index_id)].push(e.target.id);
                     docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
@@ -566,7 +566,7 @@ export function LSAS_EMOC_Form(props) {
                                     <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
                                 </td>
                                 <label>
-                                    <input type="button" className={(index+1) > 1 ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
+                                    <input type="button" className={(index+1)  > 1 && !instance.props.currentStatus ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
                                 </label>
                             </tr>
                             <tr >
