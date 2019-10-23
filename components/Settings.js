@@ -46,7 +46,7 @@ export function Settings(props){
                 </tr>
                 <tr>
                     <td>
-                        <input className="settingBt" type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
+                        <input disabled={isDisabled()} className={"settingBt"} type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
                     </td>
                 </tr>
             </tbody>
@@ -61,6 +61,15 @@ export function Settings(props){
         state.curr_view=constants.views.calendar;
         state.changeView(state);
         
+    }
+    function  isDisabled() {
+        if(state.offlineEvents > 0)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     
     function reset(){

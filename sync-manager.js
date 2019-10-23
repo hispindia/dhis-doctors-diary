@@ -121,28 +121,29 @@ function syncManager(){
         
     }
     
-    this.saveEvent = function(dvMap,ps,state,callback,status){
+    this.saveEvent = function(dvMap,ps,state,callback,status) {
 
         var event = {
-            trackedEntityInstance : state.curr_user_data.tei.trackedEntityInstance,
-            program :constants.program_doc_diary,
-            programStage : state.curr_user_program_stage,
-            orgUnit : state.curr_user_data.tei.orgUnit
+            trackedEntityInstance: state.curr_user_data.tei.trackedEntityInstance,
+            program: constants.program_doc_diary,
+            programStage: state.curr_user_program_stage,
+            orgUnit: state.curr_user_data.tei.orgUnit
         };
-        
-     
-        if (!state.curr_event){
 
-            event.eventDate = state.curr_event_date;            
+
+        if (!state.curr_event) {
+
+            event.eventDate = state.curr_event_date;
             state.curr_user_data.events.push(event);
 
-        }else{
-            if (state.curr_event){
+        }
+        else {
+            if (state.curr_event) {
                 event = state.curr_event;
             }
         }
 
-        if (status == "COMPLETED"){
+        if (status === "COMPLETED") {
             event.status = "COMPLETED";
             /* Support for Approval Level
                First time set approval de value to either Pending1 or Pending 2 
@@ -152,16 +153,17 @@ function syncManager(){
             /* */
         }
         event.dataValues = populateDataValues();
-        event.offline= true;
+        event.offline = true;
         state.curr_user_eventMapByDate[event.eventDate] = event;
-        if(!callback){
-            state.offlineEvents = state.offlineEvents+1;
+        if (!callback) {
+            state.offlineEvents = state.offlineEvents + 1;
         }
-        cache.save(constants.cache_user_prefix+state.curr_user.username,
-                       state.curr_user_data);
+        console.log(constants.cache_user_prefix + state.curr_user.username);
+        cache.save(constants.cache_user_prefix + state.curr_user.username,
+            state.curr_user_data);
         state.changeView(state);
-        sendEvent(state,event,callback);
-        
+        sendEvent(state, event, callback);
+
         function populateDataValues(){
             return ps.programStageDataElements.reduce(function(list,obj){
             
@@ -200,10 +202,12 @@ function syncManager(){
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
 
-      
-        if (!event.event){         
+
+        if (!(event.event)){
+            console.log("create: "+Object.entries(event));
             api.saveReq(`events`,event,postSave)
         }else{
+            console.log("update: "+Object.entries(event));
             api.updateReq(`events/${event.event}`,event,postSend)
             
         }
