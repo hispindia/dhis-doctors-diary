@@ -149,18 +149,6 @@ export function DataEntryForm(props){
             }
             sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
             state.curr_view = constants.views.calendar;
-            //instance.setState(state);
-           /* }
-            else if(dataValueMap[i] == constants.emoc_data_de){
-                sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                state.curr_view = constants.views.calendar;
-                instance.setState(state)
-            }
-            else{
-                sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                state.curr_view = constants.views.calendar;
-            }
-        */
         }
         else{
             sendOrSave = true;
@@ -200,6 +188,11 @@ export function DataEntryForm(props){
                     flag1=true;
                 }
             }
+        }
+        if(dataValueMap["x2uDVEGfY4K"] === "")
+        {
+            alert("Please select working status");
+            flag1 = false;
         }
 
         return flag1;

@@ -9,6 +9,12 @@ export function LSAS_EMOC_Form(props) {
 
     var doc_ehrmsid = "";
 
+    var doc_case_id = "";
+
+    var doc_patient_name = "";
+
+    var doc_rch_id = "";
+
     var count = 0;
 
     var call_doc_ehrmsid = "";
@@ -40,7 +46,7 @@ export function LSAS_EMOC_Form(props) {
 
     var checkedCall = false;
 
-    var msgForObject = [];
+    var case_ids = [];
 
     var uniqueIds = [];
 
@@ -65,6 +71,9 @@ export function LSAS_EMOC_Form(props) {
     state.data.push({
         id: doc_ehrmsid,
         doc_id: call_doc_ehrmsid,
+        case_id: doc_case_id,
+        patient_name: doc_patient_name,
+        rch_id: doc_rch_id,
         onCall: checkedCall,
         mbBsDoctor: [],
         supportingStaff: [],
@@ -103,6 +112,24 @@ export function LSAS_EMOC_Form(props) {
             return true;
         }
     }
+    function alphaNumValEntered(de, e) {
+
+        if ((!e.target.value.match("^([a-zA-Z0-9]+)$"))) {
+            e.target.value = e.target.value.slice(0, e.target.value.length - 1);
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function alphabetValEntered(de, e) {
+
+        if ((!e.target.value.match("^([a-zA-Z]+)$"))) {
+            e.target.value = e.target.value.slice(0, e.target.value.length - 1);
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     function checkUnique(doc, e, index) {
         var flag = true;
@@ -117,85 +144,124 @@ export function LSAS_EMOC_Form(props) {
                 }
             }
         }
-        //console.log("index id: "+index_id);
-            var val1 = document.getElementById("DocId_" + (index_id));
-            var val2 = document.getElementById("Partner_DocId_" + (index_id));
 
-            if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
-                props.sendOrSave = false;
-                doc_ehrmsid = "";
-                doc_ehrmsid = val1.value + "";
-                doc["doc_id"] = "";
-                doc["id"] = (doc_ehrmsid);
-                docMap["doc_id" + (index_id)].push(val1.id);
-                docMap["doc_uniqueIds" + (index_id)][val1.id] = val1.value;
-                build_object();
-                return true;
-            } else if (val1.value === "" && val2.value !== "" && e.target.id == "Partner_DocId_" + (index_id)) {
-                props.sendOrSave = false;
-                call_doc_ehrmsid = "";
-                call_doc_ehrmsid = val2.value + "";
-                doc["doc_id"] = call_doc_ehrmsid;
-                doc["id"] = "";
-                docMap["doc_id" + (index_id)].push(val2.id);
-                docMap["doc_uniqueIds" + (index_id)][val2.id] = val2.value;
-                build_object();
-                return true;
+        var caseid = document.getElementById("caseid_" + (index_id));
+        var patient_name = document.getElementById("patient_name_" + (index_id));
+        var ech_id = document.getElementById("rch_id_" + (index_id));
+
+        var val1 = document.getElementById("DocId_" + (index_id));
+        var val2 = document.getElementById("Partner_DocId_" + (index_id));
+
+
+
+        if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
+            props.sendOrSave = false;
+            doc_ehrmsid = "";
+            doc_ehrmsid = val1.value + "";
+            doc["doc_id"] = "";
+            doc["id"] = (doc_ehrmsid);
+            docMap["doc_id" + (index_id)].push(val1.id);
+            docMap["doc_uniqueIds" + (index_id)][val1.id] = val1.value;
+            build_object();
+            return true;
+        } else if (val1.value === "" && val2.value !== "" && e.target.id == "Partner_DocId_" + (index_id)) {
+            props.sendOrSave = false;
+            call_doc_ehrmsid = "";
+            call_doc_ehrmsid = val2.value + "";
+            doc["doc_id"] = call_doc_ehrmsid;
+            doc["id"] = "";
+            docMap["doc_id" + (index_id)].push(val2.id);
+            docMap["doc_uniqueIds" + (index_id)][val2.id] = val2.value;
+            build_object();
+            return true;
+        }
+        if(caseid.value !== "" && e.target.id == "caseid_" + (index_id)){
+            props.sendOrSave = false;
+            doc_case_id = "";
+            doc_case_id = caseid.value + "";
+                if(case_ids.length >=2 && case_ids.includes(doc_case_id)) {
+                    alert("Please enter unique case id");
+                    caseid.focus();
+                    caseid.select();
+                    caseid.value = "";
+                    flag = false;
+                }
+                else{
+                    doc["case_id"] = doc_case_id;
+                    case_ids.push(doc_case_id);
+                    build_object();
+                    return true;
+                }
+        }
+        if(patient_name.value !== "" && e.target.id == "patient_name_" + (index_id)){
+            props.sendOrSave = false;
+            doc_patient_name = "";
+            doc_patient_name = patient_name.value + "";
+            doc["patient_name"] = ""+doc_patient_name;
+            build_object();
+            return true;
+        }
+        if(ech_id.value !== "" && e.target.id == "rch_id_" + (index_id)){
+            props.sendOrSave = false;
+            doc_rch_id = "";
+            doc_rch_id = ech_id.value + "";
+            doc["rch_id"] = doc_rch_id;
+            build_object();
+            return true;
+        }
+        if (docMap["doc_id" + (index_id)].length > 0) {
+            for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
+                var allIds = docMap["doc_id" + (index_id)][i];
+                if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
+                    e.target.value = "";
+                    alert("Please enter unique erhms id");
+                    flag = false;
+                }
             }
-            if (docMap["doc_id" + (index_id)].length > 0) {
-                for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
-                    var allIds = docMap["doc_id" + (index_id)][i];
-                    if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
-                        e.target.value = "";
-                        alert("Please enter unique erhms id");
-                        flag = false;
-                    }
+            if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][e.target.id] != "") {
+                if (e.target.value != "" &&
+                    (e.target.id === "mbBSId_1" + "doc" + (index_id)
+                        || e.target.id === "mbBSId_2" + "doc" + (index_id))) {
+                    doc.push(e.target.value);
+                    props.sendOrSave = false;
+                    build_object();
+                } else if (e.target.value != "" &&
+                    (e.target.id === "staffId_1" + "doc" + (index_id)
+                        || e.target.id === "staffId_2" + "doc" + (index_id))) {
+                    doc.push(e.target.value);
+                    props.sendOrSave = false;
+
+                    build_object();
+                } else if (e.target.value != "" &&
+                    (e.target.id === "otTechId_1" + "doc" + (index_id)
+                        || e.target.id === "otTechId_2" + "doc" + (index_id))) {
+                    doc.push(e.target.value);
+                    props.sendOrSave = false;
+
+                    build_object();
                 }
-                if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][e.target.id] != "") {
-                    if (e.target.value != "" &&
-                        (e.target.id === "mbBSId_1" + "doc" + (index_id)
-                            || e.target.id === "mbBSId_2" + "doc" + (index_id))) {
-                        doc.push(e.target.value);
-                        props.sendOrSave = false;
-                        build_object();
-                    } else if (e.target.value != "" &&
-                        (e.target.id === "staffId_1" + "doc" + (index_id)
-                            || e.target.id === "staffId_2" + "doc" + (index_id))) {
-                        doc.push(e.target.value);
-                        props.sendOrSave = false;
 
-                        build_object();
-                    } else if (e.target.value != "" &&
-                        (e.target.id === "otTechId_1" + "doc" + (index_id)
-                            || e.target.id === "otTechId_2" + "doc" + (index_id))) {
-                        doc.push(e.target.value);
-                        props.sendOrSave = false;
+                if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
+                {
+                    var d1 = docMap["doc_uniqueIds" + (index_id)][e.target.id];
+                    //console.log("Previous value---------"+doc[i]);
+                    for( var i = 0; i < doc.length; i++){
+                        if ( doc[i] === d1) {
 
-                        build_object();
-                    }
-
-                    if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
-                    {
-                        var d1 = docMap["doc_uniqueIds" + (index_id)][e.target.id];
-                        //console.log("Previous value---------"+doc[i]);
-                        for( var i = 0; i < doc.length; i++){
-                            if ( doc[i] === d1) {
-                                //console.log("doc[i]---------"+doc[i]);
-                                //console.log("doc[i]---------"+d1);
-                                doc.splice(index, 1);
-                                build_object();
-                            }
+                            doc.splice(index, 1);
+                            build_object();
                         }
-                        //console.log("Data length: " + doc.length);
                     }
-                    docMap["doc_id" + (index_id)].push(e.target.id);
-                    docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
-
+                    //console.log("Data length: " + doc.length);
                 }
-            } else {
                 docMap["doc_id" + (index_id)].push(e.target.id);
                 docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
+
             }
+        } else {
+            docMap["doc_id" + (index_id)].push(e.target.id);
+            docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
+        }
 
         return flag;
     }
@@ -264,6 +330,9 @@ export function LSAS_EMOC_Form(props) {
             state.data.push( {
                 id : "",
                 doc_id: "",
+                case_id: "",
+                patient_name:"",
+                rch_id:"",
                 onCall : false,
                 mbBsDoctor : [],
                 supportingStaff : [],
@@ -542,53 +611,97 @@ export function LSAS_EMOC_Form(props) {
         }
 
         var data =state.data.reduce(function(list,obj,index){
-
+            if(!case_ids.includes(obj.case_id) && obj.case_id){
+                case_ids.push(obj.case_id);
+            }
             list.push(<div>
-                <table>
-                    <tbody key={"tbody"+index} className="lsasTableTbody">
-                            <tr key={"DocId"+ index}>
-                                <td colSpan="2">
-                                    <label>
-                                        {constants.lsas_emoc_data_de === instance.props.de.id?"LSAS Ehmrs Id":"EMOC Ehmrs Id" }
-                                    </label>
-                                    <input
-                                        type="text"
-                                        maxLength={6}
-                                        id = {"DocId_"+ (index+1)}
-                                        defaultValue={!obj.id?"":obj.id}
-                                        onChange={numberValEntered.bind(null,obj.id)}
-                                        onBlur={checkUnique.bind(null,obj)}
-                                        disabled = {instance.props.currentStatus || obj.onCall}
-                                        className="form-control"></input>
-                                </td>
-                                <td className="td_button">
-                                    <label>Doctor on call</label>
-                                    <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
-                                </td>
+                    <table>
+                        <tbody key={"tbody"+index} className="lsasTableTbody">
+                        <tr>
+                            <td colSpan="3">
+                                <label>Case Id:</label>
+                                <input
+                                    type="text"
+                                    id = {"caseid_"+ (index+1)}
+                                    maxLength={50}
+                                    defaultValue={!obj.case_id?"":obj.case_id}
+                                    onChange={alphaNumValEntered.bind(null,obj.case_id)}
+                                    onBlur={checkUnique.bind(null,obj)}
+                                    disabled = {instance.props.currentStatus}
+                                    className="form-control"></input>
+                            </td>
+                            <label>
+                                <input type="button" className={(index+1)  > 1 && !instance.props.currentStatus ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
+                            </label>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                <label>Patient Name:</label>
+                                <input
+                                    type="text"
+                                    id = {"patient_name_"+ (index+1)}
+                                    maxLength={20}
+                                    defaultValue={!obj.patient_name?"":obj.patient_name}
+                                    onChange={alphabetValEntered.bind(null,obj.patient_name)}
+                                    onBlur={checkUnique.bind(null,obj)}
+                                    disabled = {instance.props.currentStatus}
+                                    className="form-control"></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                <label>RCH Id:</label>
+                                <input
+                                    type="text"
+                                    maxLength={12}
+                                    id = {"rch_id_"+ (index+1)}
+                                    defaultValue={!obj.rch_id?"":obj.rch_id}
+                                    onChange={numberValEntered.bind(null,obj.rch_id)}
+                                    onBlur={checkUnique.bind(null,obj)}
+                                    disabled = {instance.props.currentStatus}
+                                    className="form-control"></input>
+                            </td>
+                        </tr>
+                        <tr key={"DocId"+ index}>
+                            <td colSpan="2">
                                 <label>
-                                    <input type="button" className={(index+1)  > 1 && !instance.props.currentStatus ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
+                                    {constants.lsas_emoc_data_de === instance.props.de.id?"LSAS Ehrms Id":"EMOC Ehrms Id" }
                                 </label>
-                            </tr>
-                            <tr >
-                                <td colSpan="3">
-                                    <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor on call</label>
-                                    <input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="3">
-                                    {getMbbsDoctor(obj.mbBsDoctor,index)}</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="3">
-                                    {getSupportingStaff(obj.supportingStaff,index)}</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="3">
-                                    {getOtTechnician(obj.otTechnician,index)}</td>
-                            </tr>
-                            </tbody>
-                       </table>
+                                <input
+                                    type="text"
+                                    maxLength={6}
+                                    id = {"DocId_"+ (index+1)}
+                                    defaultValue={!obj.id?"":obj.id}
+                                    onChange={numberValEntered.bind(null,obj.id)}
+                                    onBlur={checkUnique.bind(null,obj)}
+                                    disabled = {instance.props.currentStatus || obj.onCall}
+                                    className="form-control"></input>
+                            </td>
+                            <td className="td_button">
+                                <label>Doctor/Specialist on Call</label>
+                                <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colSpan="3">
+                                <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor/Specialist on Call</label>
+                                <input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                {getMbbsDoctor(obj.mbBsDoctor,index)}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                {getSupportingStaff(obj.supportingStaff,index)}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                {getOtTechnician(obj.otTechnician,index)}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             );
             return list;

@@ -33,12 +33,12 @@ export function Reports(props){
         state.changeView(state);
     }
     function getUserDataElement() {
-        console.log(ps.programStageDataElements);
+        //console.log(ps.programStageDataElements);
         dataElementList = [];
         return Object.assign([],ps.programStageDataElements)
             .reduce(function(list,obj){
                 if (obj.dataElement.id === constants.lsas_emoc_data_de || obj.dataElement.id === constants.emoc_data_de) {
-                    console.log(obj.dataElement.id);
+                    //console.log(obj.dataElement.id);
                 }
                 else{
                     list.push(<th>{obj.dataElement.formName}</th>);
@@ -61,12 +61,8 @@ function  createTable() {
             if (edate.getMonth() == currentDate.getMonth()) {
                 count++;
                 list[moment(obj.eventDate).format("YYYY-MM-DD")]= obj;
-
-                //getTabularData(obj);
-                //console.log(list[moment(obj.eventDate).format("YYYY-MM-DD")]);
                 dataMap[edate] = obj;
                 dateList.push(edate);
-                console.log(edate.toLocaleDateString("en-US"));
             }
 
             return list;
@@ -113,7 +109,11 @@ function  createTable() {
     instance.render = function(){
         return (<div className="reportArea">
                 <table className="reportTable">
-                <thead><tr>
+                <thead>
+                <tr>
+                    <th colSpan="8">User Report of Current Month</th>
+                </tr>
+                <tr>
                     <th>Event Date</th>
                     <th>Data Status</th>
                     {getUserDataElement()}
