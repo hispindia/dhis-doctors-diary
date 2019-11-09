@@ -619,6 +619,20 @@ export function LSAS_EMOC_Form(props) {
                         <tbody key={"tbody"+index} className="lsasTableTbody">
                         <tr>
                             <td colSpan="3">
+                                <label>Patient Name:</label>
+                                <input
+                                    type="text"
+                                    id = {"patient_name_"+ (index+1)}
+                                    maxLength={20}
+                                    defaultValue={!obj.patient_name?"":obj.patient_name}
+                                    onChange={alphabetValEntered.bind(null,obj.patient_name)}
+                                    onBlur={checkUnique.bind(null,obj)}
+                                    disabled = {instance.props.currentStatus}
+                                    className="form-control"></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
                                 <label>Case Id:</label>
                                 <input
                                     type="text"
@@ -634,20 +648,7 @@ export function LSAS_EMOC_Form(props) {
                                 <input type="button" className={(index+1)  > 1 && !instance.props.currentStatus ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
                             </label>
                         </tr>
-                        <tr>
-                            <td colSpan="3">
-                                <label>Patient Name:</label>
-                                <input
-                                    type="text"
-                                    id = {"patient_name_"+ (index+1)}
-                                    maxLength={20}
-                                    defaultValue={!obj.patient_name?"":obj.patient_name}
-                                    onChange={alphabetValEntered.bind(null,obj.patient_name)}
-                                    onBlur={checkUnique.bind(null,obj)}
-                                    disabled = {instance.props.currentStatus}
-                                    className="form-control"></input>
-                            </td>
-                        </tr>
+
                         <tr>
                             <td colSpan="3">
                                 <label>RCH Id:</label>
@@ -678,13 +679,13 @@ export function LSAS_EMOC_Form(props) {
                                     className="form-control"></input>
                             </td>
                             <td className="td_button">
-                                <label>Doctor/Specialist on Call</label>
+                                <label>Doctor on Call/ Specialist</label>
                                 <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
                             </td>
                         </tr>
                         <tr >
                             <td colSpan="3">
-                                <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor/Specialist on Call</label>
+                                <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor on Call/ Specialist</label>
                                 <input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
                             </td>
                         </tr>
