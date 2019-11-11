@@ -94,7 +94,7 @@ export function DataEntryForm(props){
         {
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.emoc_data_de];
                 var newStr = data.replace(str,'');
@@ -103,7 +103,7 @@ export function DataEntryForm(props){
             }
             else if(sendOrSave && (dataValueMap[constants.lsas_emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.lsas_emoc_data_de];
                 var newStr = data.replace(str,'');
@@ -131,7 +131,7 @@ export function DataEntryForm(props){
         {
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.emoc_data_de];
                 var newStr = data.replace(str,'');
@@ -140,7 +140,7 @@ export function DataEntryForm(props){
             }
             else if(sendOrSave && (dataValueMap[constants.lsas_emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.lsas_emoc_data_de];
                 var newStr = data.replace(str,'');

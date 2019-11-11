@@ -46,6 +46,8 @@ export function LSAS_EMOC_Form(props) {
 
     var checkedCall = false;
 
+    var isCase = false;
+
     var case_ids = [];
 
     var uniqueIds = [];
@@ -72,6 +74,7 @@ export function LSAS_EMOC_Form(props) {
         id: doc_ehrmsid,
         doc_id: call_doc_ehrmsid,
         case_id: doc_case_id,
+        isCaseId: isCase,
         patient_name: doc_patient_name,
         rch_id: doc_rch_id,
         onCall: checkedCall,
@@ -88,6 +91,7 @@ export function LSAS_EMOC_Form(props) {
             console.log("An error occurred while parsing object" + ex);
         }
     }
+
 
     function build_object() {
 
@@ -147,15 +151,18 @@ export function LSAS_EMOC_Form(props) {
 
         var caseid = document.getElementById("caseid_" + (index_id));
         var patient_name = document.getElementById("patient_name_" + (index_id));
-        var ech_id = document.getElementById("rch_id_" + (index_id));
+        var rch_id = document.getElementById("rch_id_" + (index_id));
 
         var val1 = document.getElementById("DocId_" + (index_id));
         var val2 = document.getElementById("Partner_DocId_" + (index_id));
 
 
-
         if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
             props.sendOrSave = false;
+            if(e.target.value.length < 6){
+                alert("Please enter at-least 6 digit ehrms id");
+                return false;
+            }
             doc_ehrmsid = "";
             doc_ehrmsid = val1.value + "";
             doc["doc_id"] = "";
@@ -175,7 +182,7 @@ export function LSAS_EMOC_Form(props) {
             build_object();
             return true;
         }
-        if(caseid.value !== "" && e.target.id == "caseid_" + (index_id)){
+        if(rch_id.value === "" && caseid.value !== "" && e.target.id == "caseid_" + (index_id)){
             props.sendOrSave = false;
             doc_case_id = "";
             doc_case_id = caseid.value + "";
@@ -187,11 +194,21 @@ export function LSAS_EMOC_Form(props) {
                     flag = false;
                 }
                 else{
+                    doc["rch_id"] = "";
                     doc["case_id"] = doc_case_id;
                     case_ids.push(doc_case_id);
                     build_object();
                     return true;
                 }
+        }
+        else if(caseid.value === "" && rch_id.value !== "" && e.target.id == "rch_id_" + (index_id)){
+            props.sendOrSave = false;
+            doc_rch_id = "";
+            doc_rch_id = rch_id.value + "";
+            doc["case_id"] = "";
+            doc["rch_id"] = doc_rch_id;
+            build_object();
+            return true;
         }
         if(patient_name.value !== "" && e.target.id == "patient_name_" + (index_id)){
             props.sendOrSave = false;
@@ -201,14 +218,7 @@ export function LSAS_EMOC_Form(props) {
             build_object();
             return true;
         }
-        if(ech_id.value !== "" && e.target.id == "rch_id_" + (index_id)){
-            props.sendOrSave = false;
-            doc_rch_id = "";
-            doc_rch_id = ech_id.value + "";
-            doc["rch_id"] = doc_rch_id;
-            build_object();
-            return true;
-        }
+
         if (docMap["doc_id" + (index_id)].length > 0) {
             for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
                 var allIds = docMap["doc_id" + (index_id)][i];
@@ -218,27 +228,48 @@ export function LSAS_EMOC_Form(props) {
                     flag = false;
                 }
             }
+
             if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][e.target.id] != "") {
                 if (e.target.value != "" &&
                     (e.target.id === "mbBSId_1" + "doc" + (index_id)
                         || e.target.id === "mbBSId_2" + "doc" + (index_id))) {
-                    doc.push(e.target.value);
-                    props.sendOrSave = false;
-                    build_object();
+                    if(e.target.value.length < 6)
+                    {
+                        alert("Please enter at-least 6 digit erhms id");
+                        flag = false;
+                    }
+                    else{
+                        doc.push(e.target.value);
+                        props.sendOrSave = false;
+                        build_object();
+                    }
+
                 } else if (e.target.value != "" &&
                     (e.target.id === "staffId_1" + "doc" + (index_id)
                         || e.target.id === "staffId_2" + "doc" + (index_id))) {
-                    doc.push(e.target.value);
-                    props.sendOrSave = false;
-
-                    build_object();
+                    if(e.target.value.length < 6)
+                    {
+                        alert("Please enter at-least  6 digit erhms id");
+                        flag = false;
+                    }
+                    else {
+                        doc.push(e.target.value);
+                        props.sendOrSave = false;
+                        build_object();
+                    }
                 } else if (e.target.value != "" &&
                     (e.target.id === "otTechId_1" + "doc" + (index_id)
                         || e.target.id === "otTechId_2" + "doc" + (index_id))) {
-                    doc.push(e.target.value);
-                    props.sendOrSave = false;
-
-                    build_object();
+                    if(e.target.value.length < 6)
+                    {
+                        alert("Please enter at-least 6 digit erhms id");
+                        flag = false;
+                    }
+                    else {
+                        doc.push(e.target.value);
+                        props.sendOrSave = false;
+                        build_object();
+                    }
                 }
 
                 if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
@@ -302,6 +333,41 @@ export function LSAS_EMOC_Form(props) {
 
         return true;
     }
+    function isCaseChange(doc, e) {
+
+        var index_id = docid;
+        if((docid === 1 && state.data.length >= 2) || state.data.length >= 2) {
+            for (var i = 1; i <= state.data.length; i++) {
+                if (e.target.id === "case_checked_btn" + i) {
+                    index_id = i;
+                }
+            }
+        }
+
+        var val1 = document.getElementById("caseid_" + (index_id));
+        var checkbox = document.getElementById("case_checked_btn" + (index_id));
+        var val2 = document.getElementById("rch_id_" + (index_id));
+        var val3 = document.getElementById("rch_label_" + (index_id));
+
+        if (e.target.checked === true) {
+            isCase = true;
+            doc.isCaseId = isCase;
+            checkbox.checked = true;
+            val1.value = "";
+            val1.disabled = true;
+            val2.style.display = "block";
+            val3.style.display = "block";
+        } else {
+            isCase = false;
+            checkbox.checked = false;
+            doc.isCaseId = isCase;
+            val2.value = "";
+            val1.disabled = false;
+            val2.style.display = "none";
+            val3.style.display = "none";
+        }
+        return true;
+    }
 
     function addDoctor(){
 
@@ -331,6 +397,7 @@ export function LSAS_EMOC_Form(props) {
                 id : "",
                 doc_id: "",
                 case_id: "",
+                isCaseId: false,
                 patient_name:"",
                 rch_id:"",
                 onCall : false,
@@ -447,6 +514,27 @@ export function LSAS_EMOC_Form(props) {
         }
 
     }
+    function checkedField() {
+
+        if(state.data.length >= 1)
+        {
+            for(var i=1; i<=state.data.length; i++){
+                var checkBox = document.getElementById("case_checked_btn"+i);
+                var checkBox2 = document.getElementById("checked_btn"+i);
+                //console.log("e.target.value: "+checkBox.value);
+                if(checkBox != null && checkBox.value === true)
+                {
+                    console.log("e.target.value: "+checkBox.value);
+                    checkBox.checked;
+                }
+                if(checkBox2 != null && checkBox2.value === true)
+                {
+                    checkBox2.checked;
+                }
+            }
+        }
+
+    }
 
     function getDetails(){
 
@@ -455,7 +543,8 @@ export function LSAS_EMOC_Form(props) {
 
             var inputField = (<input
                 type="text"
-                maxLength={6}
+                maxLength={7}
+                minLength={6}
                 id = {"mbBSId_1"+"doc"+(index+1)}
                 defaultValue = {!mBbsDoc[0]?"":mBbsDoc[0]}
                 onChange={numberValEntered.bind(null,mBbsDoc)}
@@ -464,7 +553,8 @@ export function LSAS_EMOC_Form(props) {
 
             var inputField2 = (<input
                 type="text"
-                maxLength={6}
+                maxLength={7}
+                minLength={6}
                 id = {"mbBSId_2"+"doc"+(index+1)}
                 defaultValue = {!mBbsDoc[1]?"":mBbsDoc[1]}
                 onChange={numberValEntered.bind(null,mBbsDoc)}
@@ -507,7 +597,8 @@ export function LSAS_EMOC_Form(props) {
 
             var inputField = (<input
                 type="text"
-                maxLength={6}
+                maxLength={7}
+                minLength={6}
                 id = {"otTechId_1"+"doc"+ (index+1)}
                 defaultValue = {!otStaff[0]?"":otStaff[0]}
                 disabled = {instance.props.currentStatus}
@@ -516,7 +607,8 @@ export function LSAS_EMOC_Form(props) {
 
             var inputField2 = (<input
                 type="text"
-                maxLength={6}
+                maxLength={7}
+                minLength={6}
                 id = {"otTechId_2"+"doc"+ (index+1)}
                 defaultValue = {!otStaff[1]?"":otStaff[1]}
                 onChange={numberValEntered.bind(null,otStaff)}
@@ -560,7 +652,8 @@ export function LSAS_EMOC_Form(props) {
 
             var inputField = (<input
                 type="text"
-                maxLength={6}
+                maxLength={7}
+                minLength={6}
                 id = {"staffId_1"+"doc"+ (index+1)}
                 defaultValue = {!staff[0]?"":staff[0]}
                 onChange={numberValEntered.bind(null,staff)}
@@ -569,7 +662,8 @@ export function LSAS_EMOC_Form(props) {
 
             var inputField2 = (<input
                 type="text"
-                maxLength={6}
+                maxLength={7}
+                minLength={6}
                 id = {"staffId_2"+"doc"+ (index+1)}
                 defaultValue = {!staff[1]?"":staff[1]}
                 onChange={numberValEntered.bind(null,staff)}
@@ -614,6 +708,23 @@ export function LSAS_EMOC_Form(props) {
             if(!case_ids.includes(obj.case_id) && obj.case_id){
                 case_ids.push(obj.case_id);
             }
+            function getCaseChecked()
+            {
+                if(obj.isCaseId){
+                    return (<input type="checkbox"  checked id={"case_checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.isCaseId} onChange={isCaseChange.bind(null,obj)}/>);
+                }
+                else{
+                    return (<input type="checkbox"  id={"case_checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.isCaseId} onChange={isCaseChange.bind(null,obj)}/>);
+                }
+            }
+            function getDocChecked(){
+                if(obj.onCall){
+                    return (<input type="checkbox" checked  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>);
+                }
+                else{
+                    return (<input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>);
+                }
+            }
             list.push(<div>
                     <table>
                         <tbody key={"tbody"+index} className="lsasTableTbody">
@@ -630,9 +741,12 @@ export function LSAS_EMOC_Form(props) {
                                     disabled = {instance.props.currentStatus}
                                     className="form-control"></input>
                             </td>
+                            <label>
+                                <input type="button" className={(index+1)  > 1 && !instance.props.currentStatus ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
+                            </label>
                         </tr>
                         <tr>
-                            <td colSpan="3">
+                            <td colSpan="2">
                                 <label>Case Id:</label>
                                 <input
                                     type="text"
@@ -641,17 +755,18 @@ export function LSAS_EMOC_Form(props) {
                                     defaultValue={!obj.case_id?"":obj.case_id}
                                     onChange={alphaNumValEntered.bind(null,obj.case_id)}
                                     onBlur={checkUnique.bind(null,obj)}
-                                    disabled = {instance.props.currentStatus}
+                                    disabled = {instance.props.currentStatus || obj.isCaseId}
                                     className="form-control"></input>
                             </td>
-                            <label>
-                                <input type="button" className={(index+1)  > 1 && !instance.props.currentStatus ?"redButton":"hide"} value=" X " onClick={deleteDoc.bind(null,index)}/>
-                            </label>
+                            <td className="td_button">
+                                <label>Don't have case id</label>
+                                {getCaseChecked()}
+                            </td>
                         </tr>
 
                         <tr>
                             <td colSpan="3">
-                                <label>RCH Id:</label>
+                                <label className={obj.isCaseId?"":"hidden"} id={"rch_label_"+(index+1)} >RCH Id:</label>
                                 <input
                                     type="text"
                                     maxLength={12}
@@ -660,7 +775,8 @@ export function LSAS_EMOC_Form(props) {
                                     onChange={numberValEntered.bind(null,obj.rch_id)}
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus}
-                                    className="form-control"></input>
+                                    className={obj.isCaseId?"form-control":"hidden"}
+                                    ></input>
                             </td>
                         </tr>
                         <tr key={"DocId"+ index}>
@@ -670,7 +786,8 @@ export function LSAS_EMOC_Form(props) {
                                 </label>
                                 <input
                                     type="text"
-                                    maxLength={6}
+                                    maxLength={7}
+                                    minLength={6}
                                     id = {"DocId_"+ (index+1)}
                                     defaultValue={!obj.id?"":obj.id}
                                     onChange={numberValEntered.bind(null,obj.id)}
@@ -680,7 +797,8 @@ export function LSAS_EMOC_Form(props) {
                             </td>
                             <td className="td_button">
                                 <label>Doctor on Call/ Specialist</label>
-                                <input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>
+                                {getDocChecked()}
+
                             </td>
                         </tr>
                         <tr >
@@ -708,9 +826,7 @@ export function LSAS_EMOC_Form(props) {
             return list;
         },[]);
         return data;
-
     }
-
     instance.render = function(){
 
         if(instance.props.workingStatus!="Working"){
@@ -726,6 +842,7 @@ export function LSAS_EMOC_Form(props) {
                     <tr>
                         <td colSpan="3">
                             {getDetails()}
+                            {checkedField()}
                         </td>
 
                     </tr>
