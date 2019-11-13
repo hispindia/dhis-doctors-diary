@@ -161,6 +161,7 @@ export function LSAS_EMOC_Form(props) {
             props.sendOrSave = false;
             if(e.target.value.length < 6){
                 alert("Please enter at-least 6 digit ehrms id");
+                
                 return false;
             }
             doc_ehrmsid = "";
@@ -344,10 +345,12 @@ export function LSAS_EMOC_Form(props) {
             }
         }
 
-        var val1 = document.getElementById("caseid_" + (index_id));
+        var val1 = document.getElementById("rch_id_" + (index_id));
         var checkbox = document.getElementById("case_checked_btn" + (index_id));
-        var val2 = document.getElementById("rch_id_" + (index_id));
-        var val3 = document.getElementById("rch_label_" + (index_id));
+        var val2 = document.getElementById("caseid_" + (index_id));
+        var val3 = document.getElementById("case_label_" + (index_id));
+
+        console.log(e.target.checked);
 
         if (e.target.checked === true) {
             isCase = true;
@@ -366,6 +369,7 @@ export function LSAS_EMOC_Form(props) {
             val2.style.display = "none";
             val3.style.display = "none";
         }
+        build_object();
         return true;
     }
 
@@ -710,6 +714,7 @@ export function LSAS_EMOC_Form(props) {
             }
             function getCaseChecked()
             {
+
                 if(obj.isCaseId){
                     return (<input type="checkbox"  checked id={"case_checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.isCaseId} onChange={isCaseChange.bind(null,obj)}/>);
                 }
@@ -747,26 +752,7 @@ export function LSAS_EMOC_Form(props) {
                         </tr>
                         <tr>
                             <td colSpan="2">
-                                <label>Case Id:</label>
-                                <input
-                                    type="text"
-                                    id = {"caseid_"+ (index+1)}
-                                    maxLength={50}
-                                    defaultValue={!obj.case_id?"":obj.case_id}
-                                    onChange={alphaNumValEntered.bind(null,obj.case_id)}
-                                    onBlur={checkUnique.bind(null,obj)}
-                                    disabled = {instance.props.currentStatus || obj.isCaseId}
-                                    className="form-control"></input>
-                            </td>
-                            <td className="td_button">
-                                <label>Don't have case id</label>
-                                {getCaseChecked()}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td colSpan="3">
-                                <label className={obj.isCaseId?"":"hidden"} id={"rch_label_"+(index+1)} >RCH Id:</label>
+                                <label id={"rch_label_"+(index+1)} >RCH Id:</label>
                                 <input
                                     type="text"
                                     maxLength={12}
@@ -774,9 +760,30 @@ export function LSAS_EMOC_Form(props) {
                                     defaultValue={!obj.rch_id?"":obj.rch_id}
                                     onChange={numberValEntered.bind(null,obj.rch_id)}
                                     onBlur={checkUnique.bind(null,obj)}
-                                    disabled = {instance.props.currentStatus}
-                                    className={obj.isCaseId?"form-control":"hidden"}
-                                    ></input>
+                                    disabled = {instance.props.currentStatus || obj.isCaseId }
+                                    className="form-control"
+                                ></input>
+
+
+                            </td>
+                            <td className="td_button">
+                                <label>Don't have RCH id</label>
+                                {getCaseChecked()}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colSpan="3">
+                                <label className={obj.isCaseId?"":"hidden"} id={"case_label_"+(index+1)}>Case Id:</label>
+                                <input
+                                    type="text"
+                                    id = {"caseid_"+ (index+1)}
+                                    maxLength={50}
+                                    defaultValue={!obj.case_id?"":obj.case_id}
+                                    onChange={alphaNumValEntered.bind(null,obj.case_id)}
+                                    onBlur={checkUnique.bind(null,obj)}
+                                    disabled = {instance.props.currentStatus }
+                                    className={obj.isCaseId?"form-control":"hidden"}></input>
                             </td>
                         </tr>
                         <tr key={"DocId"+ index}>
