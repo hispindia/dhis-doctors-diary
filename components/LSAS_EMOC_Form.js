@@ -15,6 +15,8 @@ export function LSAS_EMOC_Form(props) {
 
     var doc_rch_id = "";
 
+    var validationMap = [];
+
     var count = 0;
 
     var call_doc_ehrmsid = "";
@@ -68,7 +70,8 @@ export function LSAS_EMOC_Form(props) {
     var state = props.state;
 
     state = {
-        data: []
+        data: [],
+        validationPass: true
     };
     state.data.push({
         id: doc_ehrmsid,
@@ -95,11 +98,43 @@ export function LSAS_EMOC_Form(props) {
 
     function build_object() {
 
-        //console.log("props.sendOrSave: " + props.sendOrSave);
-        instance.props.onChangeHandler(instance.props.de,
-            JSON.stringify(state),
-            state.data.length,props.sendOrSave);
+        console.log("props.sendOrSave: " + props.sendOrSave);
+            if(!validateForm()){
+                return false;
+            }
+            else{
+               return true;
+            }
 
+
+
+
+    }
+    function validateForm() {
+
+        var flag = true;
+        console.log("validationMap.length: "+Object.keys(validationMap).length);
+        for (var p in validationMap) {
+            if( validationMap.hasOwnProperty(p) ) {
+                console.log(p + " , " + validationMap[p] + "\n");
+                if(validationMap[p] !== "")
+                {
+                    flag = false;
+                    state.validationPass = false;
+                }
+                else{
+                    state.validationPass = true;
+                }
+            }
+        }
+
+        if(flag){
+            instance.props.onChangeHandler(instance.props.de,
+                JSON.stringify(state),
+                state.data.length,props.sendOrSave,state.validationPass);
+        }
+
+        return flag;
     }
 
     function idChange(doc, e) {
@@ -127,7 +162,7 @@ export function LSAS_EMOC_Form(props) {
     }
     function alphabetValEntered(de, e) {
 
-        if ((!e.target.value.match("^([a-zA-Z]+)$"))) {
+        if ((!e.target.value.match("^[a-zA-Z ]*$"))) {
             e.target.value = e.target.value.slice(0, e.target.value.length - 1);
             return false;
         } else {
@@ -160,10 +195,11 @@ export function LSAS_EMOC_Form(props) {
         if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
             props.sendOrSave = false;
             if(e.target.value.length < 6){
+                validationMap[e.target.id] = "Please enter at-least 6 digit ehrms id";
                 alert("Please enter at-least 6 digit ehrms id");
-                
                 return false;
             }
+            validationMap[e.target.id] = "";
             doc_ehrmsid = "";
             doc_ehrmsid = val1.value + "";
             doc["doc_id"] = "";
@@ -183,12 +219,13 @@ export function LSAS_EMOC_Form(props) {
             build_object();
             return true;
         }
-        if(rch_id.value === "" && caseid.value !== "" && e.target.id == "caseid_" + (index_id)){
+        else if(rch_id.value === "" && caseid.value !== "" && e.target.id == "caseid_" + (index_id)){
             props.sendOrSave = false;
             doc_case_id = "";
             doc_case_id = caseid.value + "";
                 if(case_ids.length >=2 && case_ids.includes(doc_case_id)) {
                     alert("Please enter unique case id");
+                    validationMap[e.target.id] = "Please enter unique case id";
                     caseid.focus();
                     caseid.select();
                     caseid.value = "";
@@ -196,6 +233,7 @@ export function LSAS_EMOC_Form(props) {
                 }
                 else{
                     doc["rch_id"] = "";
+                    validationMap[e.target.id] = "";
                     doc["case_id"] = doc_case_id;
                     case_ids.push(doc_case_id);
                     build_object();
@@ -203,70 +241,90 @@ export function LSAS_EMOC_Form(props) {
                 }
         }
         else if(caseid.value === "" && rch_id.value !== "" && e.target.id == "rch_id_" + (index_id)){
-            props.sendOrSave = false;
-            doc_rch_id = "";
-            doc_rch_id = rch_id.value + "";
-            doc["case_id"] = "";
-            doc["rch_id"] = doc_rch_id;
-            build_object();
-            return true;
+            if(rch_id.value.length < 12){
+                alert("Please enter 12 digit RCH Id");
+                validationMap[e.target.id] = "Please enter 12 digit RCH Id";
+            }else{
+                validationMap[e.target.id] = "";
+                props.sendOrSave = false;
+                doc_rch_id = "";
+                doc_rch_id = rch_id.value + "";
+                doc["case_id"] = "";
+                doc["rch_id"] = doc_rch_id;
+                //build_object();
+                return true;
+            }
         }
-        if(patient_name.value !== "" && e.target.id == "patient_name_" + (index_id)){
+        else if(patient_name.value !== "" && e.target.id == "patient_name_" + (index_id)){
             props.sendOrSave = false;
             doc_patient_name = "";
             doc_patient_name = patient_name.value + "";
             doc["patient_name"] = ""+doc_patient_name;
-            build_object();
+            //build_object();
             return true;
         }
 
-        if (docMap["doc_id" + (index_id)].length > 0) {
+        else if (docMap["doc_id" + (index_id)].length > 0) {
             for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
                 var allIds = docMap["doc_id" + (index_id)][i];
                 if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
                     e.target.value = "";
                     alert("Please enter unique erhms id");
+                    validationMap[e.target.id] = "Please enter unique erhms id";
                     flag = false;
                 }
             }
 
             if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][e.target.id] != "") {
+                console.log("e.target.id: "+e.target.id);
                 if (e.target.value != "" &&
                     (e.target.id === "mbBSId_1" + "doc" + (index_id)
                         || e.target.id === "mbBSId_2" + "doc" + (index_id))) {
+
+                    console.log("MBBS");
                     if(e.target.value.length < 6)
                     {
                         alert("Please enter at-least 6 digit erhms id");
+                        validationMap[e.target.id] = "Please enter at-least 6 digit erhms id";
                         flag = false;
                     }
                     else{
+                        validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
                         build_object();
                     }
 
-                } else if (e.target.value != "" &&
+                }
+                if (e.target.value != "" &&
                     (e.target.id === "staffId_1" + "doc" + (index_id)
                         || e.target.id === "staffId_2" + "doc" + (index_id))) {
+                    console.log("Staff");
                     if(e.target.value.length < 6)
                     {
                         alert("Please enter at-least  6 digit erhms id");
+                        validationMap[e.target.id] = "Please enter at-least 6 digit erhms id";
                         flag = false;
                     }
                     else {
+                        validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
                         build_object();
                     }
-                } else if (e.target.value != "" &&
+                }
+                if (e.target.value != "" &&
                     (e.target.id === "otTechId_1" + "doc" + (index_id)
                         || e.target.id === "otTechId_2" + "doc" + (index_id))) {
+                    console.log("OT TechId");
                     if(e.target.value.length < 6)
                     {
+                        validationMap[e.target.id] = "Please enter at-least 6 digit erhms id";
                         alert("Please enter at-least 6 digit erhms id");
                         flag = false;
                     }
                     else {
+                        validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
                         build_object();
@@ -276,7 +334,6 @@ export function LSAS_EMOC_Form(props) {
                 if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
                 {
                     var d1 = docMap["doc_uniqueIds" + (index_id)][e.target.id];
-                    //console.log("Previous value---------"+doc[i]);
                     for( var i = 0; i < doc.length; i++){
                         if ( doc[i] === d1) {
 
@@ -571,7 +628,10 @@ export function LSAS_EMOC_Form(props) {
 
             </input>);
 
-            var firstInput = (<div><tr><td colSpan="2"><label>MBBS Doctor 1</label>{inputField}</td><td className="td_button">{addButton}</td></tr></div>);
+            var firstInput = (<div><tr>
+                <td colSpan="2"><label>MBBS Doctor 1</label>{inputField}</td><td className="td_button">{addButton}</td>
+                <label className="redColor">{validationMap["mbBSId_1"+"doc"+(index+1)]}</label>
+            </tr></div>);
             if (mbbs_num_map["doc"+ (index+1)] === 1 &&  mBbsDoc.length < 2 ){
                 if(mBbsDoc[0] != "")
                 {
@@ -593,6 +653,7 @@ export function LSAS_EMOC_Form(props) {
                 ids.push(firstInput);
                 ids.push(<div><tr>
                     <td colSpan="2"><label>MBBS Doctor 2</label>{inputField2}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["mbBSId_2"+"doc"+(index+1)]}</label>
                 </tr></div>);
                 return ids;
             }
@@ -623,7 +684,10 @@ export function LSAS_EMOC_Form(props) {
 
             </input>);
 
-            var firstInput = (<div><tr><td colSpan="2"><label>OT Technician 1</label>{inputField}</td><td className="td_button">  {addButton}</td></tr></div>);
+            var firstInput = (<div><tr>
+                <td colSpan="2"><label>OT Technician 1</label>{inputField}</td><td className="td_button">  {addButton}</td>
+                <label className="redColor">{validationMap["otTechId_1"+"doc"+(index+1)]}</label>
+            </tr></div>);
             if (ot_num_map["doc"+ (index+1)] == 1 && otStaff.length < 2){
                 if(otStaff[0] != "")
                 {
@@ -648,6 +712,7 @@ export function LSAS_EMOC_Form(props) {
                 ids.push(firstInput);
                 ids.push(<div><tr><td colSpan="2">
                     <label>OT Technician 2</label>{inputField2}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["otTechId_2"+"doc"+(index+1)]}</label>
                 </tr></div>);
                 return ids;
             }
@@ -678,7 +743,10 @@ export function LSAS_EMOC_Form(props) {
 
             </input>);
 
-            var firstInput = (<div><tr><td colSpan="2"><label>Staff Nurse 1 </label>{inputField}</td><td className="td_button">{addButton}</td></tr></div>);
+            var firstInput = (<div><tr>
+                <td colSpan="2"><label>Staff Nurse 1 </label>{inputField}</td><td className="td_button">{addButton}</td>
+                <label className="redColor">{validationMap["staffId_1"+"doc"+(index+1)]}</label>
+            </tr></div>);
             if (staff_num_map["doc"+ (index+1)] == 1 &&  staff.length < 2){
                 if(staff[0] != "")
                 {
@@ -703,6 +771,7 @@ export function LSAS_EMOC_Form(props) {
                 ids.push(firstInput);
                 ids.push(<div><tr>
                     <td colSpan="2"><label>Staff Nurse 2 </label>{inputField2}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["staffId_2"+"doc"+(index+1)]}</label>
                 </tr></div>);
                 return ids;
             }
@@ -763,8 +832,7 @@ export function LSAS_EMOC_Form(props) {
                                     disabled = {instance.props.currentStatus || obj.isCaseId }
                                     className="form-control"
                                 ></input>
-
-
+                                <label className="redColor">{validationMap["rch_id_"+(index+1)]}</label>
                             </td>
                             <td className="td_button">
                                 <label>Don't have RCH id</label>
@@ -784,6 +852,7 @@ export function LSAS_EMOC_Form(props) {
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus }
                                     className={obj.isCaseId?"form-control":"hidden"}></input>
+                                <label className="redColor">{validationMap["caseid_"+(index+1)]}</label>
                             </td>
                         </tr>
                         <tr key={"DocId"+ index}>
@@ -801,6 +870,7 @@ export function LSAS_EMOC_Form(props) {
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus || obj.onCall}
                                     className="form-control"></input>
+                                <label className="redColor">{validationMap["DocId_"+(index+1)]}</label>
                             </td>
                             <td className="td_button">
                                 <label>Doctor on Call/ Specialist</label>

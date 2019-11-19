@@ -15,6 +15,8 @@ export function DataEntryForm(props){
 
     var btn_save_send = false;
 
+    var validationPass = false;
+
     var sendOrSave = false;
 
     var state = props.state;
@@ -86,7 +88,12 @@ export function DataEntryForm(props){
 
     function save(){
 
+        console.log(validationPass)
         if(!validate()){
+            state.changeView(state);
+            return;
+        }
+        if(!validationPass){
             state.changeView(state);
             return;
         }
@@ -127,6 +134,10 @@ export function DataEntryForm(props){
             state.changeView(state);
             return;
         }
+        if(!validationPass){
+            state.changeView(state);
+            return;
+        }
         if(window.confirm("Are You Sure You want to send data"))
         {
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
@@ -156,9 +167,6 @@ export function DataEntryForm(props){
             instance.setState(state);
             return false;
         }
-
-
-
     }
 
     function createForm(){
@@ -180,19 +188,26 @@ export function DataEntryForm(props){
             for (var i=0;i<deList.length;i++){
                 if (!dataValueMap[deList[i]] || dataValueMap[deList[i]] == ""){
                     if(deList[i] !== constants.other_duties_de ) {
-                        flag1 = false;
-                        dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                        if(deList[i] === "wTdcUXWeqhN" && lsas_emoc)
+                        {
+                            flag1 = false;
+                            dvRequiredMap[deList[i]] = "Please enter at-least 1 case for C-Section";
+                        }
+                        else if(deList[i] === "zfMOVN2lc1S" && lsas_emoc){
+                            flag1 = false;
+                            dvRequiredMap[deList[i]] = "Please enter at-least 1 case for Anaesthesia";
+                        }
+                        else{
+                            flag1 = false;
+                            dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                        }
                     }
                 }
                 else{
                     flag1=true;
+                    dvRequiredMap[deList[i]] = "";
                 }
             }
-        }
-        if(dataValueMap["x2uDVEGfY4K"] === "")
-        {
-            alert("Please select working status");
-            flag1 = false;
         }
 
         return flag1;
@@ -218,7 +233,8 @@ export function DataEntryForm(props){
 
     }
 
-    function onLSAS_EMOC_Change(de,data,csections,send){
+    function onLSAS_EMOC_Change(de,data,csections,send,pass){
+        validationPass = pass;
         if(de.id == constants.lsas_emoc_data_de){
             lsas_emoc = true;
             dirtyBit = true;
@@ -373,6 +389,7 @@ export function DataEntryForm(props){
                     currentVal = {dataValueMap[de.id]}
                     currentStatus={checkIfDisabled(de.id)}
                     sendOrSave = {sendOrSave}
+                    validationpass = {validationPass}
                     onChangeHandler={onLSAS_EMOC_Change}
                 />)
             }
@@ -454,7 +471,7 @@ export function DataEntryForm(props){
                 return options.reduce(function(list,obj){
                     list.push(<option key={obj.id} value={obj.code}>{obj.name}</option>)
                     return list;
-                },[<option key = {options[0].id+"__"} disabled value={""} > --Select-- </option>]);
+                },[<option key = {options[0].id+"__"} disabled selected value={""} > --Select-- </option>]);
 
             }
         }
