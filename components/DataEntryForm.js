@@ -15,7 +15,7 @@ export function DataEntryForm(props){
 
     var btn_save_send = false;
 
-    var validationPass = false;
+    var validationPass = true;
 
     var sendOrSave = false;
 
@@ -24,7 +24,9 @@ export function DataEntryForm(props){
     var ps = state.
         program_metadata_programStageByIdMap[state.
         curr_user_program_stage];
+
     var error;
+
     if (!ps){
         //alert("Stage not assigned to user");
         error = "User does not have access to any form.";

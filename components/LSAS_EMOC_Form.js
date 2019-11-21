@@ -98,8 +98,8 @@ export function LSAS_EMOC_Form(props) {
 
     function build_object() {
 
-        console.log("props.sendOrSave: " + props.sendOrSave);
             if(!validateForm()){
+                console.log("validation in lsas/emoc: " + "false");
                 return false;
             }
             else{
@@ -804,7 +804,7 @@ export function LSAS_EMOC_Form(props) {
                         <tbody key={"tbody"+index} className="lsasTableTbody">
                         <tr>
                             <td colSpan="3">
-                                <label>Patient Name:</label>
+                                <label>Patient's Name:</label>
                                 <input
                                     type="text"
                                     id = {"patient_name_"+ (index+1)}
