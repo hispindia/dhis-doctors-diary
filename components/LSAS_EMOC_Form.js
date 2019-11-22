@@ -426,7 +426,7 @@ export function LSAS_EMOC_Form(props) {
             val2.style.display = "none";
             val3.style.display = "none";
         }
-        build_object();
+        //build_object();
         return true;
     }
 
