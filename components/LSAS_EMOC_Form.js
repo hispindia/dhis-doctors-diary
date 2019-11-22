@@ -236,7 +236,7 @@ export function LSAS_EMOC_Form(props) {
                     validationMap[e.target.id] = "";
                     doc["case_id"] = doc_case_id;
                     case_ids.push(doc_case_id);
-                    build_object();
+                   // build_object();
                     return true;
                 }
         }
