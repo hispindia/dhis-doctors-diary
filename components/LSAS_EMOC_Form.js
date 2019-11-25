@@ -206,7 +206,10 @@ export function LSAS_EMOC_Form(props) {
             doc["id"] = (doc_ehrmsid);
             docMap["doc_id" + (index_id)].push(val1.id);
             docMap["doc_uniqueIds" + (index_id)][val1.id] = val1.value;
-            build_object();
+            if(caseid.value != '' || rch_id.value != ''){
+                build_object();
+            }
+
             return true;
         } else if (val1.value === "" && val2.value !== "" && e.target.id == "Partner_DocId_" + (index_id)) {
             props.sendOrSave = false;
@@ -216,7 +219,10 @@ export function LSAS_EMOC_Form(props) {
             doc["id"] = "";
             docMap["doc_id" + (index_id)].push(val2.id);
             docMap["doc_uniqueIds" + (index_id)][val2.id] = val2.value;
-            build_object();
+            if(caseid.value != '' || rch_id.value != ''){
+                build_object();
+            }
+
             return true;
         }
         else if(rch_id.value === "" && caseid.value !== "" && e.target.id == "caseid_" + (index_id)){
@@ -237,7 +243,9 @@ export function LSAS_EMOC_Form(props) {
                     validationMap[e.target.id] = "";
                     doc["case_id"] = doc_case_id;
                     case_ids.push(doc_case_id);
-                   // build_object();
+                    if(val1.value != "" || val2.value != ""){
+                        build_object();
+                    }
                     return true;
                 }
         }
@@ -253,7 +261,9 @@ export function LSAS_EMOC_Form(props) {
                 doc_rch_id = rch_id.value + "";
                 doc["case_id"] = "";
                 doc["rch_id"] = doc_rch_id;
-                //build_object();
+                if(val1.value != "" || val2.value != ""){
+                    build_object();
+                }
                 return true;
             }
         }
@@ -294,7 +304,7 @@ export function LSAS_EMOC_Form(props) {
                         validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        build_object();
+                       // build_object();
                     }
 
                 }
@@ -312,7 +322,7 @@ export function LSAS_EMOC_Form(props) {
                         validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        build_object();
+                        //build_object();
                     }
                 }
                 if (e.target.value != "" &&
@@ -329,7 +339,7 @@ export function LSAS_EMOC_Form(props) {
                         validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        build_object();
+                       // build_object();
                     }
                 }
 
@@ -340,7 +350,7 @@ export function LSAS_EMOC_Form(props) {
                         if ( doc[i] === d1) {
 
                             doc.splice(index, 1);
-                            build_object();
+                            //build_object();
                         }
                     }
                     //console.log("Data length: " + doc.length);
@@ -443,13 +453,15 @@ export function LSAS_EMOC_Form(props) {
         var val = document.getElementById("DocId_"+(index_id));
         var val2 = document.getElementById("Partner_DocId_"+(index_id));
         var checked = document.getElementById("checked_btn"+(index_id));
+        var caseid = document.getElementById("caseid_" + (index_id));
+        var rch_id = document.getElementById("rch_id_" + (index_id));
         //console.log("checked.value:"+checked.value)
         if(checked.value === "false" && (!val.value || val.value === ""))
         {
             alert("Please enter previous doctor ehrms id");
             return false;
         }
-        else if(checked.value === "true" && (!val2.value || val2.value == ""))
+        else if(checked.value === "true" && (!val2.value || val2.value == "") && (caseid.value != "" || rch_id.value != ""))
         {
             alert("Please enter previous partner doctor detail");
             return false;
@@ -490,6 +502,10 @@ export function LSAS_EMOC_Form(props) {
             }
         }
         var val = document.getElementById("mbBSId_1"+"doc"+index_id);
+        var doc1 = document.getElementById("DocId_"+index_id);
+        var patDoc = document.getElementById("Partner_DocId_"+(index_id));
+        var caseid = document.getElementById("caseid_" + (index_id));
+        var rch_id = document.getElementById("rch_id_" + (index_id));
         //console.log("mbbs value: "+val.value);
 
         if (!val.value || val.value == ""){
@@ -503,7 +519,9 @@ export function LSAS_EMOC_Form(props) {
             }
             mbbs_num = mbbs_num + 1;
             mbbs_num_map["doc"+ index_id] = mbbs_num;
-            build_object();
+            if((doc1.value != "" || patDoc.value != "") && (caseid.value != "" || rch_id.value != "")) {
+                build_object();
+            }
             return true;
         }
 
@@ -520,6 +538,11 @@ export function LSAS_EMOC_Form(props) {
             }
         }
         var val = document.getElementById("otTechId_1" +"doc"+index_id);
+
+        var doc1 = document.getElementById("DocId_"+index_id);
+        var patDoc = document.getElementById("Partner_DocId_"+(index_id));
+        var caseid = document.getElementById("caseid_" + (index_id));
+        var rch_id = document.getElementById("rch_id_" + (index_id));
         //console.log("ot staff value: "+val.value);
 
         if (!val.value || val.value == ""){
@@ -533,7 +556,9 @@ export function LSAS_EMOC_Form(props) {
             }
             ot_num = ot_num + 1;
             ot_num_map["doc"+ index_id ] = ot_num;
-            build_object();
+            if((doc1.value != "" || patDoc.value != "") && (caseid.value != "" || rch_id.value != "")) {
+                build_object();
+            }
             return true;
         }
     }
@@ -553,6 +578,11 @@ export function LSAS_EMOC_Form(props) {
 
         var val = document.getElementById("staffId_1"+"doc"+index_id);
 
+        var doc1 = document.getElementById("DocId_"+index_id);
+        var patDoc = document.getElementById("Partner_DocId_"+(index_id));
+        var caseid = document.getElementById("caseid_" + (index_id));
+        var rch_id = document.getElementById("rch_id_" + (index_id));
+
         if (!val.value || val.value == ""){
             alert("Please enter ehrms id in this field than add other");
             return false;
@@ -564,7 +594,10 @@ export function LSAS_EMOC_Form(props) {
             }
             staff_num = staff_num + 1;
             staff_num_map["doc"+ index_id ] = staff_num;
-            build_object();
+            if((doc1.value != "" || patDoc.value != "") && (caseid.value != "" || rch_id.value != ""))
+            {
+                build_object();
+            }
             return true;
         }
 
