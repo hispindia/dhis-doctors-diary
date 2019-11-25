@@ -233,6 +233,7 @@ export function LSAS_EMOC_Form(props) {
                 }
                 else{
                     doc["rch_id"] = "";
+                    validationMap["rch_id_" + (index_id)] = "";
                     validationMap[e.target.id] = "";
                     doc["case_id"] = doc_case_id;
                     case_ids.push(doc_case_id);
@@ -246,6 +247,7 @@ export function LSAS_EMOC_Form(props) {
                 validationMap[e.target.id] = "Please enter 12 digit RCH Id";
             }else{
                 validationMap[e.target.id] = "";
+                validationMap["caseid_" + (index_id)] = "";
                 props.sendOrSave = false;
                 doc_rch_id = "";
                 doc_rch_id = rch_id.value + "";
@@ -783,21 +785,13 @@ export function LSAS_EMOC_Form(props) {
             }
             function getCaseChecked()
             {
-
-                if(obj.isCaseId){
-                    return (<input type="checkbox"  checked id={"case_checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.isCaseId} onChange={isCaseChange.bind(null,obj)}/>);
-                }
-                else{
                     return (<input type="checkbox"  id={"case_checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.isCaseId} onChange={isCaseChange.bind(null,obj)}/>);
-                }
+
             }
             function getDocChecked(){
-                if(obj.onCall){
-                    return (<input type="checkbox" checked  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>);
-                }
-                else{
+
                     return (<input type="checkbox"  id={"checked_btn"+(index+1)} disabled = {instance.props.currentStatus} value={obj.onCall} onChange={onCallChange.bind(null,obj)}/>);
-                }
+
             }
             list.push(<div>
                     <table>
