@@ -15,6 +15,8 @@ export function DataEntryForm(props){
 
     var btn_save_send = false;
 
+    var validationPass = true;
+
     var sendOrSave = false;
 
     var state = props.state;
@@ -22,7 +24,9 @@ export function DataEntryForm(props){
     var ps = state.
         program_metadata_programStageByIdMap[state.
         curr_user_program_stage];
+
     var error;
+
     if (!ps){
         //alert("Stage not assigned to user");
         error = "User does not have access to any form.";
@@ -60,13 +64,13 @@ export function DataEntryForm(props){
                 <div className="entrySaveDiv">
 
                     <input className="button1 button2" type="button" value="Back" onClick={back}></input>
-                    <input className={dirtyBit?"button1 button2" : "hidden"}
+                    <input className={dirtyBit ?"button1 button2" : "hidden"}
                            type="button"
                            value="Save"
                            onClick={save}></input>
 
                     <input
-                        className={state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
+                        className={state.offlineEvents > 0 || state.curr_event && state.curr_event.status == "COMPLETED" || !state.curr_event_calendar_classname.includes("entryDate")?"hidden":"button1 button2 floatRight"}
                         type="button"
                         value="Send"
                         onClick={send}></input>
@@ -86,7 +90,12 @@ export function DataEntryForm(props){
 
     function save(){
 
+        console.log(validationPass)
         if(!validate()){
+            state.changeView(state);
+            return;
+        }
+        if(!validationPass){
             state.changeView(state);
             return;
         }
@@ -94,7 +103,7 @@ export function DataEntryForm(props){
         {
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.emoc_data_de];
                 var newStr = data.replace(str,'');
@@ -103,7 +112,7 @@ export function DataEntryForm(props){
             }
             else if(sendOrSave && (dataValueMap[constants.lsas_emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.lsas_emoc_data_de];
                 var newStr = data.replace(str,'');
@@ -127,12 +136,15 @@ export function DataEntryForm(props){
             state.changeView(state);
             return;
         }
+        if(!validationPass){
+            state.changeView(state);
+            return;
+        }
         if(window.confirm("Are You Sure You want to send data"))
         {
-            //console.log(Object.entries(dataValueMap));
             if(sendOrSave && (dataValueMap[constants.emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.emoc_data_de];
                 var newStr = data.replace(str,'');
@@ -141,33 +153,15 @@ export function DataEntryForm(props){
             }
             else if(sendOrSave && (dataValueMap[constants.lsas_emoc_data_de]))
             {
-                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
+                var str = ",{\"id\":\"\",\"doc_id\":\"\",\"case_id\":\"\",\"isCaseId\":false,\"patient_name\":\"\",\"rch_id\":\"\",\"onCall\":false,\"mbBsDoctor\":[],\"supportingStaff\":[],\"otTechnician\":[]}";
 
                 var data = dataValueMap[constants.lsas_emoc_data_de];
                 var newStr = data.replace(str,'');
                 dataValueMap[constants.lsas_emoc_data_de] = newStr;
                 //console.log(dataValueMap[constants.lsas_emoc_data_de]);
             }
-            for(var i =0;i<=dataValueMap.length; i++)
-            {
-
-                if(dataValueMap[i] == constants.lsas_emoc_data_de){
-
-                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                    state.curr_view = constants.views.calendar;
-                    instance.setState(state);
-                }
-                else if(dataValueMap[i] == constants.emoc_data_de){
-                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                    state.curr_view = constants.views.calendar;
-                    instance.setState(state)
-                }
-                else{
-                    sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
-                    state.curr_view = constants.views.calendar;
-                }
-            }
-
+            sync.saveEvent(dataValueMap,ps,state,undefined,"COMPLETED");
+            state.curr_view = constants.views.calendar;
         }
         else{
             sendOrSave = true;
@@ -175,9 +169,6 @@ export function DataEntryForm(props){
             instance.setState(state);
             return false;
         }
-
-
-
     }
 
     function createForm(){
@@ -185,8 +176,7 @@ export function DataEntryForm(props){
         return Object.assign([],ps.programStageDataElements)
             .reduce(function(list,obj){
                 if(obj.dataElement.valueType === "NUMBER"){
-
-                    deList.push(obj.dataElement.id)
+                   deList.push(obj.dataElement.id)
                 }
                 list.push(createQuestion(obj));
                 return list;
@@ -199,11 +189,25 @@ export function DataEntryForm(props){
         if(dataValueMap["x2uDVEGfY4K"] === "Working"){
             for (var i=0;i<deList.length;i++){
                 if (!dataValueMap[deList[i]] || dataValueMap[deList[i]] == ""){
-                    flag1=false;
-                    dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                    if(deList[i] !== constants.other_duties_de ) {
+                        if(deList[i] === "wTdcUXWeqhN" && lsas_emoc)
+                        {
+                            flag1 = false;
+                            dvRequiredMap[deList[i]] = "Please enter at-least 1 case for C-Section";
+                        }
+                        else if(deList[i] === "zfMOVN2lc1S" && lsas_emoc){
+                            flag1 = false;
+                            dvRequiredMap[deList[i]] = "Please enter at-least 1 case for Anaesthesia";
+                        }
+                        else{
+                            flag1 = false;
+                            dvRequiredMap[deList[i]] = constants.sncu_mandatoryfield_message;
+                        }
+                    }
                 }
                 else{
                     flag1=true;
+                    dvRequiredMap[deList[i]] = "";
                 }
             }
         }
@@ -225,13 +229,14 @@ export function DataEntryForm(props){
     function valEntered(de,e){
         dirtyBit = true;
         dataValueMap[de.id] = e.target.value;
-        //  checkSkipLogic(de.id,e.target.value)
         dvRequiredMap[de.id] = "";
+        //  checkSkipLogic(de.id,e.target.value)
         instance.setState(state)
 
     }
 
-    function onLSAS_EMOC_Change(de,data,csections,send){
+    function onLSAS_EMOC_Change(de,data,csections,send,pass){
+        validationPass = pass;
         if(de.id == constants.lsas_emoc_data_de){
             lsas_emoc = true;
             dirtyBit = true;
@@ -380,13 +385,13 @@ export function DataEntryForm(props){
 
             if (de.id == constants.lsas_emoc_data_de || de.id == constants.emoc_data_de){
                 lsas_emoc = true;
-
                 return (<LSAS_EMOC_Form
                     de={de}
                     workingStatus={dataValueMap["x2uDVEGfY4K"]}
                     currentVal = {dataValueMap[de.id]}
                     currentStatus={checkIfDisabled(de.id)}
                     sendOrSave = {sendOrSave}
+                    validationpass = {validationPass}
                     onChangeHandler={onLSAS_EMOC_Change}
                 />)
             }
@@ -414,7 +419,7 @@ export function DataEntryForm(props){
                                    id={de.id}
                                    type = "text"
                                    maxLength={utility.getAttributeValueFromId(de.attributeValues,constants.numeric_de_maxlength)}
-                                   value = {dataValueMap[de.id]?dataValueMap[de.id]:""}
+                                   value = {dataValueMap[de.id] && dataValueMap["x2uDVEGfY4K"] === "Working"?dataValueMap[de.id]:""}
                                    onChange={numberValEntered.bind(de.id,de)} ></input>);
                 case "LONG_TEXT":
                     return (<textarea
@@ -451,7 +456,12 @@ export function DataEntryForm(props){
 
                 if (deuid!="x2uDVEGfY4K"){
                     if (dataValueMap["x2uDVEGfY4K"]!="Working"){
-                        utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
+                        if(lsas_emoc){
+                            utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K','wTdcUXWeqhN','zfMOVN2lc1S'])
+                        }else{
+                            utility.setMapExcept(dataValueMap,"",['x2uDVEGfY4K'])
+                        }
+
                         return true;
                     }
                 }
@@ -463,7 +473,7 @@ export function DataEntryForm(props){
                 return options.reduce(function(list,obj){
                     list.push(<option key={obj.id} value={obj.code}>{obj.name}</option>)
                     return list;
-                },[<option key = {options[0].id+"__"} disabled value={""} > --Select-- </option>]);
+                },[<option key = {options[0].id+"__"} disabled selected value={""} > --Select-- </option>]);
 
             }
         }

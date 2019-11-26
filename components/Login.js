@@ -22,14 +22,6 @@ export function Login(props){
         if (state.username == "" || state.password == ""){
             return;
         }
-        
-        //check if already in cache
-        if (cache.get("dd_user_"+state.username)){
-            cache.save("dd_current_user",{"username":state.username});
-            postLogin();
-            return;
-        }
-
         state.loading=true;
         state.statusMsg="";
         instance.setState(state);

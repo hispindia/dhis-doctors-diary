@@ -46,7 +46,7 @@ export function Settings(props){
                 </tr>
                 <tr>
                     <td>
-                        <input className="settingBt" type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
+                        <input disabled={isDisabled()} className={"settingBt"} type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
                     </td>
                 </tr>
             </tbody>
@@ -62,6 +62,15 @@ export function Settings(props){
         state.changeView(state);
         
     }
+    function  isDisabled() {
+        if(state.offlineEvents > 0)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     
     function reset(){
         cache.reset();
@@ -72,6 +81,7 @@ export function Settings(props){
     function logout(){
         state.curr_view=constants.views.login;
         cache.save(constants.cache_curr_user,null);
+        cache.reset();
         state.changeView(state);
         
     }
