@@ -73,10 +73,12 @@ export function LeftbarSettings(props){
     }
 
     function logout(){
-        state.curr_view=constants.views.login;
-        cache.save(constants.cache_curr_user,null);
-        state.changeView(state);
-        
+        if(window.confirm("If you exit all offline data will be deleted. Do you still want to exit")){
+            state.curr_view=constants.views.login;
+            cache.save(constants.cache_curr_user,null);
+            cache.reset();
+            state.changeView(state);
+        }
     }
 
     function changeProfile(){

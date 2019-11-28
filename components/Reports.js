@@ -4,6 +4,7 @@ import cache from '../localstorage';
 
 
 import moment from 'moment';
+import sync from "../sync-manager";
 
 let currentDate = new Date();
 export function Reports(props){
@@ -32,6 +33,20 @@ export function Reports(props){
         state.curr_view=constants.views.calendar;
         state.changeView(state);
     }
+    function synchronize(){
+
+        sync.fetchEvents(state,function(){
+            state.loading = false;
+            state.changeView(state);
+        })
+    }
+    function refetchEvents(){
+
+        sync.fetchEvents(state,function(){
+            state.loading = false;
+            state.changeView(state);
+        })
+    }
     function getUserDataElement() {
         //console.log(ps.programStageDataElements);
         dataElementList = [];
@@ -54,6 +69,7 @@ function  createTable() {
     var count = 0;
     dataMap = [];
     dateList =[];
+    synchronize();
     state.curr_user_data = cache.get(constants.cache_user_prefix+state.curr_user.username);
 
     state.curr_user_data.events.reduce(function(list,obj) {
