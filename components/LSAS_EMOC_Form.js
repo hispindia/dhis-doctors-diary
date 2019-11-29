@@ -304,6 +304,11 @@ export function LSAS_EMOC_Form(props) {
                         validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
+
+                        if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
+                            build_object();
+                        }
+
                        // build_object();
                     }
 
@@ -322,7 +327,10 @@ export function LSAS_EMOC_Form(props) {
                         validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                        //build_object();
+
+                        if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
+                            build_object();
+                        }
                     }
                 }
                 if (e.target.value != "" &&
@@ -339,7 +347,10 @@ export function LSAS_EMOC_Form(props) {
                         validationMap[e.target.id] = "";
                         doc.push(e.target.value);
                         props.sendOrSave = false;
-                       // build_object();
+
+                        if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
+                            build_object();
+                        }
                     }
                 }
 
@@ -350,7 +361,9 @@ export function LSAS_EMOC_Form(props) {
                         if ( doc[i] === d1) {
 
                             doc.splice(index, 1);
-                            //build_object();
+                            if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
+                                build_object();
+                            }
                         }
                     }
                     //console.log("Data length: " + doc.length);
