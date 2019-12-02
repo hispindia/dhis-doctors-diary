@@ -54,9 +54,7 @@ export function Main(props){
                     <Footer state={state}/>
                     </div>
                    );
-        case constants.views.calendar :        
-        case undefined:
-        default:
+        case constants.views.calendar :
             return (<div >
                     <Header state={state} />
                     <div className="wrapper">

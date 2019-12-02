@@ -133,7 +133,6 @@ export function LSAS_EMOC_Form(props) {
                 JSON.stringify(state),
                 state.data.length,props.sendOrSave,state.validationPass);
         }
-
         return flag;
     }
 
@@ -229,7 +228,7 @@ export function LSAS_EMOC_Form(props) {
             props.sendOrSave = false;
             doc_case_id = "";
             doc_case_id = caseid.value + "";
-                if(case_ids.length >=2 && case_ids.includes(doc_case_id)) {
+                if(case_ids.length >=1 && case_ids.includes(doc_case_id)) {
                     alert("Please enter unique case id");
                     validationMap[e.target.id] = "Please enter unique case id";
                     caseid.focus();
@@ -248,6 +247,7 @@ export function LSAS_EMOC_Form(props) {
                     }
                     return true;
                 }
+
         }
         else if(caseid.value === "" && rch_id.value !== "" && e.target.id == "rch_id_" + (index_id)){
             if(rch_id.value.length < 12){
