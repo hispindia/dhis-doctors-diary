@@ -132,6 +132,10 @@ export function DataEntryForm(props){
 
     function send(){
 
+        if(!validate1()){
+            state.changeView(state);
+            return;
+        }
         if(!validate()){
             state.changeView(state);
             return;
@@ -182,7 +186,16 @@ export function DataEntryForm(props){
                 return list;
             },[]);
     }
+    function validate1(){
+        return constants.required_fields.reduce(function(valid,id){
+            if (!dataValueMap[id]){
+                valid = false;
+                dvRequiredMap[id] = "Mandatory Field!";
+            }
 
+            return valid;
+        },true);
+    }
     function validate(){
 
         var flag1 = true;
@@ -211,6 +224,7 @@ export function DataEntryForm(props){
                 }
             }
         }
+
 
         return flag1;
 

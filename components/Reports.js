@@ -34,38 +34,18 @@ export function Reports(props){
         state.changeView(state);
     }
     function synchronize(){
-        state.loading = true;
-        state.changeView(state);
 
-        var ps = state.
-            program_metadata_programStageByIdMap[state.
-            curr_user_program_stage];
+        sync.fetchEvents(state,function(){
+            state.loading = false;
+            state.changeView(state);
+        })
+    }
+    function refetchEvents(){
 
-        importEvent(0,state.curr_user_data.events,ps);
-
-        function importEvent(index,events,ps){
-            if (index == events.length){
-                refetchEvents();
-                return;
-            }
-
-            var event = events[index];
-            state.curr_event = event;
-            if (event.offline){
-                var dvMap = event.dataValues.reduce(function(map,obj){
-                    map[obj.dataElement] = obj.value;
-                    return map;
-                },[]);
-
-                sync.saveEvent(dvMap,ps,state,callback);
-            }else{
-                callback();
-            }
-
-            function callback(){
-                importEvent(index+1,events,ps)
-            }
-        }
+        sync.fetchEvents(state,function(){
+            state.loading = false;
+            state.changeView(state);
+        })
     }
     function getUserDataElement() {
         //console.log(ps.programStageDataElements);
