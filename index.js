@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import cache from './localstorage';
 import constants from './constants';
 import moment from 'moment';
-import {App} from './components/app';
+//import {App} from './components/app';
 import {Main} from './components/Main';
 
 

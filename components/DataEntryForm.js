@@ -1,10 +1,10 @@
 import React,{propTypes} from 'react';
-import cache from '../localstorage';
+//import cache from '../localstorage';
 import moment from 'moment';
 import constants from '../constants';
 import sync from '../sync-manager';
 import utility from '../utility';
-import lsas from './LSAS_EMOC_Form';
+//import lsas from './LSAS_EMOC_Form';
 import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
 
 export function DataEntryForm(props){

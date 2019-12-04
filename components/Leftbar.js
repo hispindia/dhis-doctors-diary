@@ -3,7 +3,7 @@ import constants from '../constants';
 import sync from '../sync-manager';
 import cache from '../localstorage';
 
-import {LeftbarSettings} from './LeftbarSetting'
+//import {LeftbarSettings} from './LeftbarSetting'
 
 
 export function Leftbar(props){

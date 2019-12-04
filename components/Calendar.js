@@ -1,5 +1,4 @@
 import React,{propTypes} from 'react';
-import cache from '../localstorage';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import constants from '../constants';
@@ -45,13 +44,14 @@ export function Calendar(props){
         })
 
         function getDateCell(date,refDate){
-            
+            console.log(state.loading)
             var event = instance.props.state.curr_user_eventMapByDate[date.format('YYYY-MM-DD')];
             
             var className = getClass(date,refDate,event);
           //  var img = getImage(event);
             return (<td className={className}
                     key = {date.format('YYYY-MM-DD')}
+
                     onClick={goToDataEntry.bind(null,event,date.format("YYYY-MM-DD"),className)} >
                     <div className="cellDiv">
                     {date.format('D')}

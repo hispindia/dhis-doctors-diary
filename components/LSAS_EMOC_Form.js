@@ -1,6 +1,6 @@
 import React,{propTypes} from 'react';
-import utility from '../utility';
-import sync from '../sync-manager';
+//import utility from '../utility';
+//import sync from '../sync-manager';
 import constants from "../constants";
 
 export function LSAS_EMOC_Form(props) {
