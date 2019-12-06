@@ -11,7 +11,7 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.2.0/workbox-sw.js");
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
@@ -27,19 +27,31 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "27caa00cabdd42fb85391804c886e7d2"
+    "revision": "a7e9e66ee549bf4aad4860f61f6915dc"
+  },
+  {
+    "url": "css/bootstrap/bootstrap.min.css",
+    "revision": "a15c2ac3234aa8f6064ef9c1f7383c37"
+  },
+  {
+    "url": "css/bootstrap/bootstrap.min.js",
+    "revision": "e1d98d47689e00f8ecbc5d9f61bdb42e"
+  },
+  {
+    "url": "css/bootstrap/popper.min.js",
+    "revision": "56456db9d72a4b380ed3cb63095e6022"
   },
   {
     "url": "css/dhis2.css",
-    "revision": "5f836c197f72a0ba1d825a607fd930a7"
+    "revision": "e24e6b06dc1c7e6349555fd4b3dc3016"
   },
   {
     "url": "css/diary.css",
-    "revision": "6246283dd3295c59948b612ed451ecf8"
+    "revision": "896676b1207979c03a1adf6b79ea9712"
   },
   {
     "url": "css/main.css",
-    "revision": "840e03927f148a3519db644043c6ca11"
+    "revision": "24cd246ef30f3022118a59b1c916cb49"
   },
   {
     "url": "hnl.mobileConsole.1.3.js",
@@ -48,6 +60,10 @@ self.__precacheManifest = [
   {
     "url": "images/banner.png",
     "revision": "5ea7218416bbad12cadf58ce40187a6a"
+  },
+  {
+    "url": "images/banner2.png",
+    "revision": "1879a3206e809c979fd3db71fc226407"
   },
   {
     "url": "images/doublegreentick.png",
@@ -90,6 +106,10 @@ self.__precacheManifest = [
     "revision": "4807c8d5d07c1612e49c68aba5ffac67"
   },
   {
+    "url": "images/left2.png",
+    "revision": "4d0c5a54a12e8cba36c81808e22b3f45"
+  },
+  {
     "url": "images/loader.gif",
     "revision": "dc6d2504637da44d8eb0afd11c9c732a"
   },
@@ -116,6 +136,14 @@ self.__precacheManifest = [
   {
     "url": "images/rejected.png",
     "revision": "21a10d41fca7694054e6ff0284d4fb72"
+  },
+  {
+    "url": "images/right.png",
+    "revision": "585c34a1b8c0f96963a5a983758490d2"
+  },
+  {
+    "url": "images/right1.png",
+    "revision": "2c0430721f64f940b59111a48c100dc7"
   },
   {
     "url": "images/settings_blue.png",
@@ -159,7 +187,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "7ea4481c8126182148de829e0dd7c4de"
+    "revision": "ccc24b70b5eb6e51aef234840e66a54a"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

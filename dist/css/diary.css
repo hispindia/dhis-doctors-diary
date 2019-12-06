@@ -209,8 +209,8 @@ html {
 
     cursor: pointer;
     -webkit-box-shadow: 0px 0px 8px 5px grey;
-    -moz-box-shadow: 0px 0px 8px 2px light grey;
-    box-shadow: 0px 0px 8px 2px light grey;
+    -moz-box-shadow: 0px 0px 8px 2px lightgrey;
+    box-shadow: 0px 0px 8px 2px lightgrey;
 
 
 }

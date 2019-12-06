@@ -90,12 +90,21 @@ export function DataEntryForm(props){
 
     function save(){
 
-        console.log(validationPass)
+        //console.log(validationPass)
+        if(!validate1()){
+            state.changeView(state);
+            return;
+        }
         if(!validate()){
             state.changeView(state);
             return;
         }
         if(!validationPass){
+            state.changeView(state);
+            return;
+        }
+        if(!checkCaseDetails())
+        {
             state.changeView(state);
             return;
         }
@@ -129,6 +138,40 @@ export function DataEntryForm(props){
 
         // state.changeView(state);
     }
+    function checkCaseDetails(){
+
+        var flag = true;
+        if((dataValueMap[constants.emoc_data_de]))
+        {
+            //console.log(dataValueMap[constants.emoc_data_de]);
+            var emoc = JSON.parse(dataValueMap[constants.emoc_data_de]);
+            for(var i=0; i<= emoc.data.length-1; i++){
+                if((emoc.data[i].id != "" || emoc.data[i].doc_id != "") && (emoc.data[i].case_id != "" || emoc.data[i].rch_id != "")){
+                    flag = true;
+                }
+                else{
+                    flag = false;
+                }
+            }
+        }
+        else if((dataValueMap[constants.lsas_emoc_data_de])) {
+
+            //console.log(dataValueMap[constants.lsas_emoc_data_de]);
+            var lsas = JSON.parse(dataValueMap[constants.lsas_emoc_data_de]);
+            for(var i=0; i<= lsas.data.length-1; i++){
+                if((lsas.data[i].id != "" || lsas.data[i].doc_id != "") && (lsas.data[i].case_id != "" || lsas.data[i].rch_id != "")){
+                    flag = true;
+                }
+                else{
+                    flag = false;
+                }
+            }
+        }
+        if(!flag){
+            alert("Please enter all mandatory fields");
+        }
+        return flag;
+    }
 
     function send(){
 
@@ -141,6 +184,11 @@ export function DataEntryForm(props){
             return;
         }
         if(!validationPass){
+            state.changeView(state);
+            return;
+        }
+        if(!checkCaseDetails())
+        {
             state.changeView(state);
             return;
         }
