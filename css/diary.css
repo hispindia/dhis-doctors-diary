@@ -250,6 +250,10 @@ html {
     font-size: large;
 
 }
+.pdf{
+    width: 100%;
+    height: 55vh;
+}
 
 @media only screen and (min-width:768px){
     .loginArea{width:50%;}

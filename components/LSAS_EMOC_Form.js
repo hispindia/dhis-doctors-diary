@@ -275,7 +275,7 @@ export function LSAS_EMOC_Form(props) {
         else if (docMap["doc_id" + (index_id)].length > 0) {
             for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
                 var allIds = docMap["doc_id" + (index_id)][i];
-                if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
+                if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
                     e.target.value = "";
                     alert("Please enter unique erhms id");
                     validationMap[e.target.id] = "Please enter unique erhms id";
@@ -366,13 +366,12 @@ export function LSAS_EMOC_Form(props) {
                 }
                 docMap["doc_id" + (index_id)].push(e.target.id);
                 docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
-
             }
-        } else {
+        }
+        else {
             docMap["doc_id" + (index_id)].push(e.target.id);
             docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
         }
-
         return flag;
     }
 
@@ -578,7 +577,6 @@ export function LSAS_EMOC_Form(props) {
         if((docid === 1 && state.data.length >= 2) || state.data.length >= 2)
         {
             for(var i = 1;i<=state.data.length;i++){
-                //console.log(e.target.id);
                 if(e.target.id.endsWith(""+i))
                 {
                     index_id = i;

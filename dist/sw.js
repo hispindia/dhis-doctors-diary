@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "bundle.js",
-    "revision": "a7e9e66ee549bf4aad4860f61f6915dc"
+    "revision": "0e080ab9c05109881cebac005b8c3a30"
   },
   {
     "url": "css/bootstrap/bootstrap.min.css",
@@ -47,7 +47,7 @@ self.__precacheManifest = [
   },
   {
     "url": "css/diary.css",
-    "revision": "896676b1207979c03a1adf6b79ea9712"
+    "revision": "4325fdf453406d78b036fba71298696d"
   },
   {
     "url": "css/main.css",

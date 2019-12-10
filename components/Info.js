@@ -10,6 +10,21 @@ export function Info(props){
 
     var state = props.state;
 
+    var ps = state.
+        program_metadata_programStageByIdMap[state.
+        curr_user_program_stage];
+
+    function getUserInfo(){
+        if(ps.name.includes("LSAS") || ps.name.includes("EmOC") )
+        {
+
+            return (<iframe src="./images/user_guide.pdf" className="pdf"/>);
+        }
+        else{
+            return (<img className="imgDiv" src="./images/manual.jpg"></img>);
+        }
+    }
+
     instance.render = function(){
 
         return(
@@ -22,7 +37,7 @@ export function Info(props){
 
                 <tr>
                     <td >
-                        <img className="imgDiv" src="./images/manual.jpg"></img>
+                        {getUserInfo()}
 
                     </td>
                 </tr>
