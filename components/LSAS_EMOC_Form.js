@@ -861,6 +861,7 @@ export function LSAS_EMOC_Form(props) {
                                     type="text"
                                     maxLength={12}
                                     id = {"rch_id_"+ (index+1)}
+                                    key = {"rch_id_"+ (index+1)}
                                     defaultValue={!obj.rch_id?"":obj.rch_id}
                                     onChange={numberValEntered.bind(null,obj.rch_id)}
                                     onBlur={checkUnique.bind(null,obj)}

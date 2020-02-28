@@ -10,9 +10,10 @@ export function Footer(props){
     var state = props.state;
     function getSyncImageNotification(){
         if (state.offlineEvents>0){
+
             return state.offlineEvents; 
         }
-        
+
         return (<img className="headerTick" src="./images/doublegreentick.png"></img>)
     }
     
@@ -93,7 +94,7 @@ export function Footer(props){
                 src={state.loading?"./images/loader.gif":"./images/sync.png"} title="Synchronized data">
                 </img>
                 { getSyncImageNotification() }
-
+                    {constants.version}
                 </div>
                 </div>
                 </div>)

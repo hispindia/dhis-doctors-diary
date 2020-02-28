@@ -191,25 +191,50 @@ function syncManager(){
         
         
     }
-    
+    var isExistingEvent = false;
+    var eventId = '';
+
     function sendEvent(state,event,callback){
-
-        //check for offline
-
-
         var api = new _api(constants.DHIS_URL_BASE);
-
+        var eventDate;
+        var currentEventDate = moment(event.eventDate).format("YYYY-MM-DD");
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
+        function checkEventExist(state,event) {
+            api.getReq(`events.json?trackedEntityInstance=${state.curr_user_data.tei.trackedEntityInstance}&paging=false`,response)
 
+            function response(err,response,body) {
+                var events = JSON.parse(body).events;
+                for (var i = 0; i <= events.length - 1; i++) {
+                    eventDate = moment(events[i].eventDate).format("YYYY-MM-DD");
+                    if (eventDate === currentEventDate) {
+                        isExistingEvent = true;
+                        eventId = events[i].event;
+                        console.log("EVENT EXIST: ");
+                        return true;
+                    }
+                }
+                //return true;
+            }
 
-        if (!(event.event)){
-            console.log("create: "+Object.entries(event));
-            api.saveReq(`events`,event,postSave)
-        }else{
-            console.log("update: "+Object.entries(event));
-            api.updateReq(`events/${event.event}`,event,postSend)
-            
+            if(!response){
+                return true;
+            }
+        }
+        if(checkEventExist(state,event)){
+            if (!(event.event)){
+                if(isExistingEvent){
+                    console.log("new update: "+Object.entries(event));
+                    api.updateReq(`events/${eventId}`,event,postSend)
+                }
+                else{
+                    console.log("create: "+Object.entries(event));
+                    api.saveReq(`events`,event,postSave)
+                }
+            }else{
+                console.log("update: "+Object.entries(event));
+                api.updateReq(`events/${event.event}`,event,postSend)
+            }
         }
 
         function postSave(error,response,body){
@@ -217,8 +242,6 @@ function syncManager(){
                 console.log("Error : Save failed" + error);
                 return;
             }
-
-            
             event.event = body.response.importSummaries[0].reference;
             delete event.offline;
             state.offlineEvents = state.offlineEvents-1;
@@ -229,7 +252,6 @@ function syncManager(){
             if(callback){
                 callback()
             }
-            
         }
 
         function postSend(error,response,body){
