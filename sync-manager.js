@@ -214,7 +214,7 @@ function syncManager(){
                         return true;
                     }
                 }
-                //return true;
+                return true;
             }
 
             if(!response){
