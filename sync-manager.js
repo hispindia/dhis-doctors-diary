@@ -231,7 +231,7 @@ function syncManager(){
                     }
                     return true;
                 });
-           
+           console.log(eventId);
         }
         function postSave(error,response,body){
             if(error){
