@@ -82,15 +82,13 @@ export function Header(props){
         return (<div>
             <div className="headerDiv ">
                 <div className="banner" >
-                    <div className="bannerItems "> </div>
-
+                    <div className="bannerItems "></div>
                 </div>
-
-
             </div>
+
             <div className="onlineStatus">
             <span className={state.online?"internetIcon online":"offline"}></span>
-            {state.online?"Online":"Offline"}<br/>
+                {state.online?"Online":"Offline"} <br/>
             {state.curr_view == constants.views.login?"":state.curr_user_data.user.displayName}
             </div></div>
         )

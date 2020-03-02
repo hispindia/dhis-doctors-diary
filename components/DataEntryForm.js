@@ -143,7 +143,7 @@ export function DataEntryForm(props){
         var flag = true;
         if((dataValueMap[constants.emoc_data_de]))
         {
-            //console.log(dataValueMap[constants.emoc_data_de]);
+            console.log(dataValueMap[constants.emoc_data_de]);
             var emoc = JSON.parse(dataValueMap[constants.emoc_data_de]);
             for(var i=0; i<= emoc.data.length-1; i++){
                 if((emoc.data[i].id != "" || emoc.data[i].doc_id != "") && (emoc.data[i].case_id != "" || emoc.data[i].rch_id != "")){
@@ -156,7 +156,7 @@ export function DataEntryForm(props){
         }
         else if((dataValueMap[constants.lsas_emoc_data_de])) {
 
-            //console.log(dataValueMap[constants.lsas_emoc_data_de]);
+            console.log(dataValueMap[constants.lsas_emoc_data_de]);
             var lsas = JSON.parse(dataValueMap[constants.lsas_emoc_data_de]);
             for(var i=0; i<= lsas.data.length-1; i++){
                 if((lsas.data[i].id != "" || lsas.data[i].doc_id != "") && (lsas.data[i].case_id != "" || lsas.data[i].rch_id != "")){

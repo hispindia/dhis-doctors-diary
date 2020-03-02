@@ -196,47 +196,43 @@ function syncManager(){
 
     function sendEvent(state,event,callback){
         var api = new _api(constants.DHIS_URL_BASE);
-        var eventDate;
-        var currentEventDate = moment(event.eventDate).format("YYYY-MM-DD");
+
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
+        if(checkEventExist) {
+            if (!(event.event)) {
+                if (isExistingEvent) {
+                    console.log("new update: " + Object.entries(event));
+                    api.updateReq(`events/${eventId}`, event, postSend)
+                } else {
+                    console.log("create: " + Object.entries(event));
+                    api.saveReq(`events`, event, postSave)
+                }
+            } else {
+                console.log("update: " + Object.entries(event));
+                api.updateReq(`events/${event.event}`, event, postSend)
+            }
+        }
         function checkEventExist(state,event) {
-            api.getReq(`events.json?trackedEntityInstance=${state.curr_user_data.tei.trackedEntityInstance}&paging=false`,response)
-
-            function response(err,response,body) {
-                var events = JSON.parse(body).events;
-                for (var i = 0; i <= events.length - 1; i++) {
-                    eventDate = moment(events[i].eventDate).format("YYYY-MM-DD");
-                    if (eventDate === currentEventDate) {
-                        isExistingEvent = true;
-                        eventId = events[i].event;
-                        console.log("EVENT EXIST: ");
-                        return true;
+            var eventDate;
+            var currentEventDate = moment(event.eventDate).format("YYYY-MM-DD");
+            api.getReq(
+                `events.json?trackedEntityInstance=${state.curr_user_data.tei.trackedEntityInstance}`,
+                function(err,response,body){
+                    var events = JSON.parse(body).events;
+                    for (var i = 0; i <= events.length - 1; i++) {
+                        eventDate = moment(events[i].eventDate).format("YYYY-MM-DD");
+                        if (eventDate === currentEventDate) {
+                            isExistingEvent = true;
+                            eventId = events[i].event;
+                            console.log("EVENT EXIST: ");
+                            return true;
+                        }
                     }
-                }
-                return true;
-            }
-
-            if(!response){
-                return true;
-            }
+                    return true;
+                });
+           
         }
-        if(checkEventExist(state,event)){
-            if (!(event.event)){
-                if(isExistingEvent){
-                    console.log("new update: "+Object.entries(event));
-                    api.updateReq(`events/${eventId}`,event,postSend)
-                }
-                else{
-                    console.log("create: "+Object.entries(event));
-                    api.saveReq(`events`,event,postSave)
-                }
-            }else{
-                console.log("update: "+Object.entries(event));
-                api.updateReq(`events/${event.event}`,event,postSend)
-            }
-        }
-
         function postSave(error,response,body){
             if(error){
                 console.log("Error : Save failed" + error);

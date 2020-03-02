@@ -18,7 +18,6 @@ function localstorage(){
         for (var key in localStorage){
             if (key.startsWith("dd_")){
                 localStorage.removeItem(key);
-
                 console.log(key)
             }
         }

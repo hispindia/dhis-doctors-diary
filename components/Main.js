@@ -49,7 +49,6 @@ export function Main(props){
         case constants.views.login :
             return (<div >
                     <Header state={state}></Header>
-
                     <Login state={state}/>
                     <Footer state={state}/>
                     </div>
