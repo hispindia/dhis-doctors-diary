@@ -6,6 +6,7 @@ import sync from '../sync-manager';
 import utility from '../utility';
 //import lsas from './LSAS_EMOC_Form';
 import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
+import cache from "../localstorage";
 
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
@@ -50,7 +51,11 @@ export function DataEntryForm(props){
 
     instance.render = function(){
         if (error){
-            return (<label>{error}</label>)
+            return (<div>
+                <h1>Cache issue</h1>
+                Clear Cache<input className="settingBt" type="button" onClick = {reset} value="Reset"></input>
+                {error}
+            </div>)
         }
         return (
             <div className="entryArea">
@@ -540,5 +545,10 @@ export function DataEntryForm(props){
             }
         }
 
+    }
+    function reset(){
+        cache.reset();
+        state.curr_view=constants.views.login;
+        state.changeView(state);
     }
 }

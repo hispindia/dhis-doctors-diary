@@ -4,7 +4,7 @@ import _api from './dhis2API';
 import moment from 'moment';
 
 function syncManager(){
-
+    var events = [];
     this.saveProfile = function(attrValMap,state,callback){
 
         var oldAttrMap = state.curr_user_data.tei.attributes.reduce(function(map,obj){
@@ -199,39 +199,46 @@ function syncManager(){
 
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
-        if(checkEventExist) {
-            if (!(event.event)) {
-                if (isExistingEvent) {
-                    console.log("new update: " + Object.entries(event));
-                    api.updateReq(`events/${eventId}`, event, postSend)
-                } else {
-                    console.log("create: " + Object.entries(event));
-                    api.saveReq(`events`, event, postSave)
-                }
-            } else {
-                console.log("update: " + Object.entries(event));
-                api.updateReq(`events/${event.event}`, event, postSend)
-            }
-        }
+        checkEventExist(state,event);
         function checkEventExist(state,event) {
             var eventDate;
+            var flag= false;
             var currentEventDate = moment(event.eventDate).format("YYYY-MM-DD");
-            api.getReq(
-                `events.json?trackedEntityInstance=${state.curr_user_data.tei.trackedEntityInstance}`,
-                function(err,response,body){
-                    var events = JSON.parse(body).events;
-                    for (var i = 0; i <= events.length - 1; i++) {
-                        eventDate = moment(events[i].eventDate).format("YYYY-MM-DD");
-                        if (eventDate === currentEventDate) {
-                            isExistingEvent = true;
-                            eventId = events[i].event;
-                            console.log("EVENT EXIST: ");
-                            return true;
-                        }
+            api.getReq(`events.json?trackedEntityInstance=${state.curr_user_data.tei.trackedEntityInstance}&paging=false`,gotEvents);
+
+            function gotEvents(error,response,body){
+                if (error){
+                    console.log("Error Header: events fetch");
+                    flag = true;
+                    return flag;
+                }
+                events = JSON.parse(body).events;
+                console.log(events.length);
+                for (var i = 0; i <= events.length - 1; i++) {
+                    eventDate = moment(events[i].eventDate).format("YYYY-MM-DD");
+                    if (eventDate === currentEventDate) {
+                        isExistingEvent = true;
+                        eventId = events[i].event;
+                        console.log("Event Exist:------------");
+                        return true;
                     }
-                    return true;
-                });
-           console.log(eventId);
+                    continue;
+                }
+                if (!(event.event)) {
+                    if (isExistingEvent) {
+                        console.log("new update: " + Object.entries(event));
+                        api.updateReq(`events/${eventId}`, event, postSend)
+                    } else {
+                        console.log("create: " + Object.entries(event));
+                        api.saveReq(`events`, event, postSave)
+                    }
+                } else {
+                    console.log("update: " + Object.entries(event));
+                    api.updateReq(`events/${event.event}`, event, postSend)
+                }
+                return true;
+            }
+            return true;
         }
         function postSave(error,response,body){
             if(error){
