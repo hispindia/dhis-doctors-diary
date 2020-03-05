@@ -1,6 +1,6 @@
 import React,{propTypes} from 'react';
-import utility from '../utility';
-import sync from '../sync-manager';
+//import utility from '../utility';
+//import sync from '../sync-manager';
 import constants from "../constants";
 
 export function LSAS_EMOC_Form(props) {
@@ -99,34 +99,30 @@ export function LSAS_EMOC_Form(props) {
     function build_object() {
 
             if(!validateForm()){
-                console.log("validation in lsas/emoc: " + "false");
+                //console.log("validation in lsas/emoc: " + "false");
                 return false;
             }
             else{
                return true;
             }
-
-
-
-
     }
-    function validateForm() {
 
+    function validateForm() {
         var flag = true;
-        console.log("validationMap.length: "+Object.keys(validationMap).length);
-        for (var p in validationMap) {
-            if( validationMap.hasOwnProperty(p) ) {
-                console.log(p + " , " + validationMap[p] + "\n");
-                if(validationMap[p] !== "")
-                {
-                    flag = false;
-                    state.validationPass = false;
-                }
-                else{
-                    state.validationPass = true;
+
+         for (var p in validationMap) {
+                if( validationMap.hasOwnProperty(p) ) {
+                    //console.log(p + " , " + validationMap[p] + "\n");
+                    if(validationMap[p] !== "")
+                    {
+                        flag = false;
+                        state.validationPass = false;
+                    }
+                    else{
+                        state.validationPass = true;
+                    }
                 }
             }
-        }
 
         if(flag){
             instance.props.onChangeHandler(instance.props.de,
@@ -279,7 +275,7 @@ export function LSAS_EMOC_Form(props) {
         else if (docMap["doc_id" + (index_id)].length > 0) {
             for (var i = 0; i < docMap["doc_id" + (index_id)].length; i++) {
                 var allIds = docMap["doc_id" + (index_id)][i];
-                if (docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
+                if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value === docMap["doc_uniqueIds" + (index_id)][allIds] && e.target.value != "" ) {
                     e.target.value = "";
                     alert("Please enter unique erhms id");
                     validationMap[e.target.id] = "Please enter unique erhms id";
@@ -288,12 +284,12 @@ export function LSAS_EMOC_Form(props) {
             }
 
             if (docMap["doc_uniqueIds" + (index_id)][e.target.id] != e.target.value && docMap["doc_uniqueIds" + (index_id)][e.target.id] != "") {
-                console.log("e.target.id: "+e.target.id);
+                //console.log("e.target.id: "+e.target.id);
                 if (e.target.value != "" &&
                     (e.target.id === "mbBSId_1" + "doc" + (index_id)
                         || e.target.id === "mbBSId_2" + "doc" + (index_id))) {
 
-                    console.log("MBBS");
+                    //console.log("MBBS");
                     if(e.target.value.length < 6)
                     {
                         alert("Please enter at-least 6 digit erhms id");
@@ -316,7 +312,7 @@ export function LSAS_EMOC_Form(props) {
                 if (e.target.value != "" &&
                     (e.target.id === "staffId_1" + "doc" + (index_id)
                         || e.target.id === "staffId_2" + "doc" + (index_id))) {
-                    console.log("Staff");
+                    //console.log("Staff");
                     if(e.target.value.length < 6)
                     {
                         alert("Please enter at-least  6 digit erhms id");
@@ -336,7 +332,7 @@ export function LSAS_EMOC_Form(props) {
                 if (e.target.value != "" &&
                     (e.target.id === "otTechId_1" + "doc" + (index_id)
                         || e.target.id === "otTechId_2" + "doc" + (index_id))) {
-                    console.log("OT TechId");
+                    //console.log("OT TechId");
                     if(e.target.value.length < 6)
                     {
                         validationMap[e.target.id] = "Please enter at-least 6 digit erhms id";
@@ -370,13 +366,12 @@ export function LSAS_EMOC_Form(props) {
                 }
                 docMap["doc_id" + (index_id)].push(e.target.id);
                 docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
-
             }
-        } else {
+        }
+        else {
             docMap["doc_id" + (index_id)].push(e.target.id);
             docMap["doc_uniqueIds" + (index_id)][e.target.id] = e.target.value;
         }
-
         return flag;
     }
 
@@ -432,7 +427,7 @@ export function LSAS_EMOC_Form(props) {
         var val2 = document.getElementById("caseid_" + (index_id));
         var val3 = document.getElementById("case_label_" + (index_id));
 
-        console.log(e.target.checked);
+        //console.log(e.target.checked);
 
         if (e.target.checked === true) {
             isCase = true;
@@ -471,7 +466,7 @@ export function LSAS_EMOC_Form(props) {
         //console.log("checked.value:"+checked.value)
         if(checked.value === "false" && (!val.value || val.value === ""))
         {
-            alert("Please enter previous doctor ehrms id");
+            alert("Please enter previous case mandatory fields");
             return false;
         }
         else if(checked.value === "true" && (!val2.value || val2.value == "") && (caseid.value != "" || rch_id.value != ""))
@@ -497,6 +492,7 @@ export function LSAS_EMOC_Form(props) {
             props.sendOrSave = true;
 
             build_object();
+
             return true;
         }
 
@@ -581,7 +577,6 @@ export function LSAS_EMOC_Form(props) {
         if((docid === 1 && state.data.length >= 2) || state.data.length >= 2)
         {
             for(var i = 1;i<=state.data.length;i++){
-                //console.log(e.target.id);
                 if(e.target.id.endsWith(""+i))
                 {
                     index_id = i;
@@ -633,7 +628,7 @@ export function LSAS_EMOC_Form(props) {
                 //console.log("e.target.value: "+checkBox.value);
                 if(checkBox != null && checkBox.value === true)
                 {
-                    console.log("e.target.value: "+checkBox.value);
+                    //console.log("e.target.value: "+checkBox.value);
                     checkBox.checked;
                 }
                 if(checkBox2 != null && checkBox2.value === true)
@@ -861,11 +856,12 @@ export function LSAS_EMOC_Form(props) {
                         </tr>
                         <tr>
                             <td colSpan="2">
-                                <label id={"rch_label_"+(index+1)} >RCH Id:</label>
+                                <label id={"rch_label_"+(index+1)} >RCH Id:<strong className="redColor"> * </strong></label>
                                 <input
                                     type="text"
                                     maxLength={12}
                                     id = {"rch_id_"+ (index+1)}
+                                    key = {"rch_id_"+ (index+1)}
                                     defaultValue={!obj.rch_id?"":obj.rch_id}
                                     onChange={numberValEntered.bind(null,obj.rch_id)}
                                     onBlur={checkUnique.bind(null,obj)}
@@ -882,7 +878,7 @@ export function LSAS_EMOC_Form(props) {
 
                         <tr>
                             <td colSpan="3">
-                                <label className={obj.isCaseId?"":"hidden"} id={"case_label_"+(index+1)}>Case Id:</label>
+                                <label className={obj.isCaseId?"":"hidden"} id={"case_label_"+(index+1)}>Case Id:<strong className="redColor"> * </strong></label>
                                 <input
                                     type="text"
                                     id = {"caseid_"+ (index+1)}
@@ -899,6 +895,7 @@ export function LSAS_EMOC_Form(props) {
                             <td colSpan="2">
                                 <label>
                                     {constants.lsas_emoc_data_de === instance.props.de.id?"LSAS Ehrms Id":"EMOC Ehrms Id" }
+                                    <strong className="redColor"> * </strong>
                                 </label>
                                 <input
                                     type="text"
@@ -913,14 +910,17 @@ export function LSAS_EMOC_Form(props) {
                                 <label className="redColor">{validationMap["DocId_"+(index+1)]}</label>
                             </td>
                             <td className="td_button">
-                                <label>Doctor on Call/ Specialist</label>
+                                <label>
+                                    Doctor on Call/ Specialist
+                                </label>
                                 {getDocChecked()}
 
                             </td>
                         </tr>
                         <tr >
                             <td colSpan="3">
-                                <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor on Call/ Specialist</label>
+                                <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor on Call/ Specialist
+                                    <strong className="redColor"> * </strong></label>
                                 <input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
                             </td>
                         </tr>
@@ -940,6 +940,7 @@ export function LSAS_EMOC_Form(props) {
                     </table>
                 </div>
             );
+
             return list;
         },[]);
         return data;

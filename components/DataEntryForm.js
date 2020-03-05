@@ -1,11 +1,12 @@
 import React,{propTypes} from 'react';
-import cache from '../localstorage';
+//import cache from '../localstorage';
 import moment from 'moment';
 import constants from '../constants';
 import sync from '../sync-manager';
 import utility from '../utility';
-import lsas from './LSAS_EMOC_Form';
+//import lsas from './LSAS_EMOC_Form';
 import {LSAS_EMOC_Form} from './LSAS_EMOC_Form.js';
+import cache from "../localstorage";
 
 export function DataEntryForm(props){
     var instance = Object.create(React.Component.prototype)
@@ -50,7 +51,11 @@ export function DataEntryForm(props){
 
     instance.render = function(){
         if (error){
-            return (<label>{error}</label>)
+            return (<div>
+                <h1>Cache issue</h1>
+                Clear Cache<input className="settingBt" type="button" onClick = {reset} value="Reset"></input>
+                {error}
+            </div>)
         }
         return (
             <div className="entryArea">
@@ -90,12 +95,21 @@ export function DataEntryForm(props){
 
     function save(){
 
-        console.log(validationPass)
+        //console.log(validationPass)
+        if(!validate1()){
+            state.changeView(state);
+            return;
+        }
         if(!validate()){
             state.changeView(state);
             return;
         }
         if(!validationPass){
+            state.changeView(state);
+            return;
+        }
+        if(!checkCaseDetails())
+        {
             state.changeView(state);
             return;
         }
@@ -129,6 +143,40 @@ export function DataEntryForm(props){
 
         // state.changeView(state);
     }
+    function checkCaseDetails(){
+
+        var flag = true;
+        if((dataValueMap[constants.emoc_data_de]))
+        {
+            console.log(dataValueMap[constants.emoc_data_de]);
+            var emoc = JSON.parse(dataValueMap[constants.emoc_data_de]);
+            for(var i=0; i<= emoc.data.length-1; i++){
+                if((emoc.data[i].id != "" || emoc.data[i].doc_id != "") && (emoc.data[i].case_id != "" || emoc.data[i].rch_id != "")){
+                    flag = true;
+                }
+                else{
+                    flag = false;
+                }
+            }
+        }
+        else if((dataValueMap[constants.lsas_emoc_data_de])) {
+
+            console.log(dataValueMap[constants.lsas_emoc_data_de]);
+            var lsas = JSON.parse(dataValueMap[constants.lsas_emoc_data_de]);
+            for(var i=0; i<= lsas.data.length-1; i++){
+                if((lsas.data[i].id != "" || lsas.data[i].doc_id != "") && (lsas.data[i].case_id != "" || lsas.data[i].rch_id != "")){
+                    flag = true;
+                }
+                else{
+                    flag = false;
+                }
+            }
+        }
+        if(!flag){
+            alert("Please enter all mandatory fields");
+        }
+        return flag;
+    }
 
     function send(){
 
@@ -141,6 +189,11 @@ export function DataEntryForm(props){
             return;
         }
         if(!validationPass){
+            state.changeView(state);
+            return;
+        }
+        if(!checkCaseDetails())
+        {
             state.changeView(state);
             return;
         }
@@ -492,5 +545,10 @@ export function DataEntryForm(props){
             }
         }
 
+    }
+    function reset(){
+        cache.reset();
+        state.curr_view=constants.views.login;
+        state.changeView(state);
     }
 }

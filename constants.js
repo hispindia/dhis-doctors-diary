@@ -1,8 +1,9 @@
 //exports.DHIS_URL_BASE = "https://uphmis.in/uphmis";
 
-exports.DHIS_URL_BASE = "http://139.162.61.147/uphmis230";
-//exports.DHIS_URL_BASE = "http://192.168.106.49:8080/dhis";
+//exports.DHIS_URL_BASE = "http://139.162.61.147/uphmis230";
+exports.DHIS_URL_BASE = "https://ln1.hispindia.org/uphmis230";
 //exports.DHIS_URL_BASE = "http://192.168.0.246:8090/upupgrade";
+
 
 //exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
 //exports.DHIS_URL_BASE = "http://localhost:8090/upupgrade";
@@ -14,6 +15,8 @@ exports.program_doc_diary = "Bv3DaiOd5Ai";
 exports.root_ou = "v8EzhiynNtf";
 exports.attr_user = "fXG73s6W4ER";
 
+exports.version = "Version 1.2";
+
 
 exports.views = {
     login : "login",
@@ -24,7 +27,8 @@ exports.views = {
     profile: "profile",
     changePassword : "changePassword",
     info:"info",
-    reports:"reports"
+    reports:"reports",
+    error:"error"
 };
 
 
