@@ -3,6 +3,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import constants from '../constants';
 import utility from '../utility';
+import cache from "../localstorage";
 
 const moment = extendMoment(Moment);
 
@@ -12,6 +13,9 @@ export function Calendar(props){
     instance.props = props;
 
     var state = props.state;
+    var ps = state.
+        program_metadata_programStageByIdMap[state.
+        curr_user_program_stage];
 
     function makeDateRange(){
 
@@ -137,7 +141,11 @@ export function Calendar(props){
         }
         
     }
-    
+    function reset(){
+        cache.reset();
+        state.curr_view=constants.views.login;
+        state.changeView(state);
+    }
     function goToDataEntry(event,date,className){
 
         if (className.includes("futureDate")){
@@ -162,39 +170,54 @@ export function Calendar(props){
         state.selMoment = moment(state.selMoment).add(1,'month');
         instance.setState(state)
     }
+    var error;
+
+    if (!ps){
+        //alert("Stage not assigned to user");
+        error = "User does not have access to any form.";
+    }
 
     instance.render = function(){
-         return (<div>
-                 <div className="big calendarFacility">{utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2)}</div>
+        try{
+            return (<div>
+                    <div className="big calendarFacility">{utility.makeFacilityStrBelowLevel(state.curr_user_data.user.organisationUnits[0],2)}</div>
 
-                 <div className="calendarArea">
+                    <div className="calendarArea">
 
-                 <div className="calendarButton">
-                 <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
-                
+                        <div className="calendarButton">
+                            <div className="floatLeft big "  onClick = {prevMonth}><b>&lt;&lt;</b></div>
 
-                 <div className="big">{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</div>
-                 <div className="floatRight big " onClick = {nextMonth} ><b> &gt;&gt; </b></div>
-                 </div>
-                 <table className="calendarTable">
-                 <thead>
-                 
-                 <tr>
-                 <th>M</th>
-                 <th>T</th>
-                 <th>W</th>
-                 <th>T</th>
-                 <th>F</th>
-                 <th>S</th>
-                 <th>S</th>
-                 </tr>
-                 </thead>
-                 <tbody>
-                 {getDates()}
-                 </tbody>
-                 </table>
-             </div></div>
-         )
+
+                            <div className="big">{state.selMoment.format('MMM') +' '+ state.selMoment.format('YYYY')}</div>
+                            <div className="floatRight big " onClick = {nextMonth} ><b> &gt;&gt; </b></div>
+                        </div>
+                        <table className="calendarTable">
+                            <thead>
+
+                            <tr>
+                                <th>M</th>
+                                <th>T</th>
+                                <th>W</th>
+                                <th>T</th>
+                                <th>F</th>
+                                <th>S</th>
+                                <th>S</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {getDates()}
+                            </tbody>
+                        </table>
+                    </div></div>
+            )
+        }
+        catch (error) {
+            return (<div className="calendarArea">
+                <h1>Cache issue</h1>
+                Clear Cache<input className="settingBt" type="button" onClick = {reset} value="Reset"></input>
+                {error}
+            </div>)
+        }
     }
     return instance;
 }

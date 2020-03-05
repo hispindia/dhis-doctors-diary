@@ -14,6 +14,8 @@ import {ChangePassword} from './ChangePassword'
 import {Info} from './Info'
 import {Leftbar} from './Leftbar'
 import {Reports} from './Reports'
+import {Error} from './Error'
+import cache from "../localstorage";
 
 export function Main(props){
     
@@ -42,9 +44,14 @@ export function Main(props){
             return "threePlusTwo";
         }
     }
+    function reset(){
+        cache.reset();
+        state.curr_view=constants.views.login;
+        state.changeView(state);
+    }
     
     instance.render = function(){
-
+try{
         switch(state.curr_view){
         case constants.views.login :
             return (<div >
@@ -153,11 +160,24 @@ export function Main(props){
                     <Footer state={state}/>
                     </div>
                    );
-      
+            case constants.views.error:
+                return (<div>
+                            <Error state={state}/>
+                        </div>);
             
 
         }
     }
+    catch (error) {
+        return (<div className="calendarArea">
+            <h2>Previous Cache Found</h2>
+            <br/><br/>
+            <p>Please click on "Clear" button to clean cache</p>
+            <input className="settingBt" type="button" onClick = {reset} value="Clear"></input>
+            {error}
+        </div>)
+    }
+}
     return instance;
 
   

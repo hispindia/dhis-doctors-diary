@@ -126,7 +126,7 @@ function init(callback){
     }
     
     function filterPrograStageFromUserGroup(){
-
+try{
         var curr_user_ug_array = state.
             curr_user_data.
             user.
@@ -147,6 +147,10 @@ function init(callback){
                 }
             }
         }
+}catch (e) {
+    state.curr_view = constants.views.error;
+    callback(state);
+}
 
         return undefined;
     }
