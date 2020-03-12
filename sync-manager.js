@@ -195,8 +195,8 @@ function syncManager(){
     var eventId = '';
 
     function sendEvent(state,event,callback){
-        var api = new _api(constants.DHIS_URL_BASE);
 
+        var api = new _api(constants.DHIS_URL_BASE);
         api.setCredentials(state.curr_user_data.user.userCredentials.username,
                            state.curr_user_data.user.password);
         checkEventExist(state,event);
@@ -220,9 +220,9 @@ function syncManager(){
                         isExistingEvent = true;
                         eventId = events[i].event;
                         console.log("Event Exist:------------");
-                        return true;
+                        break;
                     }
-                    continue;
+                   // continue;
                 }
                 if (!(event.event)) {
                     if (isExistingEvent) {
