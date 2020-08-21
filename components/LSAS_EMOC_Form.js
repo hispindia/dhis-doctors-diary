@@ -25,11 +25,18 @@ export function LSAS_EMOC_Form(props) {
     var ot_num = 1;
     var mbbs_num = 1;
     var staff_num = 1;
+    var class_num = 1;
     var ot_num_map = {
         "doc1": ot_num,
         "doc2": ot_num,
         "doc3": ot_num,
         "doc4": ot_num,
+    };
+    var class_num_map = {
+        "doc1": class_num,
+        "doc2": class_num,
+        "doc3": class_num,
+        "doc4": class_num,
     };
 
     var mbbs_num_map = {
@@ -83,7 +90,8 @@ export function LSAS_EMOC_Form(props) {
         onCall: checkedCall,
         mbBsDoctor: [],
         supportingStaff: [],
-        otTechnician: []
+        otTechnician: [],
+        classStaff:[]
     });
 
     if (props.currentVal) {
@@ -164,7 +172,41 @@ export function LSAS_EMOC_Form(props) {
             return true;
         }
     }
+    function checkUniqueName(doc, e) {
+        var index_id = docid;
+        props.sendOrSave = false;
+        if((docid === 1 && state.data.length >= 2))
+        {
+            for(var i = 1;i<=state.data.length;i++){
+                if(e.target.id.endsWith(""+i))
+                {
+                    index_id = i;
+                }
+            }
+        }
+        var nameVal1 = document.getElementById("classStaffId_1"+"doc"+ (index_id));
+        var nameVal2 = document.getElementById("classStaffId_2"+"doc"+ (index_id));
+        var nameVal3 = document.getElementById("classStaffId_3"+"doc"+ (index_id));
+        var nameVal4 = document.getElementById("classStaffId_4"+"doc"+ (index_id));
 
+        if((e.target.value == nameVal1.value && e.target != nameVal1) ||
+            (e.target.value == nameVal2.value && e.target != nameVal2) ||
+            (e.target.value == nameVal3.value && e.target != nameVal3)||
+            (e.target.value == nameVal4.value && e.target != nameVal4)){
+
+            alert("Please enter unique 4th class staff name");
+            e.target.value = "";
+            return false;
+        }
+        else{
+           if(!doc.includes(nameVal4.value) && nameVal4 ){
+                doc.push(nameVal4.value);
+            }
+            build_object();
+            return true;
+        }
+
+    }
     function checkUnique(doc, e, index) {
         var flag = true;
 
@@ -186,10 +228,9 @@ export function LSAS_EMOC_Form(props) {
         var val1 = document.getElementById("DocId_" + (index_id));
         var val2 = document.getElementById("Partner_DocId_" + (index_id));
 
-
-        if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
+       if (val1.value !== "" && val2.value === "" && e.target.id == "DocId_" + (index_id)) {
             props.sendOrSave = false;
-            if(e.target.value.length < 6){
+            if(e.target.value.length < 6 ){
                 validationMap[e.target.id] = "Please enter at-least 6 digit ehrms id";
                 alert("Please enter at-least 6 digit ehrms id");
                 return false;
@@ -486,7 +527,8 @@ export function LSAS_EMOC_Form(props) {
                 onCall : false,
                 mbBsDoctor : [],
                 supportingStaff : [],
-                otTechnician: []
+                otTechnician: [],
+                classStaff:[]
             });
 
             props.sendOrSave = true;
@@ -566,6 +608,70 @@ export function LSAS_EMOC_Form(props) {
             ot_num = ot_num + 1;
             ot_num_map["doc"+ index_id ] = ot_num;
             if((doc1.value != "" || patDoc.value != "") && (caseid.value != "" || rch_id.value != "")) {
+                build_object();
+            }
+            return true;
+        }
+    }
+    function addClassStaff(classStaff,e){
+        var index_id = docid;
+        if((docid === 1 && state.data.length >= 2) || state.data.length >= 2)
+        {
+            for(var i = 1;i<=state.data.length;i++){
+                if(e.target.id === "class_"+"btn_"+"doc"+i)
+                {
+                    index_id = i;
+                }
+            }
+        }
+        var val1 = document.getElementById("classStaffId_1" +"doc"+index_id);
+        var val2 = document.getElementById("classStaffId_2" +"doc"+index_id);
+        var val3 = document.getElementById("classStaffId_3" +"doc"+index_id);
+        var val4 = document.getElementById("classStaffId_4" +"doc"+index_id);
+
+        var doc1 = document.getElementById("DocId_"+index_id);
+        var patDoc = document.getElementById("Partner_DocId_"+(index_id));
+        var caseid = document.getElementById("caseid_" + (index_id));
+        var rch_id = document.getElementById("rch_id_" + (index_id));
+        //console.log("ot staff value: "+val.value);
+
+        if (!val1.value || val1.value == ""){
+            alert("Please enter first  value in 4th class nurse than add other");
+            return false;
+        }
+        else if((!val1.value || val1.value == "") && (!val2.value || val2.value == "")){
+            alert("Please enter first two  value in 4th class nurse than add other");
+            return false;
+        }
+        else if((!val1.value || val1.value == "") && (!val2.value || val2.value == "") &&  (!val3.value || val3.value == "")){
+            alert("Please enter first three value in 4th class nurse than add other");
+            return false;
+        }
+        else {
+            if(!classStaff.includes(val1.value))
+            {
+                classStaff.push(val1.value);
+
+            }
+            else if(!classStaff.includes(val2.value))
+            {
+                classStaff.push(val2.value);
+
+            }
+            else if(!classStaff.includes(val3.value))
+            {
+                classStaff.push(val3.value);
+            }
+            else if(!classStaff.includes(val4.value))
+            {
+                classStaff.push(val4.value);
+            }
+            class_num = class_num + 1;
+            console.log(classStaff);
+            class_num_map["doc"+ index_id ] = class_num;
+            console.log("class_num: "+class_num);
+            if((doc1.value != "" || patDoc.value != "") && (caseid.value != "" || rch_id.value != "")) {
+                console.log("build object");
                 build_object();
             }
             return true;
@@ -760,6 +866,130 @@ export function LSAS_EMOC_Form(props) {
                 return ids;
             }
         }
+        function getClassStaff(classStaff,index){
+
+            var inputField = (<input
+                type="text"
+                id = {"classStaffId_1"+"doc"+ (index+1)}
+                defaultValue = {!classStaff[0]?"":classStaff[0]}
+                onChange={alphabetValEntered.bind(null,classStaff)}
+                onBlur={checkUniqueName.bind(null,classStaff)}
+                disabled = {instance.props.currentStatus}
+                className="form-control" ></input>);
+
+            var inputField2 = (<input
+                type="text"
+                id = {"classStaffId_2"+"doc"+ (index+1)}
+                defaultValue = {!classStaff[1]?"":classStaff[1]}
+                onChange={alphabetValEntered.bind(null,classStaff)}
+                onBlur={checkUniqueName.bind(null,classStaff)}
+                disabled = {instance.props.currentStatus}
+                className="form-control" ></input>);
+
+            var inputField3 = (<input
+                type="text"
+                id = {"classStaffId_3"+"doc"+ (index+1)}
+                defaultValue = {!classStaff[2]?"":classStaff[2]}
+                onChange={alphabetValEntered.bind(null,classStaff)}
+                onBlur={checkUniqueName.bind(null,classStaff)}
+                disabled = {instance.props.currentStatus}
+                className="form-control" ></input>);
+
+            var inputField4 = (<input
+                type="text"
+                id = {"classStaffId_4"+"doc"+ (index+1)}
+                defaultValue = {!classStaff[3]?"":classStaff[3]}
+                onChange={alphabetValEntered.bind(null,classStaff)}
+                onBlur={checkUniqueName.bind(null,classStaff)}
+                disabled = {instance.props.currentStatus}
+                className="form-control" ></input>);
+
+            var addButton = (<input type="button" id={"class_btn_"+"doc"+(index+1)} className={class_num_map["doc"+ (index+1)] === 4 || classStaff.length >= 4 || instance.props.currentStatus ?"hidden":"button1 button2"}  onClick={addClassStaff.bind(null,classStaff)} value=" + ">
+
+            </input>);
+
+            var firstInput = (<div><tr>
+                <td colSpan="2"><label>4th Class Staff Name 1</label>{inputField}</td><td className="td_button">  {addButton}</td>
+                <label className="redColor">{validationMap["classStaffId_1"+"doc"+(index+1)]}</label>
+            </tr></div>);
+            if (class_num_map["doc"+ (index+1)] == 1 && classStaff.length < 2){
+                if(classStaff[0] != "")
+                {
+                    docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
+                    docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
+                }
+                return firstInput;
+            }
+            else if(classStaff[0] != "" && (class_num == 2 )){
+                docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
+                docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_2"+"doc"+(index+1)] = classStaff[1];
+                var ids = [];
+
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 1</label>{inputField}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_1"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 2</label>{inputField2}</td><td className="td_button">{addButton}</td>
+                    <label className="redColor">{validationMap["classStaffId_2"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                return ids;
+            }
+            else if(classStaff[1] != "" && (class_num == 3)){
+                docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
+                docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_2"+"doc"+(index+1)] = classStaff[1];
+                docMap["doc_id" + (index+1)].push("classStaffId_3"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_3"+"doc"+(index+1)] = classStaff[2];
+                var ids = [];
+
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 1</label>{inputField}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_2"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 2</label>{inputField2}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_3"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 3</label>{inputField3}</td><td className="td_button">{addButton}</td>
+                    <label className="redColor">{validationMap["classStaffId_3"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                return ids;
+            }
+            else if(class_num == 4 || classStaff.length < 5){
+                docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
+                docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_2"+"doc"+(index+1)] = classStaff[1];
+                docMap["doc_id" + (index+1)].push("classStaffId_3"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_3"+"doc"+(index+1)] = classStaff[2];
+                docMap["doc_id" + (index+1)].push("classStaffId_4"+"doc"+(index+1));
+                docMap["doc_uniqueIds" + (index+1)]["classStaffId_4"+"doc"+(index+1)] = classStaff[3];
+                var ids = [];
+                //ids.push(firstInput);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 1</label>{inputField}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_2"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 2</label>{inputField2}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_2"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 3</label>{inputField3}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_3"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                ids.push(<div><tr><td colSpan="2">
+                    <label>4th Class Staff Name 4</label>{inputField4}</td><td className="td_button"></td>
+                    <label className="redColor">{validationMap["classStaffId_4"+"doc"+(index+1)]}</label>
+                </tr></div>);
+                return ids;
+            }
+        }
         function getSupportingStaff(staff,index){
 
             var inputField = (<input
@@ -935,6 +1165,10 @@ export function LSAS_EMOC_Form(props) {
                         <tr>
                             <td colSpan="3">
                                 {getOtTechnician(obj.otTechnician,index)}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                {getClassStaff(obj.classStaff,index)}</td>
                         </tr>
                         </tbody>
                     </table>
