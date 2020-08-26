@@ -666,6 +666,7 @@ export function LSAS_EMOC_Form(props) {
             {
                 classStaff.push(val4.value);
             }
+            class_num = class_num_map["doc"+ index_id ];
             class_num = class_num + 1;
             console.log(classStaff);
             class_num_map["doc"+ index_id ] = class_num;
@@ -920,7 +921,7 @@ export function LSAS_EMOC_Form(props) {
                 }
                 return firstInput;
             }
-            else if(classStaff[0] != "" && (class_num == 2 )){
+            else if(classStaff[0] != "" && (class_num_map["doc"+ (index+1) ] == 2 )){
                 docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
                 docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
                 docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
@@ -937,7 +938,7 @@ export function LSAS_EMOC_Form(props) {
                 </tr></div>);
                 return ids;
             }
-            else if(classStaff[1] != "" && (class_num == 3)){
+            else if(classStaff[1] != "" && (class_num_map["doc"+ (index+1) ] == 3 )){
                 docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
                 docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
                 docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
@@ -960,7 +961,7 @@ export function LSAS_EMOC_Form(props) {
                 </tr></div>);
                 return ids;
             }
-            else if(class_num == 4 || classStaff.length < 5){
+            else if( (class_num_map["doc"+ (index+1) ] == 4 ) || classStaff.length < 5){
                 docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
                 docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
                 docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
