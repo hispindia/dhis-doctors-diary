@@ -220,9 +220,9 @@ function syncManager(){
                         isExistingEvent = true;
                         eventId = events[i].event;
                         console.log("Event Exist:------------");
-                        return true;
+                        break;
                     }
-                    continue;
+                   // continue;
                 }
                 if (!(event.event)) {
                     if (isExistingEvent) {

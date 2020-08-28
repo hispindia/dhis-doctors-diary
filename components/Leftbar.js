@@ -3,7 +3,7 @@ import constants from '../constants';
 import sync from '../sync-manager';
 import cache from '../localstorage';
 
-import {LeftbarSettings} from './LeftbarSetting'
+//import {LeftbarSettings} from './LeftbarSetting'
 
 
 export function Leftbar(props){
@@ -78,12 +78,10 @@ export function Leftbar(props){
     }
 
     function logout(){
-        if(window.confirm("If you exit all offline data will be deleted. Do you still want to exit")){
             state.curr_view=constants.views.login;
             cache.save(constants.cache_curr_user,null);
-            cache.reset();
+           // cache.reset();
             state.changeView(state);
-        }
     }
 
     function getClassNameSelectedItem(item){
