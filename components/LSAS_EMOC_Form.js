@@ -189,10 +189,10 @@ export function LSAS_EMOC_Form(props) {
         var nameVal3 = document.getElementById("classStaffId_3"+"doc"+ (index_id));
         var nameVal4 = document.getElementById("classStaffId_4"+"doc"+ (index_id));
 
-        if((e.target.value == nameVal1.value && e.target != nameVal1) ||
+        if(e.target.value != "" && (  (e.target.value == nameVal1.value && e.target != nameVal1) ||
             (e.target.value == nameVal2.value && e.target != nameVal2) ||
             (e.target.value == nameVal3.value && e.target != nameVal3)||
-            (e.target.value == nameVal4.value && e.target != nameVal4)){
+            (e.target.value == nameVal4.value && e.target != nameVal4))){
 
             alert("Please enter unique 4th class staff name");
             e.target.value = "";
@@ -202,6 +202,9 @@ export function LSAS_EMOC_Form(props) {
            if(!doc.includes(nameVal4.value) && nameVal4 ){
                 doc.push(nameVal4.value);
             }
+           else if(!doc.includes(nameVal3.value) && nameVal3){
+               doc.push(nameVal3.value);
+           }
             build_object();
             return true;
         }
@@ -635,37 +638,37 @@ export function LSAS_EMOC_Form(props) {
         var rch_id = document.getElementById("rch_id_" + (index_id));
         //console.log("ot staff value: "+val.value);
 
-        if (!val1.value || val1.value == ""){
+        if ((!val2 && !val3 && val1) && (!val1.value || val1.value == "")){
             alert("Please enter first  value in 4th class nurse than add other");
             return false;
         }
-        else if((!val1.value || val1.value == "") && (!val2.value || val2.value == "")){
+        else if((!val3 && val1 && val2) && ((!val1.value || val1.value != "") && (!val2.value || val2.value == ""))){
             alert("Please enter first two  value in 4th class nurse than add other");
             return false;
         }
-        else if((!val1.value || val1.value == "") && (!val2.value || val2.value == "") &&  (!val3.value || val3.value == "")){
+        else if((val3 && val1 && val2) && ((!val1.value || val1.value != "") && (!val2.value || val2.value != "") &&  (!val3.value || val3.value == ""))){
             alert("Please enter first three value in 4th class nurse than add other");
             return false;
         }
-        else {
-            if(!classStaff.includes(val1.value))
-            {
-                classStaff.push(val1.value);
+          else{
+                if(!classStaff.includes(val1.value))
+                {
+                    classStaff.push(val1.value);
 
-            }
-            else if(!classStaff.includes(val2.value))
-            {
-                classStaff.push(val2.value);
+                }
+                else if(!classStaff.includes(val2.value))
+                {
+                    classStaff.push(val2.value);
 
-            }
-            else if(!classStaff.includes(val3.value))
-            {
-                classStaff.push(val3.value);
-            }
-            else if(!classStaff.includes(val4.value))
-            {
-                classStaff.push(val4.value);
-            }
+                }
+                else if(!classStaff.includes(val3.value))
+                {
+                    classStaff.push(val3.value);
+                }
+                else if(!classStaff.includes(val4.value))
+                {
+                    classStaff.push(val4.value);
+                }
             class_num = class_num_map["doc"+ index_id ];
             class_num = class_num + 1;
             console.log(classStaff);

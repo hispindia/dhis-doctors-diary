@@ -49,6 +49,9 @@ export function Settings(props){
                         <input disabled={isDisabled()} className={"settingBt"} type="button" onClick = {state.loading?function(){console.log("header sync : Multiple clicks")}:synchronize} value="Manual Sync"></input>
                     </td>
                 </tr>
+                <tr>
+                    <td>{constants.version}</td>
+                </tr>
             </tbody>
                 </table>
                 </div>
