@@ -75,13 +75,11 @@ function  createTable() {
     state.curr_user_data.events.reduce(function(list,obj) {
             var edate = new Date(obj.eventDate);
             var endDate = new Date();
-           // var dateOffset = (24*60*60*1000) * 40; //40 days
-           //currentDate = new Date(currentDate.setTime(currentDate.getTime()-dateOffset));
-            console.log("currentDate.getDate()  "+currentDate);
 
-            if(endDate.getDate() <= 10)
+            if(endDate.getDate() <= 10 )
             {
-                if(edate.getMonth() == currentDate.getMonth() || edate.getMonth() == (currentDate.getMonth()-1)){
+                if((edate.getMonth() == currentDate.getMonth()
+                    || edate.getMonth() == (currentDate.getMonth()-1)) && endDate.getFullYear() === edate.getFullYear()){
                     count++;
                     list[moment(obj.eventDate).format("YYYY-MM-DD")]= obj;
                     dataMap[edate] = obj;
@@ -89,7 +87,7 @@ function  createTable() {
                 }
             }
             else {
-                if(edate.getMonth() == currentDate.getMonth()){
+                if(edate.getMonth() == currentDate.getMonth() && endDate.getFullYear() === edate.getFullYear()){
                     count++;
                     list[moment(obj.eventDate).format("YYYY-MM-DD")]= obj;
                     dataMap[edate] = obj;

@@ -25,6 +25,7 @@ export function LSAS_EMOC_Form(props) {
     var ot_num = 1;
     var mbbs_num = 1;
     var staff_num = 1;
+	var classSMap = [];
     var class_num = 1;
     var ot_num_map = {
         "doc1": ot_num,
@@ -60,6 +61,8 @@ export function LSAS_EMOC_Form(props) {
     var case_ids = [];
 
     var uniqueIds = [];
+	
+	var uniqueNames = [];
 
     var docid = 1;
 
@@ -183,28 +186,43 @@ export function LSAS_EMOC_Form(props) {
                     index_id = i;
                 }
             }
-        }
-        var nameVal1 = document.getElementById("classStaffId_1"+"doc"+ (index_id));
-        var nameVal2 = document.getElementById("classStaffId_2"+"doc"+ (index_id));
-        var nameVal3 = document.getElementById("classStaffId_3"+"doc"+ (index_id));
-        var nameVal4 = document.getElementById("classStaffId_4"+"doc"+ (index_id));
-
-        if((e.target.value == nameVal1.value && e.target != nameVal1) ||
-            (e.target.value == nameVal2.value && e.target != nameVal2) ||
-            (e.target.value == nameVal3.value && e.target != nameVal3)||
-            (e.target.value == nameVal4.value && e.target != nameVal4)){
-
-            alert("Please enter unique 4th class staff name");
-            e.target.value = "";
-            return false;
-        }
-        else{
-           if(!doc.includes(nameVal4.value) && nameVal4 ){
-                doc.push(nameVal4.value);
-            }
-            build_object();
-            return true;
-        }
+        }        
+		var val1 = document.getElementById("classStaffId_1" +"doc"+index_id);
+        var val2 = document.getElementById("classStaffId_2" +"doc"+index_id);
+        var val3 = document.getElementById("classStaffId_3" +"doc"+index_id);
+        var val4 = document.getElementById("classStaffId_4" +"doc"+index_id);
+		
+		
+		
+		if(e.target.value != ""){
+			if(doc.includes(e.target.value)){
+				alert("Please enter unique 4th class staff name");
+				e.target.value = "";
+				return false;
+			}
+			else{				
+				if(!doc.includes(e.target.value)){
+					if(val1 && val1.value != "" ){
+						classSMap['val1_doc'+index_id] = val1.value;
+						doc[0]  = classSMap['val1_doc'+index_id];}
+						
+					if(val2 && val2.value != ""){
+						classSMap['val2_doc'+index_id] = val2.value;
+						doc[1]  = classSMap['val2_doc'+index_id];}
+						
+					if(val3 && val3.value != ""){
+						classSMap['val3_doc'+index_id] = val3.value;
+						doc[2]  = classSMap['val3_doc'+index_id];}
+					if(val4 && val4.value != ""){						
+						classSMap['val4_doc'+index_id] = val4.value;
+						doc[3]  = classSMap['val4_doc'+index_id];}	
+					uniqueNames.push(e.target.value);
+											
+					build_object();
+					return true;
+				}				
+			}
+		} 		
 
     }
     function checkUnique(doc, e, index) {
@@ -339,7 +357,12 @@ export function LSAS_EMOC_Form(props) {
                     }
                     else{
                         validationMap[e.target.id] = "";
-                        doc.push(e.target.value);
+						if(e.target.id === "mbBSId_1" + "doc" + (index_id)){
+							doc[0] = e.target.value;
+						}
+						if(e.target.id === "mbBSId_2" + "doc" + (index_id)){
+							doc[1] = e.target.value;
+						}                        
                         props.sendOrSave = false;
 
                         if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
@@ -362,7 +385,12 @@ export function LSAS_EMOC_Form(props) {
                     }
                     else {
                         validationMap[e.target.id] = "";
-                        doc.push(e.target.value);
+                        if(e.target.id === "staffId_1" + "doc" + (index_id)){
+							doc[0] = e.target.value;
+						}
+						if(e.target.id === "staffId_2" + "doc" + (index_id)){
+							doc[1] = e.target.value;
+						}  
                         props.sendOrSave = false;
 
                         if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
@@ -382,14 +410,19 @@ export function LSAS_EMOC_Form(props) {
                     }
                     else {
                         validationMap[e.target.id] = "";
-                        doc.push(e.target.value);
+                        if(e.target.id === "otTechId_1" + "doc" + (index_id)){
+							doc[0] = e.target.value;
+						}
+						if(e.target.id === "otTechId_2" + "doc" + (index_id)){
+							doc[1] = e.target.value;
+						}
                         props.sendOrSave = false;
 
                         if((val1.value != '' || val2.value != '') && (caseid.value != '' || rch_id.value != '')){
                             build_object();
                         }
                     }
-                }
+                }				
 
                 if(doc.length > 2 && docMap["doc_uniqueIds" + (index_id)][e.target.id])
                 {
@@ -635,37 +668,20 @@ export function LSAS_EMOC_Form(props) {
         var rch_id = document.getElementById("rch_id_" + (index_id));
         //console.log("ot staff value: "+val.value);
 
-        if (!val1.value || val1.value == ""){
+        if ((!val2 && !val3 && val1) && (!val1.value || val1.value == "")){
             alert("Please enter first  value in 4th class nurse than add other");
             return false;
         }
-        else if((!val1.value || val1.value == "") && (!val2.value || val2.value == "")){
+        else if((!val3 && val1 && val2) && ((!val1.value || val1.value != "") && (!val2.value || val2.value == ""))){
             alert("Please enter first two  value in 4th class nurse than add other");
             return false;
         }
-        else if((!val1.value || val1.value == "") && (!val2.value || val2.value == "") &&  (!val3.value || val3.value == "")){
+        else if((val3 && val1 && val2) && ((!val1.value || val1.value != "") && (!val2.value || val2.value != "") &&  (!val3.value || val3.value == ""))){
             alert("Please enter first three value in 4th class nurse than add other");
             return false;
         }
-        else {
-            if(!classStaff.includes(val1.value))
-            {
-                classStaff.push(val1.value);
-
-            }
-            else if(!classStaff.includes(val2.value))
-            {
-                classStaff.push(val2.value);
-
-            }
-            else if(!classStaff.includes(val3.value))
-            {
-                classStaff.push(val3.value);
-            }
-            else if(!classStaff.includes(val4.value))
-            {
-                classStaff.push(val4.value);
-            }
+          else{
+                
             class_num = class_num_map["doc"+ index_id ];
             class_num = class_num + 1;
             console.log(classStaff);
@@ -757,7 +773,7 @@ export function LSAS_EMOC_Form(props) {
                 maxLength={7}
                 minLength={6}
                 id = {"mbBSId_1"+"doc"+(index+1)}
-                defaultValue = {!mBbsDoc[0]?"":mBbsDoc[0]}
+                defaultValue = {!mBbsDoc && !mBbsDoc[0]?"":mBbsDoc[0]}
                 onChange={numberValEntered.bind(null,mBbsDoc)}
                 disabled = {instance.props.currentStatus}
                 className="form-control" onBlur={checkUnique.bind(null,mBbsDoc)}></input>);
@@ -767,7 +783,7 @@ export function LSAS_EMOC_Form(props) {
                 maxLength={7}
                 minLength={6}
                 id = {"mbBSId_2"+"doc"+(index+1)}
-                defaultValue = {!mBbsDoc[1]?"":mBbsDoc[1]}
+                defaultValue = {!mBbsDoc && !mBbsDoc[1]?"":mBbsDoc[1]}
                 onChange={numberValEntered.bind(null,mBbsDoc)}
                 disabled = {instance.props.currentStatus}
                 className="form-control" onBlur={checkUnique.bind(null,mBbsDoc)}></input>);
@@ -815,7 +831,7 @@ export function LSAS_EMOC_Form(props) {
                 maxLength={7}
                 minLength={6}
                 id = {"otTechId_1"+"doc"+ (index+1)}
-                defaultValue = {!otStaff[0]?"":otStaff[0]}
+                defaultValue = {!otStaff && !otStaff[0]?"":otStaff[0]}
                 disabled = {instance.props.currentStatus}
                 onChange={numberValEntered.bind(null,otStaff)}
                 className="form-control" onBlur={checkUnique.bind(null,otStaff)}></input>);
@@ -825,7 +841,7 @@ export function LSAS_EMOC_Form(props) {
                 maxLength={7}
                 minLength={6}
                 id = {"otTechId_2"+"doc"+ (index+1)}
-                defaultValue = {!otStaff[1]?"":otStaff[1]}
+                defaultValue = {!otStaff && !otStaff[1]?"":otStaff[1]}
                 onChange={numberValEntered.bind(null,otStaff)}
                 disabled = {instance.props.currentStatus}
                 className="form-control" onBlur={checkUnique.bind(null,otStaff)}></input>);
@@ -872,7 +888,7 @@ export function LSAS_EMOC_Form(props) {
             var inputField = (<input
                 type="text"
                 id = {"classStaffId_1"+"doc"+ (index+1)}
-                defaultValue = {!classStaff[0]?"":classStaff[0]}
+                defaultValue = {!classStaff || !classStaff[0]?"":classStaff[0]}
                 onChange={alphabetValEntered.bind(null,classStaff)}
                 onBlur={checkUniqueName.bind(null,classStaff)}
                 disabled = {instance.props.currentStatus}
@@ -881,7 +897,7 @@ export function LSAS_EMOC_Form(props) {
             var inputField2 = (<input
                 type="text"
                 id = {"classStaffId_2"+"doc"+ (index+1)}
-                defaultValue = {!classStaff[1]?"":classStaff[1]}
+                defaultValue = {!classStaff || !classStaff[1]?"":classStaff[1]}
                 onChange={alphabetValEntered.bind(null,classStaff)}
                 onBlur={checkUniqueName.bind(null,classStaff)}
                 disabled = {instance.props.currentStatus}
@@ -890,7 +906,7 @@ export function LSAS_EMOC_Form(props) {
             var inputField3 = (<input
                 type="text"
                 id = {"classStaffId_3"+"doc"+ (index+1)}
-                defaultValue = {!classStaff[2]?"":classStaff[2]}
+                defaultValue = {!classStaff || !classStaff[2]?"":classStaff[2]}
                 onChange={alphabetValEntered.bind(null,classStaff)}
                 onBlur={checkUniqueName.bind(null,classStaff)}
                 disabled = {instance.props.currentStatus}
@@ -899,13 +915,13 @@ export function LSAS_EMOC_Form(props) {
             var inputField4 = (<input
                 type="text"
                 id = {"classStaffId_4"+"doc"+ (index+1)}
-                defaultValue = {!classStaff[3]?"":classStaff[3]}
+                defaultValue = {!classStaff || !classStaff[3]?"":classStaff[3]}
                 onChange={alphabetValEntered.bind(null,classStaff)}
                 onBlur={checkUniqueName.bind(null,classStaff)}
                 disabled = {instance.props.currentStatus}
                 className="form-control" ></input>);
 
-            var addButton = (<input type="button" id={"class_btn_"+"doc"+(index+1)} className={class_num_map["doc"+ (index+1)] === 4 || classStaff.length >= 4 || instance.props.currentStatus ?"hidden":"button1 button2"}  onClick={addClassStaff.bind(null,classStaff)} value=" + ">
+            var addButton = (<input type="button" id={"class_btn_"+"doc"+(index+1)} className={class_num_map["doc"+ (index+1)] === 4 || !classStaff || classStaff.length >= 4 || instance.props.currentStatus ?"hidden":"button1 button2"}  onClick={addClassStaff.bind(null,classStaff)} value=" + ">
 
             </input>);
 
@@ -913,7 +929,7 @@ export function LSAS_EMOC_Form(props) {
                 <td colSpan="2"><label>4th Class Staff Name 1</label>{inputField}</td><td className="td_button">  {addButton}</td>
                 <label className="redColor">{validationMap["classStaffId_1"+"doc"+(index+1)]}</label>
             </tr></div>);
-            if (class_num_map["doc"+ (index+1)] == 1 && classStaff.length < 2){
+            if (classStaff && (class_num_map["doc"+ (index+1)] == 1 && classStaff.length < 2)){
                 if(classStaff[0] != "")
                 {
                     docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
@@ -921,7 +937,7 @@ export function LSAS_EMOC_Form(props) {
                 }
                 return firstInput;
             }
-            else if(classStaff[0] != "" && (class_num_map["doc"+ (index+1) ] == 2 )){
+            else if(classStaff && (classStaff[0] != "" && (class_num_map["doc"+ (index+1) ] == 2 ))){
                 docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
                 docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
                 docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
@@ -938,7 +954,7 @@ export function LSAS_EMOC_Form(props) {
                 </tr></div>);
                 return ids;
             }
-            else if(classStaff[1] != "" && (class_num_map["doc"+ (index+1) ] == 3 )){
+            else if(classStaff && (classStaff[1] != "" && (class_num_map["doc"+ (index+1) ] == 3 ))){
                 docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
                 docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
                 docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
@@ -961,7 +977,7 @@ export function LSAS_EMOC_Form(props) {
                 </tr></div>);
                 return ids;
             }
-            else if( (class_num_map["doc"+ (index+1) ] == 4 ) || classStaff.length < 5){
+            else if(classStaff && ((class_num_map["doc"+ (index+1) ] == 4 ) || classStaff.length < 5)){
                 docMap["doc_id" + (index+1)].push("classStaffId_1"+"doc"+(index+1));
                 docMap["doc_uniqueIds" + (index+1)]["classStaffId_1"+"doc"+(index+1)] = classStaff[0];
                 docMap["doc_id" + (index+1)].push("classStaffId_2"+"doc"+(index+1));
@@ -998,7 +1014,7 @@ export function LSAS_EMOC_Form(props) {
                 maxLength={7}
                 minLength={6}
                 id = {"staffId_1"+"doc"+ (index+1)}
-                defaultValue = {!staff[0]?"":staff[0]}
+                defaultValue = {!staff && !staff[0]?"":staff[0]}
                 onChange={numberValEntered.bind(null,staff)}
                 disabled = {instance.props.currentStatus}
                 className="form-control" onBlur={checkUnique.bind(null,staff)}></input>);
@@ -1008,7 +1024,7 @@ export function LSAS_EMOC_Form(props) {
                 maxLength={7}
                 minLength={6}
                 id = {"staffId_2"+"doc"+ (index+1)}
-                defaultValue = {!staff[1]?"":staff[1]}
+                defaultValue = {!staff && !staff[1]?"":staff[1]}
                 onChange={numberValEntered.bind(null,staff)}
                 disabled = {instance.props.currentStatus}
                 className="form-control" onBlur={checkUnique.bind(null,staff)}></input>);
@@ -1075,7 +1091,7 @@ export function LSAS_EMOC_Form(props) {
                                     type="text"
                                     id = {"patient_name_"+ (index+1)}
                                     maxLength={20}
-                                    defaultValue={!obj.patient_name?"":obj.patient_name}
+                                    defaultValue={!obj && !obj.patient_name?"":obj.patient_name}
                                     onChange={alphabetValEntered.bind(null,obj.patient_name)}
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus}
@@ -1093,7 +1109,7 @@ export function LSAS_EMOC_Form(props) {
                                     maxLength={12}
                                     id = {"rch_id_"+ (index+1)}
                                     key = {"rch_id_"+ (index+1)}
-                                    defaultValue={!obj.rch_id?"":obj.rch_id}
+                                    defaultValue={!obj && !obj.rch_id?"":obj.rch_id}
                                     onChange={numberValEntered.bind(null,obj.rch_id)}
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus || obj.isCaseId }
@@ -1114,7 +1130,7 @@ export function LSAS_EMOC_Form(props) {
                                     type="text"
                                     id = {"caseid_"+ (index+1)}
                                     maxLength={50}
-                                    defaultValue={!obj.case_id?"":obj.case_id}
+                                    defaultValue={!obj && !obj.case_id?"":obj.case_id}
                                     onChange={alphaNumValEntered.bind(null,obj.case_id)}
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus }
@@ -1133,7 +1149,7 @@ export function LSAS_EMOC_Form(props) {
                                     maxLength={7}
                                     minLength={6}
                                     id = {"DocId_"+ (index+1)}
-                                    defaultValue={!obj.id?"":obj.id}
+                                    defaultValue={!obj && !obj.id?"":obj.id}
                                     onChange={numberValEntered.bind(null,obj.id)}
                                     onBlur={checkUnique.bind(null,obj)}
                                     disabled = {instance.props.currentStatus || obj.onCall}
@@ -1152,7 +1168,7 @@ export function LSAS_EMOC_Form(props) {
                             <td colSpan="3">
                                 <label className={obj.onCall?"":"hidden"} id={"partner_"+(index+1)}>Details of Doctor on Call/ Specialist
                                     <strong className="redColor"> * </strong></label>
-                                <input  defaultValue={!obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
+                                <input  defaultValue={!obj && !obj["doc_id"]?"":obj["doc_id"]} className={obj.onCall?"":"hidden"} onBlur={checkUnique.bind(null,obj)} disabled = {instance.props.currentStatus} type="text" id={"Partner_DocId_"+(index+1)}/>
                             </td>
                         </tr>
                         <tr>
