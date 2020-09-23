@@ -6,7 +6,7 @@ exports.DHIS_URL_BASE = "https://ln1.hispindia.org/uphmis230";
 
 
 //exports.DHIS_URL_BASE = "https://devtest.hispindia.org/upupgrade";
-//exports.DHIS_URL_BASE = "http://localhost:8090/upupgrade";
+//exports.DHIS_URL_BASE = "http://localhost:8080/dhis";
 
 exports.username = "admin";
 exports.password = "";
@@ -98,6 +98,7 @@ exports.sncu_mandatoryfield=[
 
 exports.lsas_emoc_data_de = "ZnzjYCK4r9w";
 exports.emoc_data_de = "qgzoi2gteWu";
+exports.version = "Version 2.1";
 
 
 
